@@ -4,8 +4,12 @@
 
 
   <h2>Search Results</h2>
-
-<div> {{ search_results }} </div>
-  
+    {% for user in search_results %}
+       <div> {{ user['physician_first_name'] }} 
+             {{ user['physician_last_name'] }} 
+             {{ user['recipient_zip_code'] }} </div>
+    {% endfor %}
+     <div> {{ search_results }} </div> <br>
+     
 
 {% endblock %}

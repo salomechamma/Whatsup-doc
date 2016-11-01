@@ -1,6 +1,7 @@
 """What's up Doc"""
 
 import os
+import module
 from jinja2 import StrictUndefined
 
 from flask import jsonify
@@ -54,13 +55,13 @@ def index():
 @app.route("/results_list")
 def results_list():
     """Show list of doctor resulting from search."""
-    firstname = (request.args.get('firstname')).upper()
-    lastname = (request.args.get('lastname')).upper()
-    payload = {'$$app_token': secret_token,
+    firstname = request.args.get('firstname')
+    lastname = request.args.get('lastname')
+    data = {'$$app_token': secret_token,
                 'physician_first_name': firstname,
                 'physician_last_name': lastname}
 
-    response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=payload)
+    response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
     search_results = response.json()
 
     return render_template('results_list.html', search_results=search_results)
