@@ -63,6 +63,8 @@ def results_list():
 
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
     search_results = response.json()
+    # to keep only unique id of doctor so no duplicates in list of results:
+    search_results = module.unique_dico(search_results)
 
     return render_template('results_list.html', search_results=search_results)
 
