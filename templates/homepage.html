@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+  <h2>Homepage</h2>
+
+ <form action="/results_list">
+    First Name: <input type="text" name="firstname">
+    Last Name: <input type="text" name="lastname">
+
+    <input type="submit" value="Search">
+
+ </form>
+  <p><a href="/movies">Homepage</a></p>
+  <div> {{ response }} </div>
+  <div> end </div>
+  
+
+{% endblock %}
