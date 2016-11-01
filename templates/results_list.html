@@ -4,14 +4,22 @@
 
 
   <h2>Search Results</h2>
-  
+    <table>
+        <tr>
+        <th>Name</th>
+        <th>Specialty</th>
+        <th>City</th>
+        <th>Zipcode</th>
+        </tr>
     {% for user in search_results %}
-       <div> {{ user['physician_first_name'] }} 
-             {{ user['physician_last_name'] }} 
-             {{ user['physician_specialty'] }}
-             {{ user['recipient_zip_code'] }} </div>
+        <tr>
+             <td> <a href="/doc_summary/{{ user['physician_profile_id'] }}">{{ user['physician_first_name'] }} {{ user['physician_last_name'] }} </a> </td>
+             <td>{{ user['physician_specialty'] }} </td>
+             <td>{{ user['recipient_city'] }} </td>
+             <td>{{ user['recipient_zip_code'] }} </td>
+         </tr>
     {% endfor %}
      <!-- <div> {{ search_results }} </div> <br> -->
-     
+     </table>
 
 {% endblock %}

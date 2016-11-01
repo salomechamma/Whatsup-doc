@@ -68,11 +68,10 @@ def results_list():
 
     return render_template('results_list.html', search_results=search_results)
 
-@app.route("/doc_summary")
-def summary():
+@app.route("/doc_summary/<int:physician_profile_id>")
+def summary(physician_profile_id):
     """Show summary page on doctor resulting from search."""
-
-    return render_template("summary.html")
+    return render_template("summary.html", p_id=physician_profile_id)
 
 @app.route('/ind_comparison')
 def ind_comparison():

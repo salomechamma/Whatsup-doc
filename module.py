@@ -43,27 +43,15 @@ def print_nicely_results(list_results):
     """Fname Lname of results."""
     pprint(list_results)
 
-def unique_id(list_results):
-    """ Takes in list of dictionnaries and return list of dict with only unique ids of doctor """
-    new_list = []
-    for dico in list_results:
-        if int(dico['physician_profile_id']) in new_list:
-            list_results.remove(dico)
-            # del list_results[i]
-        else:
-            new_list.append(int(dico['physician_profile_id']))
-    return list_results
      
 
 def unique_dico(list_results):
-    """ xxxx """
-    id_list = []
-    new_list = []
+    """ Return list of unique dictionnaries (unique physician ids) """
+    id_list = [] #list to store unique physician ids
+    new_list = [] # list to store unique dictionnaries and function to return it
     for dico in list_results:
         if int(dico['physician_profile_id']) in id_list:
-            print "enter"
             pass
-            # del list_results[i]
         else:
             id_list.append(int(dico['physician_profile_id']))
             new_list.append(dico)
