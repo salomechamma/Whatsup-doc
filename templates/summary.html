@@ -5,7 +5,33 @@
 
   <h2>Summary</h2>
 
-<div> Physician ID: {{ p_id }} </div>
-  
+<h4> Physician ID: {{ p_id }}  <br>
+ Total payments received from pharmaceutical companies in 2015: ${{ total }} </h4> <br>
 
+<div>
+    {{ perso_doc_info['specialty'] }} <br>
+    {{ perso_doc_info['street_address'] }} {{ perso_doc_info['zipcode' ] }} {{ perso_doc_info['city' ] }} 
+
+</div>
+
+<div>
+    <!-- replace with a pie chart with JS chart or plython tool -->
+    In 2015:
+    <ul>
+        {% for name, payment in pay_breakdown.items() %}
+
+            <li> {{ name }} paid a total of  ${{ payment }} to XXXXXX - {{ "${:,.2f}".format(payment/total*100) }}% of total payments received </li>
+        {% endfor %}
+    </ul>
+</div>
+<span>
+    <form method="get" action="/ind_comparison">
+    <button type="submit">Compare with peers</button>
+    </form>
+
+
+    <form method="get" action="/doctor_like">
+    <button type="submit">Access Doctor Ratings</button>
+    </form>
+</span>
 {% endblock %}

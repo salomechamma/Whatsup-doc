@@ -71,7 +71,20 @@ def results_list():
 @app.route("/doc_summary/<int:physician_profile_id>")
 def summary(physician_profile_id):
     """Show summary page on doctor resulting from search."""
-    return render_template("summary.html", p_id=physician_profile_id)
+
+    summ = {'$$app_token': secret_token,
+                'physician_profile_id': physician_profile_id,
+            }
+
+    response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=summ)
+    search_results = response.json()
+    t = module.total_payments(search_results)
+    perso_doc_info = module.perso_doc_info(search_results)
+    pay_breakdown = module.pay_per_comp(search_results)
+
+
+    return render_template("summary.html", p_id=physician_profile_id, total=t, 
+        perso_doc_info = perso_doc_info, pay_breakdown=pay_breakdown)
 
 @app.route('/ind_comparison')
 def ind_comparison():
