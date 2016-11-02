@@ -5,7 +5,7 @@
 
   <h2>Summary</h2>
 
-<h4> Physician ID: {{ p_id }}  <br>
+<h4>  {{ first_name }} {{ last_name }} <br>
  Total payments received from pharmaceutical companies in 2015: ${{ total }} </h4> <br>
 
 <div>
@@ -16,11 +16,11 @@
 
 <div>
     <!-- replace with a pie chart with JS chart or plython tool -->
-    In 2015:
+    <br><b>In 2015: </b> 
     <ul>
         {% for name, payment in pay_breakdown.items() %}
 
-            <li> {{ name }} paid a total of  ${{ payment }} to XXXXXX - {{ "${:,.2f}".format(payment/total*100) }}% of total payments received </li>
+            <li> {{ name }} paid a total of  ${{ payment }} - {{ "${:,.2f}".format(payment/total*100) }}% of total payments received </li>
         {% endfor %}
     </ul>
 </div>

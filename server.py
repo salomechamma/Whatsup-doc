@@ -79,12 +79,15 @@ def summary(physician_profile_id):
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=summ)
     search_results = response.json()
     t = module.total_payments(search_results)
+    first_name = search_results[0]['physician_first_name']
+    last_name = search_results[0]['physician_last_name']
     perso_doc_info = module.perso_doc_info(search_results)
     pay_breakdown = module.pay_per_comp(search_results)
 
 
-    return render_template("summary.html", p_id=physician_profile_id, total=t, 
-        perso_doc_info = perso_doc_info, pay_breakdown=pay_breakdown)
+    return render_template("summary.html", total=t, 
+        perso_doc_info = perso_doc_info, pay_breakdown=pay_breakdown, first_name=
+        first_name, last_name=last_name)
 
 @app.route('/ind_comparison')
 def ind_comparison():
