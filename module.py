@@ -49,6 +49,7 @@ def perso_doc_info(list_results):
     info['street_address'] = list_results[0]['recipient_primary_business_street_address_line1']
     info['zipcode'] = list_results[0]['recipient_zip_code'] 
     info['city'] = list_results[0]['recipient_city']
+    info['state'] = list_results[0]['recipient_state']
     info['p_id'] = list_results[0]['physician_profile_id']
     return info
 
@@ -80,11 +81,11 @@ def pay_per_comp_filtered(filtered_dic,total_payment):
 def results_per_spe(response):
     """ xxxx"""
     all_payments = {}
-    for result in response.json()[:10]:
+    for result in response.json():
         all_payments[str(result['submitting_applicable_manufacturer_or_applicable_gpo_name'])] = float(result["total_amount_of_payment_usdollars"])
     return all_payments
 
-
+# add payment id , docid, type of food
 
 
 
