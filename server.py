@@ -29,12 +29,6 @@ app.jinja_env.undefined = StrictUndefined
 # extract from secret.sh
 secret_token = os.environ["DOC_APP_TOKEN"]
 
-# No need:
-# headers = {"Host": "data.seattle.gov",
-#           "Accept": "application/json",
-#           "X-App-Token": secret_token}
-
-
 
 @app.route('/')
 def index():
@@ -102,10 +96,12 @@ def ind_comparison(physician_profile_id, specialty, state):
             }
     print specialty
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=summ, stream=True)
-    results = module.results_per_spe(response)
+    all_payments = module.results_per_spe(response)
+    avg_per_state = module.averg_per_state(all_payments)
+    avg_pharm = module.averg_per_company(all_payments)
     # tot_avg_sp = 
     # total_avg_sp_pharm
-    return render_template('ind_comparison.html', response=results)
+    return render_template('ind_comparison.html', avg_per_state=avg_per_state, avg_pharm=avg_pharm)
 
 @app.route('/payment_type')
 def payment():

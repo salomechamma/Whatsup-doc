@@ -80,12 +80,49 @@ def pay_per_comp_filtered(filtered_dic,total_payment):
 
 def results_per_spe(response):
     """ xxxx"""
+    # create a dictionnary with key as record id : pharn_name, payment, docid,  food_type:
     all_payments = {}
     for result in response.json():
-        all_payments[str(result['submitting_applicable_manufacturer_or_applicable_gpo_name'])] = float(result["total_amount_of_payment_usdollars"])
+        all_payments[int(result['record_id'])] = [str(result['submitting_applicable_manufacturer_or_applicable_gpo_name']), float(
+            result["total_amount_of_payment_usdollars"]), int(result['physician_profile_id']), str(
+            result['nature_of_payment_or_transfer_of_value'])]
+    # calculate number of doctor on this query by creating a set and looking at its length
     return all_payments
 
-# add payment id , docid, type of food
+def averg_per_state(all_payments):
+    doc_nber = set()
+    total = 0
+    for record in all_payments.items():
+        doc_nber.add(record[1][2])
+        total += record[1][1]
+    nber = len(doc_nber)
+    print nber
+    print total
+    return int(total/nber)
+     
+
+def averg_per_company(all_payments):
+    # ALL PAYMENTS = [{ RECORD ID: PHARMA, PAYMENT, DOCID, TYPE, RECORDID..}
+    # (RECORDID, PHARMA, PAYMENT, DOCID, TYPE, RECORDID
+    # PHARMA: +PAYMENT , SET(DOCID)
+    pharm_paymt = {}
+    nb_doc = {}
+    avg_pharm = {}
+    print all_payments.items()
+    for record in all_payments.items():
+        company = record[1][0]
+        pharm_paymt[company] = record[1][1] + pharm_paymt.get(record[1][0],0)
+        nb_doc[company] = nb_doc.get(company,set())
+        nb_doc[company].add(record[1][2])
+       
+    for company in pharm_paymt:
+        avg_pharm[company] = pharm_paymt[company]/len(nb_doc[company])
+    print "AVGGGGG" , avg_pharm
+    return avg_pharm
+
+
+
+
 
 
 
