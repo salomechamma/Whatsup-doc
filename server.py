@@ -61,6 +61,7 @@ def results_list():
                 'physician_first_name': firstname,
                 'physician_last_name': lastname}
 
+
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
     search_results = response.json()
     # to keep only unique id of doctor so no duplicates in list of results:
@@ -83,18 +84,27 @@ def summary(physician_profile_id):
     last_name = search_results[0]['physician_last_name']
     perso_doc_info = module.perso_doc_info(search_results)
     pay_breakdown = module.pay_per_comp(search_results)
+    top_pharm = module.pay_per_comp_filtered(pay_breakdown,t)
 
 
     return render_template("summary.html", total=t, 
-        perso_doc_info = perso_doc_info, pay_breakdown=pay_breakdown, first_name=
-        first_name, last_name=last_name)
+        perso_doc_info = perso_doc_info, pay_breakdown=top_pharm, first_name=
+        first_name, last_name=last_name, p_id= physician_profile_id)
 
-@app.route('/ind_comparison')
-def ind_comparison():
+@app.route("/ind_comparison/<int:physician_profile_id>/<specialty>")
+def ind_comparison(physician_profile_id, specialty):
     """Show payments received by doctor in comparison to payments received by 
     all doctors of the same specialty"""
-    pass
-    return render_template("ind_comparison.html")
+    
+    summ = {'$$app_token': secret_token,
+            'physician_specialty': specialty
+            }
+    print specialty
+    response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=summ, stream=True)
+    results = module.results_per_spe(response)
+    # tot_avg_sp = 
+    # total_avg_sp_pharm
+    return render_template('homepage.html', response=results)
 
 @app.route('/payment_type')
 def payment():
@@ -103,6 +113,10 @@ def payment():
     pass 
     return render_template('payment_type.html')
 
+@app.route('/doctor_like')
+def doctor_like():
+    pass
+    return render_template("doctor_like.html")
 
 
 if __name__ == "__main__":

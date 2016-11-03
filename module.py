@@ -3,39 +3,12 @@
 import os
 from jinja2 import StrictUndefined
 
-from flask import jsonify
-from flask import (Flask, render_template, redirect, request, flash,
-                   session)
+
 import requests
 from sys import argv
 from pprint import pprint
 import json
 import server
-
-from flask_debugtoolbar import DebugToolbarExtension
-
-
-
-app = Flask(__name__)
-
-# Required to use Flask sessions and the debug toolbar
-app.secret_key = "ABC" 
- # session 
-
-# Normally, if you use an undefined variable in Jinja2, it fails
-# silently. This is horrible. Fix this so that, instead, it raises an
-# error.
-app.jinja_env.undefined = StrictUndefined
-
-
-# extract from secret.sh
-secret_token = os.environ["DOC_APP_TOKEN"]
-
-# No need:
-# headers = {"Host": "data.seattle.gov",
-#           "Accept": "application/json",
-#           "X-App-Token": secret_token}
-
 
 
 
@@ -62,7 +35,7 @@ def unique_dico(list_results):
 
 
 def total_payments(list_payments):
-    """ XXXXX """
+    """ Return float corresponding to toal amounts received by this doctor """
     t = 0
     for dic in list_payments:
         t = t + float(dic['total_amount_of_payment_usdollars'])
@@ -70,16 +43,18 @@ def total_payments(list_payments):
 
 
 def perso_doc_info(list_results):
-    """ XXXXX """
+    """ return dictionnary containing personal info on doctor """
     info = {}
     info['specialty'] = list_results[0]['physician_specialty']
     info['street_address'] = list_results[0]['recipient_primary_business_street_address_line1']
     info['zipcode'] = list_results[0]['recipient_zip_code'] 
     info['city'] = list_results[0]['recipient_city']
+    info['p_id'] = list_results[0]['physician_profile_id']
     return info
 
 def pay_per_comp(list_results):
-    """ XXXXX """
+    """ Return dictionnary with keys being company names and values 
+    being the total payment the company made to that doctor  """
     pay_breakdown = {}
     pharm_name = []
     for dic in list_results:
@@ -92,4 +67,26 @@ def pay_per_comp(list_results):
             pay_breakdown[dic_key] = float(dic['total_amount_of_payment_usdollars']) 
             pharm_name.append(dic['submitting_applicable_manufacturer_or_applicable_gpo_name'])
     return pay_breakdown
+
+def pay_per_comp_filtered(filtered_dic,total_payment):
+    """Return"""
+    # duplicate dictionnary to be sure to not lost all the data:
+    top_pharm = sorted(filtered_dic.items(), key=lambda x:x[1], reverse=True)[:4]
+    top_pharm.append(('Other', total_payment - top_pharm[0][1] - top_pharm[1][1] 
+    - top_pharm[2][1] - top_pharm[3][1]))
+    return top_pharm
+
+
+def results_per_spe(response):
+    """ xxxx"""
+    all_payments = {}
+    for result in response.json()[:10]:
+        all_payments[str(result['submitting_applicable_manufacturer_or_applicable_gpo_name'])] = float(result["total_amount_of_payment_usdollars"])
+    return all_payments
+
+
+
+
+
+
 
