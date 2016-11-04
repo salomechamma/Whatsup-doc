@@ -117,6 +117,42 @@ def doctor_like():
     return render_template("doctor_like.html")
 
 
+
+@app.route('/chart')
+def chart():
+    """Return chart tplate."""
+    return render_template("charts.html")
+
+# trying chart
+@app.route('/doc_info.json')
+def payment_doc():
+    """Return data about payments received by doctor per each company."""
+
+    data_dict = {
+                "labels": [
+                    "Christmas Melon",
+                    "Crenshaw",
+                    "Yellow Watermelon"
+                ],
+                "datasets": [
+                    {
+                        "data": [300, 50, 100],
+                        "backgroundColor": [
+                            "#FF6384",
+                            "#36A2EB",
+                            "#FFCE56"
+                        ],
+                        "hoverBackgroundColor": [
+                            "#FF6384",
+                            "#36A2EB",
+                            "#FFCE56"
+                        ]
+                    }]
+            }
+
+    return jsonify(data_dict)
+
+
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension

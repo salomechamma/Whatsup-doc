@@ -36,4 +36,31 @@
     <button type="submit">Access Doctor Ratings</button>
     </form>
 </span>
+
+
+
+
+<div class="summary-chart">
+    <canvas id="docChart"></canvas>
+    <div id="docLegend" class="chart-legend"></div>
+  </div>
+
+<!-- Chart part -->
+<script>
+
+var options = { responsive: true };
+
+var ctx_donut = $("#docChart").get(0).getContext("2d");
+
+$.get("/doc_info.json", function (data) {
+    var mydocChart = new Chart(ctx_donut, {
+                                            type: 'doughnut',
+                                            data: data,
+                                            options: options
+                                          });
+    $('#docLegend').html(mydocChart.generateLegend());
+});
+
+</script>
+
 {% endblock %}
