@@ -80,7 +80,8 @@ def summary(physician_profile_id):
     pay_breakdown = module.pay_per_comp(search_results)
     top_pharm = module.pay_per_comp_filtered(pay_breakdown,t)
 
-
+    session['info_doc'] = perso_doc_info
+    session['pay_breakdown'] = top_pharm
     return render_template("summary.html", total=t, 
         perso_doc_info = perso_doc_info, pay_breakdown=top_pharm, first_name=
         first_name, last_name=last_name, p_id= physician_profile_id)
@@ -98,10 +99,10 @@ def ind_comparison(physician_profile_id, specialty, state):
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=summ, stream=True)
     all_payments = module.results_per_spe(response)
     avg_per_state = module.averg_per_state(all_payments)
-    avg_pharm = module.averg_per_company(all_payments)
-    # tot_avg_sp = 
-    # total_avg_sp_pharm
-    return render_template('ind_comparison.html', avg_per_state=avg_per_state, avg_pharm=avg_pharm)
+    avg_pharm = module.averg_per_company(all_payments) #dictionnary with key: pharmacy, value: avg payed doc for specific specialty & state
+    avg_pharm_match_doc = module.averg_ind_comp_doc(avg_pharm, session['pay_breakdown'])
+    return render_template('ind_comparison.html', avg_per_state=avg_per_state, 
+        avg_pharm=avg_pharm, avg_pharm_ind_doc=avg_pharm_match_doc)
 
 @app.route('/payment_type')
 def payment():

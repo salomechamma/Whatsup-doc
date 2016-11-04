@@ -44,6 +44,7 @@ def total_payments(list_payments):
 
 def perso_doc_info(list_results):
     """ return dictionnary containing personal info on doctor """
+    # for later, add first and last name and id to info dictionnary to only pass that to summary.html
     info = {}
     info['specialty'] = list_results[0]['physician_specialty']
     info['street_address'] = list_results[0]['recipient_primary_business_street_address_line1']
@@ -90,25 +91,24 @@ def results_per_spe(response):
     return all_payments
 
 def averg_per_state(all_payments):
+    """ XXXXXXXX"""
     doc_nber = set()
     total = 0
     for record in all_payments.items():
         doc_nber.add(record[1][2])
         total += record[1][1]
     nber = len(doc_nber)
-    print nber
-    print total
     return int(total/nber)
      
 
 def averg_per_company(all_payments):
+    """ XXXXXXXX"""
     # ALL PAYMENTS = [{ RECORD ID: PHARMA, PAYMENT, DOCID, TYPE, RECORDID..}
     # (RECORDID, PHARMA, PAYMENT, DOCID, TYPE, RECORDID
     # PHARMA: +PAYMENT , SET(DOCID)
     pharm_paymt = {}
     nb_doc = {}
     avg_pharm = {}
-    print all_payments.items()
     for record in all_payments.items():
         company = record[1][0]
         pharm_paymt[company] = record[1][1] + pharm_paymt.get(record[1][0],0)
@@ -116,12 +116,22 @@ def averg_per_company(all_payments):
         nb_doc[company].add(record[1][2])
        
     for company in pharm_paymt:
-        avg_pharm[company] = pharm_paymt[company]/len(nb_doc[company])
-    print "AVGGGGG" , avg_pharm
+        avg_pharm[company] = int(pharm_paymt[company]/len(nb_doc[company]))
     return avg_pharm
 
 
+def averg_ind_comp_doc(avg_pharm,doc_pay_breakdown):
+    """ XXXXXXXX"""
 
+    averg_comp_match_doc = {}
+    for company in doc_pay_breakdown:
+        if company[0] in avg_pharm.keys():
+            if company[0] == 'Other':
+                pass
+            else:
+                averg_comp_match_doc[company[0]] = avg_pharm[(company[0])]
+    # import pdb; pdb.set_trace()
+    return averg_comp_match_doc
 
 
 
