@@ -78,10 +78,15 @@ def summary(physician_profile_id):
     last_name = search_results[0]['physician_last_name']
     perso_doc_info = module.perso_doc_info(search_results)
     pay_breakdown = module.pay_per_comp(search_results)
+    # List of tuple ; tuple = (pharmacy name, total):
     top_pharm = module.pay_per_comp_filtered(pay_breakdown,t)
 
+    # Entering in session what I am going to need later:
     session['info_doc'] = perso_doc_info
     session['pay_breakdown'] = top_pharm
+    session['doc_chart_pharm'] = module.tuplelist_to_listfirstitem(top_pharm)
+    session['doc_chart_payment'] = module.tuplelist_to_listseconditem(top_pharm)
+
     return render_template("summary.html", total=t, 
         perso_doc_info = perso_doc_info, pay_breakdown=top_pharm, first_name=
         first_name, last_name=last_name, p_id= physician_profile_id)
@@ -95,7 +100,6 @@ def ind_comparison(physician_profile_id, specialty, state):
             'physician_specialty': specialty,
             'recipient_state': state
             }
-    print specialty
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=summ, stream=True)
     all_payments = module.results_per_spe(response)
     avg_per_state = module.averg_per_state(all_payments)
@@ -128,24 +132,25 @@ def chart():
 def payment_doc():
     """Return data about payments received by doctor per each company."""
 
+   
     data_dict = {
-                "labels": [
-                    "Christmas Melon",
-                    "Crenshaw",
-                    "Yellow Watermelon"
-                ],
+                "labels":  session['doc_chart_pharm'],
                 "datasets": [
                     {
-                        "data": [300, 50, 100],
+                        "data": session['doc_chart_payment'],
                         "backgroundColor": [
                             "#FF6384",
                             "#36A2EB",
-                            "#FFCE56"
+                            "#FFCE56",
+                            "#02c8a7",
+                            "#552847"
                         ],
                         "hoverBackgroundColor": [
                             "#FF6384",
                             "#36A2EB",
-                            "#FFCE56"
+                            "#FFCE56",
+                            "#02c8a7",
+                            "#552847"
                         ]
                     }]
             }

@@ -28,7 +28,7 @@ def unique_dico(list_results):
         else:
             id_list.append(int(dico['physician_profile_id']))
             new_list.append(dico)
-            print id_list
+           
            
     return new_list
      
@@ -133,8 +133,19 @@ def averg_ind_comp_doc(avg_pharm,doc_pay_breakdown):
     # import pdb; pdb.set_trace()
     return averg_comp_match_doc
 
+def tuplelist_to_listfirstitem(tuplelist):
+    """ Takes list of tuple and return list of first item of each tuple """
+    company_name = []
+    for comp_tuple in tuplelist:
+        company_name.append(comp_tuple[0])
+    return company_name
 
-
+def tuplelist_to_listseconditem(tuplelist):
+    """ Takes list of tuple and return list of second item of each tuple """
+    total_payment = []
+    for comp_tuple in tuplelist:
+        total_payment.append(comp_tuple[1])
+    return total_payment
 
 
 
