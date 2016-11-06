@@ -74,7 +74,7 @@ def pay_per_comp_filtered(filtered_dic,total_payment):
     """Return"""
     # duplicate dictionnary to be sure to not lost all the data:
     top_pharm = sorted(filtered_dic.items(), key=lambda x:x[1], reverse=True)[:4]
-    top_pharm.append(('Other', total_payment - top_pharm[0][1] - top_pharm[1][1] 
+    top_pharm.append( ('Other', total_payment - top_pharm[0][1] - top_pharm[1][1] 
     - top_pharm[2][1] - top_pharm[3][1]))
     return top_pharm
 
@@ -144,7 +144,7 @@ def tuplelist_to_listseconditem(tuplelist):
     """ Takes list of tuple and return list of second item of each tuple """
     total_payment = []
     for comp_tuple in tuplelist:
-        total_payment.append(comp_tuple[1])
+        total_payment.append(int(comp_tuple[1]))
     return total_payment
 
 

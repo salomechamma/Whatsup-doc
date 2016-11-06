@@ -39,16 +39,44 @@
 
 
 
-
-<div class="summary-chart">
-    <canvas id="docChart"></canvas>
+<div class="summary-chart" style="height: 300px; width: 50%;">
+    <canvas id="docChart" height:'256' width:'256'></canvas>
     <div id="docLegend" class="chart-legend"></div>
   </div>
 
 <!-- Chart part -->
 <script>
 
-var options = { responsive: true };
+// put stuff in options
+
+var options = { responsive: true, maintainAspectRatio: true,
+       
+                title: {            
+                    display: true,
+                    text: 'Payments received by this doctor'
+                },
+                legend: {
+                display: true},   
+                tooltips: { 
+                    callbacks: {
+                    label: function(tooltipItem, data) {
+                    var allData = data.datasets[tooltipItem.datasetIndex].data;
+                    var tooltipLabel = data.labels[tooltipItem.index];
+                    var tooltipData = allData[tooltipItem.index];
+                    var total = 0;
+                    for (var i in allData) {
+                        total += allData[i];
+                                            }
+                    var tooltipPercentage = Math.round((tooltipData / total) * 100);
+                    return tooltipLabel + ': $' + tooltipData + ' (' + tooltipPercentage + '%)';
+                                                        }
+                             }
+                    // enabled: true,
+                    // mode: 'x-axis'
+                },
+                animation:{animateRotate: true, animateScale: true} 
+                };
+
 
 var ctx_donut = $("#docChart").get(0).getContext("2d");
 
@@ -56,9 +84,9 @@ $.get("/doc_info.json", function (data) {
     var mydocChart = new Chart(ctx_donut, {
                                             type: 'doughnut',
                                             data: data,
-                                            options: options
-                                          });
-    $('#docLegend').html(mydocChart.generateLegend());
+                                            options: options,
+                                            });
+
 });
 
 </script>
