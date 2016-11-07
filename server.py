@@ -105,6 +105,9 @@ def ind_comparison(physician_profile_id, specialty, state):
     avg_per_state = module.averg_per_state(all_payments)
     avg_pharm = module.averg_per_company(all_payments) #dictionnary with key: pharmacy, value: avg payed doc for specific specialty & state
     avg_pharm_match_doc = module.averg_ind_comp_doc(avg_pharm, session['pay_breakdown'])
+    session['doc_comp'] = module.list_tup_to_dic(session['pay_breakdown'])
+    session['bar_chart'] = module.bar_chart_dic(session['doc_comp'],avg_pharm_match_doc)
+    session['pharm_avg'] = module.pharm_avg_sortedlist(avg_pharm_match_doc)
     return render_template('ind_comparison.html', avg_per_state=avg_per_state, 
         avg_pharm=avg_pharm, avg_pharm_ind_doc=avg_pharm_match_doc)
 
@@ -122,17 +125,13 @@ def doctor_like():
 
 
 
-@app.route('/chart')
-def chart():
-    """Return chart tplate."""
-    return render_template("charts.html")
 
 # trying chart
 @app.route('/doc_info.json')
 def payment_doc():
     """Return data about payments received by doctor per each company."""
 
-   
+# Be careful here , formatted for only 5 companies
     data_dict = {
                 "labels":  session['doc_chart_pharm'],
                 "datasets": [
@@ -157,6 +156,95 @@ def payment_doc():
             }
 
     return jsonify(data_dict)
+
+# @app.route("/ind_info.json")
+# def payment_ind_doc():
+#     """XXXXXX"""
+#     data_dict = {
+#                 'labels': sorted(session['doc_chart_pharm'][:-1]),
+#                 "datasets":[
+#                     {
+#                         "label": "Average spent on each doctor",
+#                         "data": session['pharm_avg'],
+#                         "borderColor": '#00FF00',
+#                         "borderWidth": 2,
+#                         "backgroundColor": [
+#                             "#FF6384",
+#                             "#36A2EB",
+#                             "#FFCE56",
+#                             "#02c8a7"
+#                         ],
+#                         "hoverBackgroundColor": [
+#                             "#FF6384",
+#                             "#36A2EB",
+#                             "#FFCE56",
+#                             "#02c8a7"
+#                         ]
+                
+#                     }]
+#             }
+
+#     return jsonify(data_dict)
+            
+@app.route("/ind_info.json")
+def payment_ind_doc():
+    """XXXXXX"""
+    data_dict = {
+                "labels": ['a','b'],
+                "datasets":[
+                    {
+                        "label": "my first dataset",
+                        "data": [3,4],
+                        "borderColor": '#00FF00',
+                        "borderWidth": 2,
+                        "stack": 1,
+                        "backgroundColor": "rgba(99,255,132,0.2)"
+                        
+                
+                    },
+                    {
+                        "label": "my second dataset",
+                        "data": [2,6],
+                        "borderColor": '#00FF00',
+                        "borderWidth": 2,
+                        "stack": 2,
+                        "backgroundColor": "rgba(255,99,132,0.2)"
+                        
+                
+                    }]
+                }
+
+    return jsonify(data_dict)
+
+
+# var data = {
+#   labels: ["January", "February", "March", "April", "May", "June", "July"],
+#   datasets: [
+#     {
+#       label: "My First dataset",
+#       backgroundColor: "rgba(99,255,132,0.2)",
+#       data: [59, 80, 81, 56, 55, 40, 65],
+#       stack: 1
+#     },
+#     {
+#       label: "My Second dataset",
+#       backgroundColor: "rgba(99,132,255,0.2)",
+#       data: [80, 81, 56, 55, 40, 65, 60],
+#       stack: 2
+#     },
+#     {
+#       label: "My Third dataset",
+#       backgroundColor: "rgba(255,99,132,0.2)",
+#       data: [60, 59, 80, 81, 56, 55, 40],
+#       stack: 2
+#     }
+#   ]
+# };
+
+
+
+
+
 
 
 if __name__ == "__main__":

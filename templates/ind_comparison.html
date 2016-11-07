@@ -9,6 +9,57 @@
 <div>  {{ avg_pharm }} </div>
 <div>  {{  avg_pharm_ind_doc }} </div>
    
-  
+<div class="comparison-chart" style="height: 300px; width: 50%;">
+    <canvas id="indChart" height:'256' width:'256'></canvas>
+    <div id="indLegend" class="chart-legend"></div>
+</div>
+
+
+<!-- Chart part -->
+<script>
+
+// put stuff in options
+
+console.log(Chart.defaults.scale.ticks);
+Chart.defaults.scale.ticks.beginAtZero = true;
+
+var options = { responsive: true, maintainAspectRatio: true,
+       
+                
+                legend: {
+                display: true},   
+                tooltips: { 
+                    callbacks: {
+                    label: function(tooltipItem, data) {
+                    var allData = data.datasets[tooltipItem.datasetIndex].data;
+                    var tooltipLabel = data.labels[tooltipItem.index];
+                    var tooltipData = allData[tooltipItem.index];
+                    // var total = 0;
+                    // for (var i in allData) {
+                    //     total += allData[i];
+                    //                         }
+                    // var tooltipPercentage = Math.round((tooltipData / total) * 100);
+                    return  'Average spent on each doctor of this specialty: $' + tooltipData ;
+                                                        }
+                             }
+                    // enabled: true,
+                    // mode: 'x-axis'
+                },
+                animation:{animateRotate: true, animateScale: true} 
+                };
+
+
+var ctx_bar = $("#indChart").get(0).getContext("2d");
+
+$.get("/ind_info.json", function (data) {
+    var myBarChart = new Chart(ctx_bar, {
+                                            type: 'bar',
+                                            data: data,
+                                            options : options
+                                          });
+    
+});
+
+</script>
 
 {% endblock %}

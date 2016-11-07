@@ -144,8 +144,42 @@ def tuplelist_to_listseconditem(tuplelist):
     """ Takes list of tuple and return list of second item of each tuple """
     total_payment = []
     for comp_tuple in tuplelist:
-        total_payment.append(int(comp_tuple[1]))
+        total_payment.append(round((comp_tuple[1]),2))
     return total_payment
 
+def list_tup_to_dic(tuplelist):
+    """ For ind comparison page, transform doc list of tuple to dict without key 'other' """
+    doc_comp = {}
+    for tuplei in tuplelist:
+        company_n = tuplei[0] 
+        if company_n == 'Other':
+            pass
+        else:
+            doc_comp[company_n] = tuplei[1]
+    return doc_comp
+
+
+
+def bar_chart_dic(avg_pharm_doc, avg_pharm_match_doc):
+    """XXXXXX"""
+    list1 = []
+    
+    for company in avg_pharm_doc:
+        datas = {}
+        datas['pharmaceutical'] = company
+        datas['doctor'] = avg_pharm_doc[company]
+        datas['avg_company-spec'] = avg_pharm_match_doc[company]
+        list1.append(datas)
+    return list1
+
+
+def pharm_avg_sortedlist(dic_avg_pharm):
+    """XXXXXX"""
+    listavg = []
+    avg_pharm = sorted(dic_avg_pharm.items())
+    print avg_pharm
+    for company in avg_pharm:
+        listavg.append(company[1])
+    return listavg
 
 
