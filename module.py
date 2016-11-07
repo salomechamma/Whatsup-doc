@@ -46,6 +46,7 @@ def perso_doc_info(list_results):
     """ return dictionnary containing personal info on doctor """
     # for later, add first and last name and id to info dictionnary to only pass that to summary.html
     info = {}
+    info['name'] = list_results[0]['physician_first_name'].capitalize() + ' ' + list_results[0]['physician_last_name'].capitalize() 
     info['specialty'] = list_results[0]['physician_specialty']
     info['street_address'] = list_results[0]['recipient_primary_business_street_address_line1']
     info['zipcode'] = list_results[0]['recipient_zip_code'] 
@@ -136,14 +137,14 @@ def averg_ind_comp_doc(avg_pharm,doc_pay_breakdown):
 def tuplelist_to_listfirstitem(tuplelist):
     """ Takes list of tuple and return list of first item of each tuple """
     company_name = []
-    for comp_tuple in tuplelist:
+    for comp_tuple in sorted(tuplelist):
         company_name.append(comp_tuple[0])
     return company_name
 
 def tuplelist_to_listseconditem(tuplelist):
     """ Takes list of tuple and return list of second item of each tuple """
     total_payment = []
-    for comp_tuple in tuplelist:
+    for comp_tuple in sorted(tuplelist):
         total_payment.append(round((comp_tuple[1]),2))
     return total_payment
 
@@ -177,9 +178,8 @@ def pharm_avg_sortedlist(dic_avg_pharm):
     """XXXXXX"""
     listavg = []
     avg_pharm = sorted(dic_avg_pharm.items())
-    print avg_pharm
     for company in avg_pharm:
-        listavg.append(company[1])
+        listavg.append(round(company[1],2))
     return listavg
 
 

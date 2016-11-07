@@ -83,11 +83,27 @@ def summary(physician_profile_id):
 
     # Entering in session what I am going to need later:
     session['info_doc'] = perso_doc_info
+    session['info_doc']['total_received'] = round(t)
     session['pay_breakdown'] = top_pharm
     session['doc_chart_pharm'] = module.tuplelist_to_listfirstitem(top_pharm)
     session['doc_chart_payment'] = module.tuplelist_to_listseconditem(top_pharm)
+  
+    top_pharm_dic_no_other = top_pharm
+    top_pharm_dic_no_other.pop()
+    session['listsamecompanies'] = module.tuplelist_to_listfirstitem(top_pharm_dic_no_other)
+    session['doc_payments_no_other']=module.tuplelist_to_listseconditem(top_pharm_dic_no_other)
+    
+    print '************ top pharm'
+    print top_pharm
 
-    return render_template("summary.html", total=t, 
+    print '************ List comp'
+    print session['listsamecompanies']
+
+    print '************ List value doc spec'
+    print session['doc_payments_no_other']
+
+
+    return render_template("summary.html", 
         perso_doc_info = perso_doc_info, pay_breakdown=top_pharm, first_name=
         first_name, last_name=last_name, p_id= physician_profile_id)
 
@@ -108,6 +124,9 @@ def ind_comparison(physician_profile_id, specialty, state):
     session['doc_comp'] = module.list_tup_to_dic(session['pay_breakdown'])
     session['bar_chart'] = module.bar_chart_dic(session['doc_comp'],avg_pharm_match_doc)
     session['pharm_avg'] = module.pharm_avg_sortedlist(avg_pharm_match_doc)
+    print '************ Value of companies for all doctors'
+    print session['pharm_avg']
+    print '************'
     return render_template('ind_comparison.html', avg_per_state=avg_per_state, 
         avg_pharm=avg_pharm, avg_pharm_ind_doc=avg_pharm_match_doc)
 
@@ -125,8 +144,6 @@ def doctor_like():
 
 
 
-
-# trying chart
 @app.route('/doc_info.json')
 def payment_doc():
     """Return data about payments received by doctor per each company."""
@@ -157,44 +174,18 @@ def payment_doc():
 
     return jsonify(data_dict)
 
-# @app.route("/ind_info.json")
-# def payment_ind_doc():
-#     """XXXXXX"""
-#     data_dict = {
-#                 'labels': sorted(session['doc_chart_pharm'][:-1]),
-#                 "datasets":[
-#                     {
-#                         "label": "Average spent on each doctor",
-#                         "data": session['pharm_avg'],
-#                         "borderColor": '#00FF00',
-#                         "borderWidth": 2,
-#                         "backgroundColor": [
-#                             "#FF6384",
-#                             "#36A2EB",
-#                             "#FFCE56",
-#                             "#02c8a7"
-#                         ],
-#                         "hoverBackgroundColor": [
-#                             "#FF6384",
-#                             "#36A2EB",
-#                             "#FFCE56",
-#                             "#02c8a7"
-#                         ]
-                
-#                     }]
-#             }
-
-#     return jsonify(data_dict)
             
 @app.route("/ind_info.json")
 def payment_ind_doc():
-    """XXXXXX"""
+    """Return data about average payments made by each company to same specialty of doc 
+    versus payment receievd by specific doctor of same specialty."""
+   
     data_dict = {
-                "labels": ['a','b'],
+                "labels": session['listsamecompanies'],
                 "datasets":[
                     {
-                        "label": "my first dataset",
-                        "data": [3,4],
+                        "label": "Payments Received by this specific Doctor",
+                        "data": session['doc_payments_no_other'],
                         "borderColor": '#00FF00',
                         "borderWidth": 2,
                         "stack": 1,
@@ -203,8 +194,8 @@ def payment_ind_doc():
                 
                     },
                     {
-                        "label": "my second dataset",
-                        "data": [2,6],
+                        "label": "Average Payments spent on this Specialty per Doctor",
+                        "data": session['pharm_avg'],
                         "borderColor": '#00FF00',
                         "borderWidth": 2,
                         "stack": 2,
@@ -213,36 +204,7 @@ def payment_ind_doc():
                 
                     }]
                 }
-
     return jsonify(data_dict)
-
-
-# var data = {
-#   labels: ["January", "February", "March", "April", "May", "June", "July"],
-#   datasets: [
-#     {
-#       label: "My First dataset",
-#       backgroundColor: "rgba(99,255,132,0.2)",
-#       data: [59, 80, 81, 56, 55, 40, 65],
-#       stack: 1
-#     },
-#     {
-#       label: "My Second dataset",
-#       backgroundColor: "rgba(99,132,255,0.2)",
-#       data: [80, 81, 56, 55, 40, 65, 60],
-#       stack: 2
-#     },
-#     {
-#       label: "My Third dataset",
-#       backgroundColor: "rgba(255,99,132,0.2)",
-#       data: [60, 59, 80, 81, 56, 55, 40],
-#       stack: 2
-#     }
-#   ]
-# };
-
-
-
 
 
 

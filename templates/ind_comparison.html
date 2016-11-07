@@ -5,11 +5,13 @@
 
   <h2>Industry Comparison</h2>
 
-<div>  ${{ avg_per_state }} </div>
-<div>  {{ avg_pharm }} </div>
-<div>  {{  avg_pharm_ind_doc }} </div>
+<div> Payments recived by {{ session['info_doc']['name'] }} in 2015: <b>${{session['info_doc']['total_received'] }} </b></div>
+<div> Average payments recived by all doctors of the {{ session['info_doc']['specialty'] }} specialty in 2015 in {{ session['info_doc']['state'] }}: <b>${{ avg_per_state }} </b></div>
+<!-- <div>  {{ avg_pharm }} </div>
+<div>  {{  avg_pharm_ind_doc }} </div> -->
    
-<div class="comparison-chart" style="height: 300px; width: 50%;">
+<br><div class="comparison-chart" style="height: 300px; width: 50%;">
+    <h3> Comparison between this doctor and all doctors of the state of practicing the xx specialty</h3><br>
     <canvas id="indChart" height:'256' width:'256'></canvas>
     <div id="indLegend" class="chart-legend"></div>
 </div>

@@ -6,7 +6,7 @@
   <h2>Summary</h2>
 
 <h4>  {{ first_name }} {{ last_name }} <br>
- Total payments received from pharmaceutical companies in 2015: ${{ total }} </h4> <br>
+ Total payments received from pharmaceutical companies in 2015: ${{ session['info_doc']['total_received'] }} </h4> <br>
 
 <!-- info related to doctor that appear on top of the page -->
 <div>
@@ -21,7 +21,7 @@
     <ul>
         {% for name, payment in pay_breakdown %}
 
-            <li> {{ name }} paid a total of  ${{ payment }} - {{ (payment*100/total)|round|int }}% of total payments received </li>
+            <li> {{ name }} paid a total of  ${{ payment }} - {{ (payment*100/session['info_doc']['total_received'])|round|int }}% of total payments received </li>
         {% endfor %}
     </ul>
 </div>
