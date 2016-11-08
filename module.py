@@ -47,7 +47,11 @@ def perso_doc_info(list_results):
     # for later, add first and last name and id to info dictionnary to only pass that to summary.html
     info = {}
     info['name'] = list_results[0]['physician_first_name'].capitalize() + ' ' + list_results[0]['physician_last_name'].capitalize() 
+    info['first_name'] = list_results[0]['physician_first_name']
+    info['last_name'] = list_results[0]['physician_last_name']
     info['specialty'] = list_results[0]['physician_specialty']
+    list_specialty = info['specialty'].split('|')
+    info['short_specialty'] = list_specialty[-1]
     info['street_address'] = list_results[0]['recipient_primary_business_street_address_line1']
     info['zipcode'] = list_results[0]['recipient_zip_code'] 
     info['city'] = list_results[0]['recipient_city']
@@ -99,7 +103,7 @@ def averg_per_state(all_payments):
         doc_nber.add(record[1][2])
         total += record[1][1]
     nber = len(doc_nber)
-    return int(total/nber)
+    return (total/nber)
      
 
 def averg_per_company(all_payments):

@@ -66,7 +66,7 @@ def results_list():
 @app.route("/doc_summary/<int:physician_profile_id>")
 def summary(physician_profile_id):
     """Show summary page on doctor resulting from search."""
-
+    # Govt API Request
     summ = {'$$app_token': secret_token,
                 'physician_profile_id': physician_profile_id,
             }
@@ -83,7 +83,7 @@ def summary(physician_profile_id):
 
     # Entering in session what I am going to need later:
     session['info_doc'] = perso_doc_info
-    session['info_doc']['total_received'] = round(t)
+    session['info_doc']['total_received'] = round(t,2)
     session['pay_breakdown'] = top_pharm
     session['doc_chart_pharm'] = module.tuplelist_to_listfirstitem(top_pharm)
     session['doc_chart_payment'] = module.tuplelist_to_listseconditem(top_pharm)
@@ -93,14 +93,8 @@ def summary(physician_profile_id):
     session['listsamecompanies'] = module.tuplelist_to_listfirstitem(top_pharm_dic_no_other)
     session['doc_payments_no_other']=module.tuplelist_to_listseconditem(top_pharm_dic_no_other)
     
-    print '************ top pharm'
-    print top_pharm
-
-    print '************ List comp'
-    print session['listsamecompanies']
-
-    print '************ List value doc spec'
-    print session['doc_payments_no_other']
+    # Yelp API request
+    
 
 
     return render_template("summary.html", 
@@ -118,7 +112,7 @@ def ind_comparison(physician_profile_id, specialty, state):
             }
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=summ, stream=True)
     all_payments = module.results_per_spe(response)
-    avg_per_state = module.averg_per_state(all_payments)
+    avg_per_state = round(module.averg_per_state(all_payments),2)
     avg_pharm = module.averg_per_company(all_payments) #dictionnary with key: pharmacy, value: avg payed doc for specific specialty & state
     avg_pharm_match_doc = module.averg_ind_comp_doc(avg_pharm, session['pay_breakdown'])
     session['doc_comp'] = module.list_tup_to_dic(session['pay_breakdown'])
