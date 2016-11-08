@@ -42,18 +42,25 @@ yelp_access_token = r.json()['access_token']
 yelp_search_url = 'https://api.yelp.com/v3/businesses/search'
 headers = {'Authorization': 'Bearer ' + yelp_access_token}
 params = {
-    'term': 'JOHN SMITH',
-    'location':  '08865, PHILLIPSBURG',
+    'term': 'CHARLES SAHA',
+    'location':  '10028',
     'categories': 'health'
 
    }
+
 result = requests.get(url=yelp_search_url, params=params, headers=headers)
 
 print result.json()['total']
-business_name = result.json()['businesses'][0]['name']
-rating = result.json()['businesses'][0]['rating']
-if (session['info_doc']['first_name'] not in business_name) or (session['info_doc']['last_name'] not in business_name):
+print result.json()['businesses'][0]['name']
+name = result.json()['businesses'][0]['name']
+if  'Saha' in name and 'Charles' in name:
+    rating = result.json()['businesses'][0]['rating']
+else:
     rating = -1
+# business_name = result.json()['businesses'][0]['name']
+# rating = result.json()['businesses'][0]['rating']
+# if (session['info_doc']['first_name'] not in business_name) or (session['info_doc']['last_name'] not in business_name):
+#     rating = -1
 
 # @app.route('/')
 # def index():

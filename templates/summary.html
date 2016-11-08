@@ -3,12 +3,17 @@
 
 
 
-  <h2>Summary</h2>
+  <h2>Doctor Summary Profile</h2>
 
-<h4>  {{ first_name }} {{ last_name }} <br>
+<h4>  {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} <br>
+{% if   session['info_doc']['rating']  > 0 %} 
+    Yelp Rating: {{ session['info_doc']['rating'] }}/5 </h4><br>
+{% endif %}
+<br>
  Total payments received from pharmaceutical companies in 2015: ${{ session['info_doc']['total_received'] }} </h4> <br>
 
 <!-- info related to doctor that appear on top of the page -->
+<!-- change to sue the SESSION here instead of the perso_doc dictionnary apssed as parameters via route -->
 <div>
     {{ perso_doc_info['short_specialty'] }} <br>
     {{ perso_doc_info['street_address'] }} {{ perso_doc_info['zipcode' ] }} {{ perso_doc_info['city' ] }} 
@@ -27,13 +32,17 @@
 </div>
 <!-- button to access other pages -->
 <span>
-    <form method="get" action="/ind_comparison/{{ p_id }}/{{ perso_doc_info['specialty'] }}/{{ perso_doc_info['state'] }}">
+    <form method="get" action="/ind_comparison/{{ p_id }}/{{ session['info_doc']['specialty'] }}/{{ session['info_doc']['state'] }}">
     <button type="submit">Compare with peers</button>
     </form>
 
 
     <form method="get" action="/doctor_like">
     <button type="submit">Access Doctor Ratings</button>
+    </form>
+
+    <form method="get" action="/">
+    <button type="submit">New Search</button>
     </form>
 </span>
 

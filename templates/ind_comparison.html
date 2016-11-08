@@ -3,8 +3,12 @@
 
 
 
-  <h2>Industry Comparison</h2>
-
+  <h2>Industry Comparison </h2>
+  <h4>  {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} <br>
+{% if   session['info_doc']['rating']  > 0 %} 
+    Yelp Rating: {{ session['info_doc']['rating'] }}/5 </h4><br>
+{% endif %}
+<br>
 <div> Payments recived by {{ session['info_doc']['name'] }} in 2015: <b>${{session['info_doc']['total_received'] }} </b></div>
 <div> Average payments recived by all doctors of the {{ session['info_doc']['short_specialty'] }} specialty in 2015 in {{ session['info_doc']['state'] }}: <b>${{ avg_per_state }} </b></div>
 <!-- <div>  {{ avg_pharm }} </div>
@@ -15,6 +19,11 @@
     <canvas id="indChart" height:'256' width:'256'></canvas>
     <div id="indLegend" class="chart-legend"></div>
 </div>
+
+
+
+
+
 
 
 <!-- Chart part -->
@@ -63,5 +72,14 @@ $.get("/ind_info.json", function (data) {
 });
 
 </script>
+
+
+ <form method="get" action="/doc_summary/{{ session['info_doc']['p_id'] }}">
+    <button type="submit">Go Back</button>
+</form>
+
+ <form method="get" action="/">
+    <button type="submit">New Search</button>
+</form>
 
 {% endblock %}
