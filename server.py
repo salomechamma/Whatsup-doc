@@ -7,10 +7,10 @@ from jinja2 import StrictUndefined
 from flask import jsonify
 from flask import (Flask, render_template, redirect, request, flash,
                    session)
+from flask_debugtoolbar import DebugToolbarExtension
 import requests
 import json
-
-from flask_debugtoolbar import DebugToolbarExtension
+from model import connect_to_db, db, User, Doctor, Like
 
 # ***************************** To use Yelp API:
 from yelp.client import Client 
@@ -49,6 +49,7 @@ def index():
     """Homepage."""
 
     p_id = 49877
+
     # parameter including app_secret
     payload = {'$$app_token': secret_token,
                 'physician_profile_id': p_id}
@@ -113,7 +114,7 @@ def summary(physician_profile_id):
     
     params = {
     'term': session['info_doc']['last_name'],
-    'location':  '10028',
+    'location':  session['info_doc']['city'] + session['info_doc']['zipcode'],
     'categories': 'health'
 
     }
@@ -121,17 +122,22 @@ def summary(physician_profile_id):
     result = requests.get(url=yelp_search_url, params=params, headers=headers)
 
     # print result.json()['total']
-    print result.json()['businesses'][0]['name']
-    name = result.json()['businesses'][0]['name'].upper()
-    print name
-    print session['info_doc']['last_name']
-    if session['info_doc']['last_name'] in name :
-        rating = result.json()['businesses'][0]['rating']
-    else:
-        rating = -1
     
-
-    session['info_doc']['rating'] = rating 
+    print result.json()
+    print result.json()['businesses'][0]['name']
+    print session['info_doc']['last_name']
+    
+    businesses = result.json()['businesses']
+    for business in businesses:
+        name = business['name'].upper()
+        city = business['location']['city'].upper()
+        if session['info_doc']['last_name'] in name and session['info_doc']['city'] in city and session['info_doc']['first_name'] in name:
+            session['info_doc']['rating'] = business['rating']
+            session['info_doc']['url'] = business['url']
+            print session['info_doc']['url']
+            break
+   
+    print name
     print session['info_doc']['rating']   
     return render_template("summary.html", 
         perso_doc_info = info_doc, pay_breakdown=top_pharm, first_name=
@@ -242,7 +248,7 @@ if __name__ == "__main__":
     # point that we invoke the DebugToolbarExtension
     app.debug = True
 
-    # connect_to_db(app)
+    connect_to_db(app)
 
     # Use the DebugToolbar
     DebugToolbarExtension(app)

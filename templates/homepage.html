@@ -10,10 +10,11 @@
     Last Name: <input type="text" name="lastname">
 
     <input type="submit" value="Search"> <br><br>
- 
-<b>Test to ensure connection with API:</b>
- <div> {{ response }} </div>  
  </form>
+ 
+  <div> <b>Test to ensure connection with API:</b>
+{{ response[0]['physician_last_name'] }} </div>  
+ 
  
   
 

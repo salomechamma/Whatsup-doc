@@ -7,7 +7,8 @@
 
 <h4>  {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} <br>
 {% if   session['info_doc']['rating']  > 0 %} 
-    Yelp Rating: {{ session['info_doc']['rating'] }}/5 </h4><br>
+    Yelp Rating: {{ session['info_doc']['rating'] }}/5  -  Access the doctor Yelp page
+    <a href= {{ session['info_doc']['url'] }} >here</a></h4><br>
 {% endif %}
 <br>
  Total payments received from pharmaceutical companies in 2015: ${{ session['info_doc']['total_received'] }} </h4> <br>

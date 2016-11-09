@@ -43,7 +43,7 @@ def total_payments(list_payments):
 
 
 def perso_doc_info(list_results):
-    """ return dictionnary containing personal info on doctor """
+    """ return dictionnary containing personal info of doctor """
     # for later, add first and last name and id to info dictionnary to only pass that to summary.html
     info = {}
     info['name'] = list_results[0]['physician_first_name'].capitalize() + ' ' + list_results[0]['physician_last_name'].capitalize() 
@@ -57,6 +57,8 @@ def perso_doc_info(list_results):
     info['city'] = list_results[0]['recipient_city']
     info['state'] = list_results[0]['recipient_state']
     info['p_id'] = list_results[0]['physician_profile_id']
+    # Need to set rating to -1 so earse previous value
+    info['rating'] = -1
     return info
 
 def pay_per_comp(list_results):
