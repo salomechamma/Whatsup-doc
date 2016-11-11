@@ -22,12 +22,17 @@ def unique_dico(list_results):
     """ Return list of unique dictionnaries (unique physician ids) """
     id_list = [] #list to store unique physician ids
     new_list = [] # list to store unique dictionnaries and function to return it
+    
     for dico in list_results:
-        if int(dico['physician_profile_id']) in id_list:
-            pass
+        if 'physician_profile_id' in dico:
+            id_p = dico['physician_profile_id']
+            if int(id_p) in id_list:
+                pass
+            else:
+                id_list.append(int(id_p))
+                new_list.append(dico)
         else:
-            id_list.append(int(dico['physician_profile_id']))
-            new_list.append(dico)
+            print dico
            
            
     return new_list

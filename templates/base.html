@@ -13,6 +13,7 @@
 <body>
 
 
+</span>
 
 {% for flash in get_flashed_messages() %}
   {{ flash }}
@@ -23,4 +24,22 @@
 {% endblock %}
 
 </body>
+<span>
+    <form method="get" action="/sign_in">
+        <button type="submit">Sign-in</button>
+    </form>
+
+    <form method="get" action="/log_in">
+        <button type="submit">Log-in</button>
+    </form>
+
+    <form method="get" action="/log_out">
+        <button type="submit">Log-out</button>
+    </form>
+
+    {% if  session.get('user_id') %} 
+    <form method="get" action="/user_page">
+        <button type="submit">My Page</button>
+    </form>
+    {% endif %}
 </html>

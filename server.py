@@ -97,6 +97,21 @@ def summary(physician_profile_id):
     # List of tuple ; tuple = (pharmacy name, total):
     top_pharm = module.pay_per_comp_filtered(pay_breakdown,t)
 
+
+    # Nber of Like for this doctor section:
+    nb_likes = 0
+    doctor1 = db.session.query(Doctor).filter(Doctor.doctor_id==info_doc['p_id']).first()
+    if doctor1:
+        nb_likes = Like.query.filter_by(doctor_id=session['info_doc']['p_id']).count()
+    session['likes'] = nb_likes
+        
+    # Check if user did like this doctor
+    liked_check = None
+    if session.get('user_id'):
+        liked_check = db.session.query(Like).filter(Like.doctor_id==info_doc['p_id'], 
+            Like.user_id == session['user_id']).first()
+
+
     # Setting relevant values in session what I am going to need later:
     session['info_doc'] = info_doc
     session['info_doc']['total_received'] = round(t,2)
@@ -121,12 +136,6 @@ def summary(physician_profile_id):
 
     result = requests.get(url=yelp_search_url, params=params, headers=headers)
 
-    # print result.json()['total']
-    
-    print result.json()
-    print result.json()['businesses'][0]['name']
-    print session['info_doc']['last_name']
-    
     businesses = result.json()['businesses']
     for business in businesses:
         name = business['name'].upper()
@@ -137,11 +146,10 @@ def summary(physician_profile_id):
             print session['info_doc']['url']
             break
    
-    print name
-    print session['info_doc']['rating']   
+   # Return parameters to jinja  
     return render_template("summary.html", 
         perso_doc_info = info_doc, pay_breakdown=top_pharm, first_name=
-        first_name, last_name=last_name, p_id= physician_profile_id)
+        first_name, last_name=last_name, p_id= physician_profile_id, liked_check=liked_check)
 
 @app.route("/ind_comparison/<int:physician_profile_id>/<specialty>/<state>")
 def ind_comparison(physician_profile_id, specialty, state):
@@ -240,8 +248,117 @@ def payment_ind_doc():
                 }
     return jsonify(data_dict)
 
+@app.route("/sign_in")
+def sign_in():
+    """Sign-in access."""
+
+    return render_template("sign_in.html")
+
+@app.route('/confirmation-sign_in', methods=["POST"])
+def conf_sign_in():
+    """Conf sign-in"""
+    fname = request.form.get('fname')
+    print fname
+    lname = request.form.get('lname')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    age = request.form.get('age')
+    zipcode = request.form.get('zipcode')
+    q1 = User.query.filter_by(email=email).first()
+    if q1 == None:
+        if age:
+            u1 = User(first_name = fname, last_name= lname, email=email, password=password,
+            age = int(age), zipcode = int(zipcode))
+        else:
+            u1 = User(first_name = fname, last_name= lname, email=email, password=password,
+             zipcode = int(zipcode))
+        db.session.add(u1)
+        db.session.commit()
+        return render_template('conf_sign_in.html', email=email, passw=password)
+    else:
+        flash("It is already taken, please choose smthg else")
+        return redirect('/sign_in')
+
+@app.route("/log_in")
+def log_in():
+    """Log-in."""
+    if session.get('user_id'):
+        flash("You are already logged in.")
+        return redirect('/')
+    return render_template("log_in.html")
+
+@app.route('/logged', methods=['POST'])
+def logged():
+    email = request.form.get('email')
+    password = request.form.get('password')
+    user = db.session.query(User).filter(User.email==email).first()
+    user_id = user.user_id
+    if user == None:
+        flash("No such user")
+        return redirect('/log_in')
+    else:
+        if user.password == password:
+            flash("Welcome to What's up Doc")
+            session["user_id"]= user_id
+            return redirect('/')
+        else:
+            flash("Wrong password, please try again.")
+            return redirect('/log_in')
+
+# check why email bug when i log out when im already logged out
+@app.route("/log_out")
+def log_out():
+    """Log user out."""
+
+    if session.get('user_id',0) == 0:
+        flash("You are not logged in.")
+        return redirect("/")
+    else:
+        del session["user_id"]
+        flash("Logged out.")
+    return redirect("/")
 
 
+# Like button
+@app.route('/like', methods=["POST"])
+def like():
+    # doctor0 = db.session.query(Doctor).filter(Doctor.doctor_id==session['info_doc']['p_id']).first()
+    doctor0 = Doctor.query.get(session['info_doc']['p_id'])
+    if doctor0 is None:
+        doctor1 = Doctor(doctor_id = session['info_doc']['p_id'],first_name = 
+        session['info_doc']['first_name'],last_name=session['info_doc']['last_name'],
+        specialty= session['info_doc']['short_specialty'],yelp_rating = session['info_doc']['rating'])
+        db.session.add(doctor1)
+    like1 = Like(doctor_id=session['info_doc']['p_id'], user_id=session['user_id'])
+    db.session.add(like1)
+    db.session.commit()
+    nb_likes = Like.query.filter_by(doctor_id=session['info_doc']['p_id']).count()
+    session['likes'] = nb_likes
+    return jsonify({'like': nb_likes})
+
+@app.route('/unlike', methods=["POST"])
+def unlike():
+    
+    Like.query.filter_by(doctor_id=session['info_doc']['p_id'], user_id=session['user_id']).delete()
+    db.session.commit()
+    nb_likes = Like.query.filter_by(doctor_id=session['info_doc']['p_id']).count()
+    session['likes'] = nb_likes
+    return jsonify({'unlike': nb_likes})
+
+
+@app.route("/user_page")
+def user_page():
+    """User_page."""
+    user1 = db.session.query(User).filter(User.user_id==session['user_id']).first()
+    fname = user1.first_name
+    lname = user1.last_name
+    email = user1.email
+    zipcode = user1.zipcode
+
+    likes = db.session.query(Like).filter(User.user_id==session['user_id']).all()
+    nb_vote = db.session.query(Like).filter(User.user_id==session['user_id']).count()
+    return render_template("user.html", fname = fname, lname=lname, email=email, 
+        zipcode=zipcode, likes=likes ,nb_vote=nb_vote)
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
