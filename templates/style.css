@@ -1,0 +1,39 @@
+/*    canvas{
+        width: 50% !important;
+        max-width: 800px;
+        height: 25%;
+    }*/
+/* var optionsPie = {
+        tooltipEvents: [],
+        showTooltips: true,
+        onAnimationComplete: function() {
+            this.showTooltip(this.segments, true);
+        },
+        tooltipTemplate: "<%= label %> - <%= value %>"
+    }*/
+
+/*h1 {
+    font-family: sans-serif;
+    color: blue;
+}
+
+h1 {
+    color: pink;
+}
+
+div.urgent {
+    color: red;
+    font-weight: bold;
+}
+
+div {
+    background-color: blue;
+}
+
+#notice {
+    font-family: monospace;
+    font-size: 3em;
+    width: 15em;
+    margin: 0 auto;
+}
+*/

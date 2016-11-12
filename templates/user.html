@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<br>
+<div class="well spaced" style="width:97%">
+  <h2>{{ fname }} {{ lname }}</h2>
+  <h2>{{ email }}</h2>
+  <h2>{{ zipcode }}</h2>
+  <h2>Number of doctors you liked: {{ nb_vote }}</h2>
+  <div> Doctors you liked:
+    {% for like in likes %}
+      <ul>
+        <!-- since doctor_id is on database because user voter for him/her, I can access it and return its page -->
+        <li> <a href="/doc_summary/{{ like.doctor.doctor_id }}">{{ like.doctor.first_name }} {{ like.doctor.last_name }} </li>
+      </ul>
+    {% endfor %}
+
+</div>
+{% endblock %}

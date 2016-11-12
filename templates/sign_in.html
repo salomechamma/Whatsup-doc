@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h2>Sign-in</h2>
+<form action='/confirmation-sign_in' method ="POST">
+ First name: <input type="text" name="fname" required>
+ Last Name: <input type="text" name="lname" required>
+ Email: <input type="text" name="email" required>
+ Password: <input type="text" name="password" required>
+ Age: <input type="text" name="age">
+ Zipcode: <input type="text" name="zipcode" required>
+
+ <input type="submit" value="Register!">
+</form>
+
+{% endblock %}
