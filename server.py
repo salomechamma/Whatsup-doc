@@ -55,7 +55,7 @@ def index():
                 'physician_profile_id': p_id}
 
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=payload)
-    # import pdb; pdb.set_trace()
+    
     # response = "https://openpaymentsdata.cms.gov/resource/tf25-5jad.json?$$app_token=secret_token&physician_profile_id=49877"
     response = response.json()
     
@@ -69,9 +69,11 @@ def results_list():
     data = {'$$app_token': secret_token,
                 'physician_first_name': firstname,
                 'physician_last_name': lastname}
-
+    headers = {'user-agent': 'curl/7.10.6 (i386-redhat-linux-gnu) libcurl/7.10.6 OpenSSL/0.9.7a ipv6 zlib/1.1.4'}
 
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
+    # import pdb; pdb.set_trace()
+    # c enter
     search_results = response.json()
     # to keep only unique id of doctor so no duplicates in list of results:
     search_results = module.unique_dico(search_results)
@@ -355,8 +357,9 @@ def user_page():
     email = user1.email
     zipcode = user1.zipcode
 
-    likes = db.session.query(Like).filter(User.user_id==session['user_id']).all()
-    nb_vote = db.session.query(Like).filter(User.user_id==session['user_id']).count()
+    likes = db.session.query(Like).filter(Like.user_id==session['user_id']).all()
+    nb_vote = db.session.query(Like).filter(Like.user_id==session['user_id']).count()
+    print nb_vote
     return render_template("user.html", fname = fname, lname=lname, email=email, 
         zipcode=zipcode, likes=likes ,nb_vote=nb_vote)
 
