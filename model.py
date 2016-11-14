@@ -22,7 +22,7 @@ class User(db.Model):
     first_name = db.Column(db.String(64), nullable=False)
     last_name = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=False)
-    password = db.Column(db.String(64), nullable=False)
+    password = db.Column(db.String(200), nullable=False)
     age = db.Column(db.Integer, nullable=True)
     zipcode = db.Column(db.Integer, nullable=False)
 

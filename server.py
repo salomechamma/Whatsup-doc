@@ -16,6 +16,8 @@ from model import connect_to_db, db, User, Doctor, Like
 from yelp.client import Client 
 import io
 
+# ***************************** To hash password:
+from passlib.hash import pbkdf2_sha256
 
 app = Flask(__name__)
 
@@ -69,7 +71,7 @@ def results_list():
     data = {'$$app_token': secret_token,
                 'physician_first_name': firstname,
                 'physician_last_name': lastname}
-    headers = {'user-agent': 'curl/7.10.6 (i386-redhat-linux-gnu) libcurl/7.10.6 OpenSSL/0.9.7a ipv6 zlib/1.1.4'}
+    # headers = {'user-agent': 'curl/7.10.6 (i386-redhat-linux-gnu) libcurl/7.10.6 OpenSSL/0.9.7a ipv6 zlib/1.1.4'}
 
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
     # import pdb; pdb.set_trace()
@@ -260,16 +262,17 @@ def sign_in():
 def conf_sign_in():
     """Conf sign-in"""
     fname = request.form.get('fname')
-    print fname
     lname = request.form.get('lname')
     email = request.form.get('email')
     password = request.form.get('password')
+    hash = pbkdf2_sha256.encrypt(password, rounds=200000, salt_size=16)
+    print hash
     age = request.form.get('age')
     zipcode = request.form.get('zipcode')
     q1 = User.query.filter_by(email=email).first()
     if q1 == None:
         if age:
-            u1 = User(first_name = fname, last_name= lname, email=email, password=password,
+            u1 = User(first_name = fname, last_name= lname, email=email, password=hash,
             age = int(age), zipcode = int(zipcode))
         else:
             u1 = User(first_name = fname, last_name= lname, email=email, password=password,
@@ -299,7 +302,9 @@ def logged():
         flash("No such user")
         return redirect('/log_in')
     else:
-        if user.password == password:
+        
+        if pbkdf2_sha256.verify(password, user.password):
+        # if user.password == password:
             flash("Welcome to What's up Doc")
             session["user_id"]= user_id
             return redirect('/')
