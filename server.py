@@ -7,6 +7,8 @@ from jinja2 import StrictUndefined
 from flask import jsonify
 from flask import (Flask, render_template, redirect, request, flash,
                    session)
+from flask_mail import Mail, Message
+
 from flask_debugtoolbar import DebugToolbarExtension
 import requests
 import json
@@ -19,8 +21,13 @@ import io
 # ***************************** To hash password:
 from passlib.hash import pbkdf2_sha256
 
+mail = Mail()
 app = Flask(__name__)
+# mail = Mail(app)
+mail.init_app(app)
 
+MAIL_PASSWORD ='alyabientot8'
+# MAIL_DEFAULT_SENDER ='chammasalome@gmail.com'
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC" 
  # session 
@@ -28,11 +35,15 @@ app.secret_key = "ABC"
 # Normally, if you use an undefined variable in Jinja2, it fails
 # silently. This is horrible. Fix this so that, instead, it raises an
 # error.
+
 app.jinja_env.undefined = StrictUndefined
+app.jinja_env.auto_reload = True
 
 
 # Government API /extract from secret.sh
 secret_token = os.environ["DOC_APP_TOKEN"]
+
+google_key = os.environ["GOOGLE_KEY"]
 
 # Yelp API
 client_id = os.environ["YELP_APP_ID"]
@@ -147,13 +158,26 @@ def summary(physician_profile_id):
         if session['info_doc']['last_name'] in name and session['info_doc']['city'] in city and session['info_doc']['first_name'] in name:
             session['info_doc']['rating'] = business['rating']
             session['info_doc']['url'] = business['url']
-            print session['info_doc']['url']
+            
             break
-   
+   # Google Map API
+    title_address = "%s %s %s %s "%(session['info_doc']['street_address'],
+        session['info_doc']['zipcode'], session['info_doc']['city'],
+                session['info_doc']['state'])
+    payloadG = {'key': google_key,
+                'address': title_address }
+    response_google = requests.get("https://maps.googleapis.com/maps/api/geocode/json", params=payloadG)
+    
+    response_google = response_google.json()
+    lat = response_google['results'][0]['geometry']['location']['lat']
+    lng = response_google['results'][0]['geometry']['location']['lng']
+    
+
    # Return parameters to jinja  
     return render_template("summary.html", 
         perso_doc_info = info_doc, pay_breakdown=top_pharm, first_name=
-        first_name, last_name=last_name, p_id= physician_profile_id, liked_check=liked_check)
+        first_name, last_name=last_name, p_id= physician_profile_id, liked_check=liked_check,
+        google_key=google_key, lat=lat, lng=lng, title_address=title_address)
 
 @app.route("/ind_comparison/<int:physician_profile_id>/<specialty>/<state>")
 def ind_comparison(physician_profile_id, specialty, state):
@@ -266,7 +290,7 @@ def conf_sign_in():
     email = request.form.get('email')
     password = request.form.get('password')
     hash = pbkdf2_sha256.encrypt(password, rounds=200000, salt_size=16)
-    print hash
+    
     age = request.form.get('age')
     zipcode = request.form.get('zipcode')
     q1 = User.query.filter_by(email=email).first()
@@ -364,9 +388,20 @@ def user_page():
 
     likes = db.session.query(Like).filter(Like.user_id==session['user_id']).all()
     nb_vote = db.session.query(Like).filter(Like.user_id==session['user_id']).count()
-    print nb_vote
+   
     return render_template("user.html", fname = fname, lname=lname, email=email, 
         zipcode=zipcode, likes=likes ,nb_vote=nb_vote)
+
+# @app.route("/mail")
+# def mail():
+#     """Mail TEST_page."""
+#     msg = Message("Hello",sender="chammasalome@gmail.com",
+#                   recipients=["salome.chamma@gmail.com"])
+#     msg.body = "testing"
+#     msg.html = "<b>testing</b>"
+#     mail.send(msg)
+
+
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
