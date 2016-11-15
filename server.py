@@ -26,8 +26,6 @@ app = Flask(__name__)
 # mail = Mail(app)
 mail.init_app(app)
 
-MAIL_PASSWORD ='alyabientot8'
-# MAIL_DEFAULT_SENDER ='chammasalome@gmail.com'
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC" 
  # session 
@@ -82,15 +80,30 @@ def results_list():
     data = {'$$app_token': secret_token,
                 'physician_first_name': firstname,
                 'physician_last_name': lastname}
-    # headers = {'user-agent': 'curl/7.10.6 (i386-redhat-linux-gnu) libcurl/7.10.6 OpenSSL/0.9.7a ipv6 zlib/1.1.4'}
-
+    
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
-    # import pdb; pdb.set_trace()
-    # c enter
+    # t = 0
+    # key_list = [secret_token, os.environ["DOC_APP_TOKEN"], secret_token]
+    # while True:
+    # # while True and t < 3:
+    #     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
+    #     # import pdb; pdb.set_trace()
+    #     # to exit pdb: c enter
+    #     search_results = response.json()
+    #     if search_results != []:
+    #         print 'NOT EMPTY'
+    #         break
+    #     else:
+    #         print 'EMPTY'
+    #         data['$$app_token'] = key_list[t]
+    #         response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
+    #         print response.json()
+    #         t =  t + 1
     search_results = response.json()
+    if search_results == []:
+        return render_template('no_result.html')
     # to keep only unique id of doctor so no duplicates in list of results:
     search_results = module.unique_dico(search_results)
-
     return render_template('results_list.html', search_results=search_results)
 
 @app.route("/doc_summary/<int:physician_profile_id>")
