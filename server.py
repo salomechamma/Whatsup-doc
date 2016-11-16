@@ -216,8 +216,8 @@ def summary(physician_profile_id):
         google_key=google_key, lat=lat, lng=lng, title_address=title_address)
 
  
-@app.route("/ind_comparison/<int:physician_profile_id>/<specialty>/<state>")
-def ind_comparison(physician_profile_id, specialty, state):
+@app.route("/ind_comparison/<int:physician_profile_id>/<specialty>/<state>/<city>")
+def ind_comparison(physician_profile_id, specialty, state, city):
     """Show payments received by doctor in comparison to payments received by 
     all doctors of the same specialty"""
     
@@ -234,27 +234,45 @@ def ind_comparison(physician_profile_id, specialty, state):
     session['doc_comp'] = module.list_tup_to_dic(session['pay_breakdown'])
     session['pharm_avg'] = module.pharm_avg_sortedlist(avg_pharm_match_doc)
     
+    
+
+    # Extract doctors of same city and specialty:
+    same_city = {'$$app_token': secret_token,
+            'physician_specialty': specialty,
+            'recipient_city': city
+            }
+    record_same_city = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=same_city, stream=True)
+    
+
     # three better doctors
     
-    all_doc = module.three_better_doc(response)
+    all_doc = module.three_better_doc(record_same_city, session['info_doc']['p_id'])
     print len(all_doc)
-    selected_list = all_doc.items()[:10]
-    print selected_list
+    # Make sure no error if all_doc have elss than 10 or no elements:
+    if len(all_doc) <10:
+        selected_list = all_doc.items()[:len(all_doc)]
+    elif len(all_doc) == 0:
+        selected_list = []
+    else:
+        selected_list = all_doc.items()[:10]
+        print selected_list
     selected_doc = {}
- 
-    # extract for each doctor its total received
+
+    # Extract for each doctor its total received
     for elem in selected_list:
         data1 = {'$$app_token': secret_token,
                 'physician_profile_id': elem[0]}
         response1 = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data1)
         selected_doc[elem[0]] = module.total_payments(response1.json())
-    # compared each doctor total received to doctor entered in search and keep it if below
+    # Compared each doctor total received to doctor entered in search and keep it if below
     best_doc = module.best_ten_doc(selected_doc, session['info_doc']['total_received'])
+    best_doc = module.best_doc_sorted(best_doc)
     print "-----------BEST DOC:"
     print best_doc
     
     return render_template('ind_comparison.html', avg_per_state=avg_per_state, 
-        avg_pharm=avg_pharm, avg_pharm_ind_doc=avg_pharm_match_doc, best_doc=best_doc)
+        avg_pharm=avg_pharm, avg_pharm_ind_doc=avg_pharm_match_doc, best_doc=best_doc, 
+        len = len(best_doc))
 
 
 @app.route('/doc_info.json')
@@ -455,6 +473,8 @@ def send_email():
     msg.html = render_template('summary_to_send.html', lat=session['info_doc']['lat'],
     lng=session['info_doc']['lng'], title_address =session['info_doc']['gmap_address'],
     google_key=google_key)
+    with app.open_resource("static/img/map.png") as fp:
+        msg.attach("static/img/map.png", "image/png", fp.read())
     mail.send(msg)
     return jsonify({'status':'Sent'})
 

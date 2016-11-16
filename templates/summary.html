@@ -50,7 +50,8 @@
     {% endif %}
     </div>
     <br>
-     <div>Total payments received from pharmaceutical companies in 2015: ${{ session['info_doc']['total_received'] }} </div> <br>
+     <div>Total payments received from pharmaceutical companies in 2015: 
+        ${{ session['info_doc']['total_received'] }} </div> <br>
 
 
 <!-- info related to doctor that appear on top of the page -->
@@ -80,7 +81,7 @@
 </div>
 <!-- button to access other pages -->
 <span>
-    <form method="get" action="/ind_comparison/{{ session['info_doc']['p_id'] }}/{{ session['info_doc']['specialty'] }}/{{ session['info_doc']['state'] }}">
+    <form method="get" action="/ind_comparison/{{ session['info_doc']['p_id'] }}/{{ session['info_doc']['specialty'] }}/{{ session['info_doc']['state'] }}/{{ session['info_doc']['city'] }}">
     <button type="submit">Compare with peers</button>
     </form>
 

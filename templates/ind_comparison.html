@@ -18,15 +18,19 @@
    <div> 
         Average payments recived by all doctors of the {{ session['info_doc']['short_specialty'] }} specialty in 2015 in {{ session['info_doc']['state'] }}: <b>${{ avg_per_state }} </b>
     </div>
-
+    <br>
     <div>
-        Here are three doctor of the same {{ session['info_doc']['short_specialty'] }} specialty, in {{ session['info_doc']['state'] }} who received less payments in 2015:
-        {% for element in best_doc %}
+        {% if best_doc|length > 1 %}
+        Want to find out doctor in {{ session['info_doc']['city'] }} who receive less than Dr {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} ? Easy! <br>
+        Here are three doctor of the same {{ session['info_doc']['short_specialty'] }} specialty, in {{ session['info_doc']['city'] }} who received less payments in 2015:
+
+        {% for i in range(len) %}
         <ul>
-            <li> <a href="/doc_summary/{{ element }}"> Doctor received total payments of ${{ best_doc[element] }}</a>
+            <li> <a href="/doc_summary/{{ best_doc[i][0] }}">  Option {{ i + 1 }} </a> -  total payments received:  ${{ best_doc[i][1] }}
         </li>
     </ul>
         {% endfor %}
+        {% endif %}
     </div>
 
  
