@@ -2,6 +2,7 @@
 
 import os
 import module
+from random import randint
 from jinja2 import StrictUndefined
 
 from flask import jsonify
@@ -21,14 +22,24 @@ import io
 # ***************************** To hash password:
 from passlib.hash import pbkdf2_sha256
 
-mail = Mail()
+
 app = Flask(__name__)
-# mail = Mail(app)
-mail.init_app(app)
 
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC" 
- # session 
+# ***************************** Flask mail settings:
+
+email_password = os.environ['EMAIL_PASSWORD']
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_DEFAULT_SENDER'] = 'whatsup.doctor.website@gmail.com'
+app.config['MAIL_USERNAME'] = 'whatsup.doctor.website@gmail.com'
+app.config['MAIL_PASSWORD'] = email_password
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+
+mail = Mail(app)
+
 
 # Normally, if you use an undefined variable in Jinja2, it fails
 # silently. This is horrible. Fix this so that, instead, it raises an
@@ -82,26 +93,27 @@ def results_list():
                 'physician_last_name': lastname}
     
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
-    # t = 0
-    # key_list = [secret_token, os.environ["DOC_APP_TOKEN"], secret_token]
-    # while True:
-    # # while True and t < 3:
-    #     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
-    #     # import pdb; pdb.set_trace()
-    #     # to exit pdb: c enter
-    #     search_results = response.json()
-    #     if search_results != []:
-    #         print 'NOT EMPTY'
-    #         break
-    #     else:
-    #         print 'EMPTY'
-    #         data['$$app_token'] = key_list[t]
-    #         response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
-    #         print response.json()
-    #         t =  t + 1
+    # Try to use several keys to see if it return something different than empty list:
+    trial = 0
+    key_list = [secret_token, os.environ["DOC_APP_TOKEN1"], os.environ['DOC_APP_TOKEN2']]
+    while trial < 100:
+        response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
+        search_results = response.json()
+        if search_results != []:
+            print 'NOT EMPTY'
+            break
+        else:
+            print 'EMPTY'
+            t = randint(0,2)
+            data['$$app_token'] = key_list[t]
+            response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
+            trial = trial + 1
+            print response.json()
+          
     search_results = response.json()
     if search_results == []:
         return render_template('no_result.html')
+
     # to keep only unique id of doctor so no duplicates in list of results:
     search_results = module.unique_dico(search_results)
     return render_template('results_list.html', search_results=search_results)
@@ -184,14 +196,17 @@ def summary(physician_profile_id):
     response_google = response_google.json()
     lat = response_google['results'][0]['geometry']['location']['lat']
     lng = response_google['results'][0]['geometry']['location']['lng']
-    
+
+    # Test for sending email set up:
+    session['info_doc']['lat'] = lat
+    session['info_doc']['long'] = lng 
+    session['info_doc']['gmap_address'] = title_address
 
    # Return parameters to jinja  
-    return render_template("summary.html", 
-        perso_doc_info = info_doc, pay_breakdown=top_pharm, first_name=
-        first_name, last_name=last_name, p_id= physician_profile_id, liked_check=liked_check,
+    return render_template("summary.html", liked_check=liked_check,
         google_key=google_key, lat=lat, lng=lng, title_address=title_address)
 
+ 
 @app.route("/ind_comparison/<int:physician_profile_id>/<specialty>/<state>")
 def ind_comparison(physician_profile_id, specialty, state):
     """Show payments received by doctor in comparison to payments received by 
@@ -219,11 +234,6 @@ def payment():
     and weight over total  """
     pass 
     return render_template('payment_type.html')
-
-@app.route('/doctor_like')
-def doctor_like():
-    pass
-    return render_template("doctor_like.html")
 
 
 
@@ -405,15 +415,16 @@ def user_page():
     return render_template("user.html", fname = fname, lname=lname, email=email, 
         zipcode=zipcode, likes=likes ,nb_vote=nb_vote)
 
-# @app.route("/mail")
-# def mail():
-#     """Mail TEST_page."""
-#     msg = Message("Hello",sender="chammasalome@gmail.com",
-#                   recipients=["salome.chamma@gmail.com"])
-#     msg.body = "testing"
-#     msg.html = "<b>testing</b>"
-#     mail.send(msg)
-
+@app.route("/send_email", methods=['POST'])
+def send_email():
+    recipients = email = request.form.get('emailAddress')
+    msg = Message("What's Up Doc informs you!", recipients=[recipients])
+    msg.body = "testing"
+    msg.html = render_template('summary_to_send.html', lat=  session['info_doc']['lat'],
+    lng = session['info_doc']['long'], title_address =session['info_doc']['gmap_address'],
+    google_key=google_key)
+    mail.send(msg)
+    return jsonify({'status':'Sent'})
 
 
 if __name__ == "__main__":

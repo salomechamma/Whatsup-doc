@@ -1,10 +1,15 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 {% block content %}
 
 
 
-  <h2>Doctor Summary Profile</h2>
+  <h3>Here are some information about Dr {{ session['info_doc']['first_name'] }} 
+    {{ session['info_doc']['last_name'] }}</h3>
+<div>
+    {{ session['info_doc']['short_specialty'] }} <br>
+    {{ session['info_doc']['street_address'] }} {{ session['info_doc']['zipcode' ] }} {{ session['info_doc']['city' ] }} 
 
+</div>
   <head>
     <style>
         #map {
@@ -12,11 +17,11 @@
           width: 400px;
 
         }
-/*        html, body {
+        html, body {
           height: 80%;
           margin: 0;
           padding: 0;
-        }*/
+        }
     </style>
     <title>Simple Map</title>
     <meta name="viewport" content="initial-scale=1.0">
@@ -24,43 +29,21 @@
   
   </head>
 
-
-
 <div>
-    <h4>  {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} <br>
+    <h4>  
     {% if   session['info_doc']['rating']  > 0 %} 
         Yelp Rating: {{ session['info_doc']['rating'] }}/5  -  Access the doctor Yelp page
         <a href= {{ session['info_doc']['url'] }} >here</a></h4><br>
     {% endif %}
     <br>
-    <div id='nb_likes'>
-    Number of total Likes : {{ session['likes'] }} 
-    </div>
-
-    <div id='like_section'>
-    {% if  session.get('user_id') %} 
-        {% if liked_check is none %}
-            <button id="like">Like this doctor</button>
-            <span id="like-message"></span>
-        {% else %}
-            <button id="unlike">Unlike this doctor</button>
-            <span id="unlike-message"></span>
-        {% endif %}
-    {% else %}
-    </div>
-    - Login/Sign-in to vote!
-    {% endif %}
+    
     <br>
      Total payments received from pharmaceutical companies in 2015: ${{ session['info_doc']['total_received'] }} </h4> <br>
 
 </div>
 <!-- info related to doctor that appear on top of the page -->
 <!-- change to sue the SESSION here instead of the perso_doc dictionnary passed as parameters via route -->
-<div>
-    {{ session['info_doc']['short_specialty'] }} <br>
-    {{ session['info_doc']['street_address'] }} {{ session['info_doc']['zipcode' ] }} {{ session['info_doc']['city' ] }} 
 
-</div>
 
 <div>
     <!-- replace with a pie chart with JS chart or plython tool -->
@@ -72,24 +55,10 @@
         {% endfor %}
     </ul>
 
- <form id="sendForm" action="/send_email" method="POST">
-    Forward Dr {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} information: <br>
-    <span id ="emailInput">Enter email address you wish to send it to: </span><input id='emailAddress' type="text" name="emailAddress"/>
-    <input type="submit" value="Send"> <br><br>
- </form>
+ 
 
 </div>
-<!-- button to access other pages -->
-<span>
-    <form method="get" action="/ind_comparison/{{ session['info_doc']['p_id'] }}/{{ session['info_doc']['specialty'] }}/{{ session['info_doc']['state'] }}">
-    <button type="submit">Compare with peers</button>
-    </form>
 
-
-    <form method="get" action="/">
-    <button type="submit">New Search</button>
-    </form>
-</span>
 
 
 
@@ -104,57 +73,7 @@
 <script>
 
 
-    "use strict";
-    function sendEmail(evt) {
-        evt.preventDefault();
-          var formInputs = {
-        'emailAddress': $("#emailAddress").val()
-        };
 
-        $.post('/send_email', formInputs ,function (data){
-        alert("The email has been sent!");
-        $('#emailAddress').val('');
-        });
-    }
-    $('#sendForm').on('submit', sendEmail);
-// Like part  
-    function handleUpvote(evt) {
-        $.post('/like', function (data) {
-            $('#like-message').text('You liked this doctor.');
-            $('#nb_likes').empty();
-            $('#nb_likes').append('Number of total Likes: ' +  data['like']);
-            $('#like_section').empty();
-            $('#like_section').append('<button id="unlike">Unlike this doctor</button><span id="unlike-message"></span>')
-            $('#unlike').on('click', handleDownVote);
-
-            // $('#like').attr('disabled', true);
-            // 
-            // change #nb likes to session['nb_likes']
-            // hide like
-            // show unvote button
-        });
-    }
-
-    $('#like').on('click', handleUpvote);
-
-
-// Unike part
-
-    function handleDownVote(evt) {
-        $.post('/unlike', function (data) {
-        $('#unlike-message').text('You unliked this doctor.');
-        $('#nb_likes').empty();
-        $('#nb_likes').append('Number of total Likes: ' +  data['unlike']);
-        $('#like_section').empty();
-        $('#like_section').append('<button id="like">Like this doctor</button><span id="like-message"></span>')
-        $('#like').on('click', handleUpvote);
-      
-            // $('#unlike').attr('disabled', true);
-            // grab id
-        });
-    }
-
-    $('#unlike').on('click', handleDownVote);
 
 // Chart section 
 var options = { responsive: true, maintainAspectRatio: true,
