@@ -24,15 +24,14 @@
   
   </head>
 
-
-
-<div>
     <h4>  {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} <br>
     {% if   session['info_doc']['rating']  > 0 %} 
         Yelp Rating: {{ session['info_doc']['rating'] }}/5  -  Access the doctor Yelp page
-        <a href= {{ session['info_doc']['url'] }} >here</a></h4><br>
-    {% endif %}
-    <br>
+        <a href= {{ session['info_doc']['url'] }} >here</a>
+
+    {% endif %} 
+    </h4><br>
+
     <div id='nb_likes'>
     Number of total Likes : {{ session['likes'] }} 
     </div>
@@ -47,13 +46,13 @@
             <span id="unlike-message"></span>
         {% endif %}
     {% else %}
-    </div>
     - Login/Sign-in to vote!
     {% endif %}
+    </div>
     <br>
-     Total payments received from pharmaceutical companies in 2015: ${{ session['info_doc']['total_received'] }} </h4> <br>
+     <div>Total payments received from pharmaceutical companies in 2015: ${{ session['info_doc']['total_received'] }} </div> <br>
 
-</div>
+
 <!-- info related to doctor that appear on top of the page -->
 <!-- change to sue the SESSION here instead of the perso_doc dictionnary passed as parameters via route -->
 <div>

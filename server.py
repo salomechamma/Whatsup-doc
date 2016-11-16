@@ -22,6 +22,11 @@ import io
 # ***************************** To hash password:
 from passlib.hash import pbkdf2_sha256
 
+# Trying Google static for email:
+from cStringIO import StringIO
+from PIL import Image
+import urllib
+
 
 app = Flask(__name__)
 
@@ -39,6 +44,8 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
 mail = Mail(app)
+
+
 
 
 # Normally, if you use an undefined variable in Jinja2, it fails
@@ -123,7 +130,7 @@ def summary(physician_profile_id):
     """Show summary page on doctor resulting from search."""
     # Govt API Request
     summ = {'$$app_token': secret_token,
-                'physician_profile_id': physician_profile_id,
+                'physician_profile_id': physician_profile_id
             }
 
     # Issue request to Govt API/ Extract doctor personal info/ Caluclate payments received by doctor
@@ -137,6 +144,18 @@ def summary(physician_profile_id):
     # List of tuple ; tuple = (pharmacy name, total):
     top_pharm = module.pay_per_comp_filtered(pay_breakdown,t)
 
+    # Setting relevant values in session that I am going to need later:
+    
+    session['info_doc'] = info_doc
+    session['info_doc']['total_received'] = round(t,2)
+    session['pay_breakdown'] = top_pharm
+    session['doc_chart_pharm'] = module.tuplelist_to_listfirstitem(top_pharm)
+    session['doc_chart_payment'] = module.tuplelist_to_listseconditem(top_pharm)
+  
+    top_pharm_dic_no_other = top_pharm
+    top_pharm_dic_no_other.pop()
+    session['listsamecompanies'] = module.tuplelist_to_listfirstitem(top_pharm_dic_no_other)
+    session['doc_payments_no_other']=module.tuplelist_to_listseconditem(top_pharm_dic_no_other)
 
     # Nber of Like for this doctor section:
     nb_likes = 0
@@ -151,18 +170,8 @@ def summary(physician_profile_id):
         liked_check = db.session.query(Like).filter(Like.doctor_id==info_doc['p_id'], 
             Like.user_id == session['user_id']).first()
 
-
-    # Setting relevant values in session what I am going to need later:
-    session['info_doc'] = info_doc
-    session['info_doc']['total_received'] = round(t,2)
-    session['pay_breakdown'] = top_pharm
-    session['doc_chart_pharm'] = module.tuplelist_to_listfirstitem(top_pharm)
-    session['doc_chart_payment'] = module.tuplelist_to_listseconditem(top_pharm)
   
-    top_pharm_dic_no_other = top_pharm
-    top_pharm_dic_no_other.pop()
-    session['listsamecompanies'] = module.tuplelist_to_listfirstitem(top_pharm_dic_no_other)
-    session['doc_payments_no_other']=module.tuplelist_to_listseconditem(top_pharm_dic_no_other)
+    
     
     # Yelp API request
     # storer rating in session
@@ -199,7 +208,7 @@ def summary(physician_profile_id):
 
     # Test for sending email set up:
     session['info_doc']['lat'] = lat
-    session['info_doc']['long'] = lng 
+    session['info_doc']['lng'] = lng 
     session['info_doc']['gmap_address'] = title_address
 
    # Return parameters to jinja  
@@ -216,25 +225,36 @@ def ind_comparison(physician_profile_id, specialty, state):
             'physician_specialty': specialty,
             'recipient_state': state
             }
+
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=summ, stream=True)
     all_payments = module.results_per_spe(response)
     avg_per_state = round(module.averg_per_state(all_payments),2)
     avg_pharm = module.averg_per_company(all_payments) #dictionnary with key: pharmacy, value: avg payed doc for specific specialty & state
     avg_pharm_match_doc = module.averg_ind_comp_doc(avg_pharm, session['pay_breakdown'])
     session['doc_comp'] = module.list_tup_to_dic(session['pay_breakdown'])
-    # session['bar_chart'] = module.bar_chart_dic(session['doc_comp'],avg_pharm_match_doc)
     session['pharm_avg'] = module.pharm_avg_sortedlist(avg_pharm_match_doc)
     
+    # three better doctors
+    
+    all_doc = module.three_better_doc(response)
+    print len(all_doc)
+    selected_list = all_doc.items()[:10]
+    print selected_list
+    selected_doc = {}
+ 
+    # extract for each doctor its total received
+    for elem in selected_list:
+        data1 = {'$$app_token': secret_token,
+                'physician_profile_id': elem[0]}
+        response1 = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data1)
+        selected_doc[elem[0]] = module.total_payments(response1.json())
+    # compared each doctor total received to doctor entered in search and keep it if below
+    best_doc = module.best_ten_doc(selected_doc, session['info_doc']['total_received'])
+    print "-----------BEST DOC:"
+    print best_doc
+    
     return render_template('ind_comparison.html', avg_per_state=avg_per_state, 
-        avg_pharm=avg_pharm, avg_pharm_ind_doc=avg_pharm_match_doc)
-
-@app.route('/payment_type')
-def payment():
-    """For each payment made to the doctor by company X, show the payment type 
-    and weight over total  """
-    pass 
-    return render_template('payment_type.html')
-
+        avg_pharm=avg_pharm, avg_pharm_ind_doc=avg_pharm_match_doc, best_doc=best_doc)
 
 
 @app.route('/doc_info.json')
@@ -420,8 +440,20 @@ def send_email():
     recipients = email = request.form.get('emailAddress')
     msg = Message("What's Up Doc informs you!", recipients=[recipients])
     msg.body = "testing"
-    msg.html = render_template('summary_to_send.html', lat=  session['info_doc']['lat'],
-    lng = session['info_doc']['long'], title_address =session['info_doc']['gmap_address'],
+
+    # Getting the Google Image:
+    # payloadG = {'key': google_key,
+    #             'address': title_address }
+    url = "http://maps.googleapis.com/maps/api/staticmap?center=%s,%s&size=800x800&zoom=14&sensor=false"%(session['info_doc']['lat'],session['info_doc']['lng'])
+    print url
+    buffer = StringIO(urllib.urlopen(url).read())
+    image1 = Image.open(buffer)
+    image1.save("static/img/map.png")
+    print image1
+    # image = image.show()
+
+    msg.html = render_template('summary_to_send.html', lat=session['info_doc']['lat'],
+    lng=session['info_doc']['lng'], title_address =session['info_doc']['gmap_address'],
     google_key=google_key)
     mail.send(msg)
     return jsonify({'status':'Sent'})

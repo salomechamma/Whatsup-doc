@@ -193,4 +193,26 @@ def pharm_avg_sortedlist(dic_avg_pharm):
         listavg.append(round(company[1],2))
     return listavg
 
+# Find three better doctors:
+def three_better_doc(response):
+    """ xxxx"""
+    # create a dictionnary with key as doctor id : total payment
+    all_doc = {}
+  
+    for record in response.json():
+        all_doc[record['physician_profile_id']] = all_doc.get(record['physician_profile_id'], 0.00) 
+        + float(record['total_amount_of_payment_usdollars']) 
+    return all_doc
+
+def best_ten_doc(all_doc, t):
+    """ xxxx"""   
+
+    best_doc = {}
+    for elem in all_doc:
+        if all_doc[elem] < t:
+            best_doc[elem] = all_doc[elem]
+    return best_doc
+
+
+
 

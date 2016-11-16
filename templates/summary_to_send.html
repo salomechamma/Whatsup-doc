@@ -6,46 +6,26 @@
   <h3>Here are some information about Dr {{ session['info_doc']['first_name'] }} 
     {{ session['info_doc']['last_name'] }}</h3>
 <div>
-    {{ session['info_doc']['short_specialty'] }} <br>
+    {{ session['info_doc']['short_specialty'] }} 
     {{ session['info_doc']['street_address'] }} {{ session['info_doc']['zipcode' ] }} {{ session['info_doc']['city' ] }} 
 
+
 </div>
-  <head>
-    <style>
-        #map {
-          height: 400px;
-          width: 400px;
-
-        }
-        html, body {
-          height: 80%;
-          margin: 0;
-          padding: 0;
-        }
-    </style>
-    <title>Simple Map</title>
-    <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8">
-  
-  </head>
-
-<div>
     <h4>  
     {% if   session['info_doc']['rating']  > 0 %} 
         Yelp Rating: {{ session['info_doc']['rating'] }}/5  -  Access the doctor Yelp page
         <a href= {{ session['info_doc']['url'] }} >here</a></h4><br>
     {% endif %}
-    <br>
     
-    <br>
-     Total payments received from pharmaceutical companies in 2015: ${{ session['info_doc']['total_received'] }} </h4> <br>
+    </h4>
+     Total payments received from pharmaceutical companies in 2015: ${{ session['info_doc']['total_received'] }} </h4> 
 
-</div>
+
 <!-- info related to doctor that appear on top of the page -->
 <!-- change to sue the SESSION here instead of the perso_doc dictionnary passed as parameters via route -->
 
 
-<div>
+
     <!-- replace with a pie chart with JS chart or plython tool -->
     <br><b>In 2015: </b> 
     <ul>
@@ -57,101 +37,12 @@
 
  
 
-</div>
 
 
 
-
-<div class="summary-chart" style="height: 300px; width: 50%;">
-    <canvas id="docChart" height:'256' width:'256'></canvas>
-    <div id="docLegend" class="chart-legend"></div>
-  </div>
-
-<div id="map"></div>
+  
+<img src="static/img/map.png" alt="google map location" style="width:200px;height:200px;">
 
 
-<script>
-
-
-
-
-// Chart section 
-var options = { responsive: true, maintainAspectRatio: true,
-       
-                title: {            
-                    display: true,
-                    text: 'Payments received by this doctor'
-                },
-                legend: {
-                display: true},   
-                tooltips: { 
-                    callbacks: {
-                    label: function(tooltipItem, data) {
-                    var allData = data.datasets[tooltipItem.datasetIndex].data;
-                    var tooltipLabel = data.labels[tooltipItem.index];
-                    var tooltipData = allData[tooltipItem.index];
-                    var total = 0;
-                    for (var i in allData) {
-                        total += allData[i];
-                                            }
-                    var tooltipPercentage = Math.round((tooltipData / total) * 100);
-                    return tooltipLabel + ': $' + tooltipData + ' (' + tooltipPercentage + '%)';
-                                                        }
-                             }
-                    // enabled: true,
-                    // mode: 'x-axis'
-                },
-                animation:{animateRotate: true, animateScale: true} 
-                };
-
-
-var ctx_donut = $("#docChart").get(0).getContext("2d");
-
-$.get("/doc_info.json", function (data) {
-    var mydocChart = new Chart(ctx_donut, {
-                                            type: 'doughnut',
-                                            data: data,
-                                            options: options,
-                                            });
-
-});
-// Google Map section
-    
-      var map;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: {{ lat }}, lng: {{ lng }}},
-          zoom: 10
-        });
-        // var marker = new google.maps.Marker({
-        //   position: {lat: {{ lat }}, lng: {{ lng }}},
-        //   map: map,
-        //   title: 'Doctor'
-        //  });
-        
-        // Setting options for carrot icon (size etc..)
-        var image = {
-            url: 'http://pngimg.com/upload/carrot_PNG4997.png',
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(17, 34),
-            scaledSize: new google.maps.Size(45, 45)
-        };
-
-        // Create carrot icon and specify its position
-        var marker2 = new google.maps.Marker({
-            position: { lat: {{ lat }}, lng: {{ lng }} },
-            icon: image,
-            map: map,
-            title: '{{ title_address }}'
-            // scaledSize : new google.maps.Size(10, 20)
-          });
-        };
-
-
-</script>
-
- <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key={{ google_key }}&callback=initMap">
-    </script>
 
 {% endblock %}

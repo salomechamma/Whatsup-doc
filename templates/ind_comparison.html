@@ -7,21 +7,36 @@
     <h4>  
         {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} <br>
         {% if   session['info_doc']['rating']  > 0 %} 
-        Yelp Rating: {{ session['info_doc']['rating'] }}/5 </h4><br>
+        Yelp Rating: {{ session['info_doc']['rating'] }}/5 
+    </h4><br>
         {% endif %}
-    <br>
    
-    <br>
     <div> 
         Payments recived by {{ session['info_doc']['name'] }} in 2015: <b>${{session['info_doc']['total_received'] }} </b>
     </div>
-    <div> 
+
+   <div> 
         Average payments recived by all doctors of the {{ session['info_doc']['short_specialty'] }} specialty in 2015 in {{ session['info_doc']['state'] }}: <b>${{ avg_per_state }} </b>
     </div>
+
+    <div>
+        Here are three doctor of the same {{ session['info_doc']['short_specialty'] }} specialty, in {{ session['info_doc']['state'] }} who received less payments in 2015:
+        {% for element in best_doc %}
+        <ul>
+            <li> <a href="/doc_summary/{{ element }}"> Doctor received total payments of ${{ best_doc[element] }}</a>
+        </li>
+    </ul>
+        {% endfor %}
+    </div>
+
+ 
+
+
+  <br>
 <!-- <div>  {{ avg_pharm }} </div>
 <div>  {{  avg_pharm_ind_doc }} </div> -->
    
-<br>
+
 <div class="comparison-chart" style="height: 300px; width: 50%;">
     <h3> Comparison between this doctor and all doctors of the state of practicing the {{ session['info_doc']['short_specialty'] }} specialty</h3><br>
     <canvas id="indChart" height:'256' width:'256'></canvas>
