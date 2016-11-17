@@ -143,6 +143,7 @@ def summary(physician_profile_id):
     pay_breakdown = module.pay_per_comp(search_results)
     # List of tuple ; tuple = (pharmacy name, total):
     top_pharm = module.pay_per_comp_filtered(pay_breakdown,t)
+   
 
     # Setting relevant values in session that I am going to need later:
     
@@ -151,12 +152,19 @@ def summary(physician_profile_id):
     session['pay_breakdown'] = top_pharm
     session['doc_chart_pharm'] = module.tuplelist_to_listfirstitem(top_pharm)
     session['doc_chart_payment'] = module.tuplelist_to_listseconditem(top_pharm)
+   
   
     top_pharm_dic_no_other = top_pharm
-    top_pharm_dic_no_other.pop()
+    if len(top_pharm_dic_no_other) > 4:
+        top_pharm_dic_no_other.pop()
     session['listsamecompanies'] = module.tuplelist_to_listfirstitem(top_pharm_dic_no_other)
     session['doc_payments_no_other']=module.tuplelist_to_listseconditem(top_pharm_dic_no_other)
-
+    
+    print "------- SESSION DOC CHART PAYMT!!!!"
+    print top_pharm_dic_no_other
+    # print session['listsamecompanies']
+    # print session['doc_payments_no_other']
+    print "----"
     # Nber of Like for this doctor section:
     nb_likes = 0
     doctor1 = db.session.query(Doctor).filter(Doctor.doctor_id==info_doc['p_id']).first()
@@ -228,11 +236,20 @@ def ind_comparison(physician_profile_id, specialty, state, city):
 
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=summ, stream=True)
     all_payments = module.results_per_spe(response)
+    # avg_per_state: Average payments recived by all doctors of the specialty in this state:
     avg_per_state = round(module.averg_per_state(all_payments),2)
-    avg_pharm = module.averg_per_company(all_payments) #dictionnary with key: pharmacy, value: avg payed doc for specific specialty & state
+    #avg_pharm: dictionnary with key: pharmacy, value: avg payed doc for specific specialty & state:
+    avg_pharm = module.averg_per_company(all_payments) 
+    # session['pay_breakdown'] : list of tuple with (pharmacy name, total payment)
     avg_pharm_match_doc = module.averg_ind_comp_doc(avg_pharm, session['pay_breakdown'])
     session['doc_comp'] = module.list_tup_to_dic(session['pay_breakdown'])
     session['pharm_avg'] = module.pharm_avg_sortedlist(avg_pharm_match_doc)
+    print "PHARM_AVG"
+    # print session['pharm_avg']
+    print avg_pharm_match_doc
+    print session['pay_breakdown']
+    # print avg_pharm
+    # print avg_per_state
     
     
 
@@ -267,8 +284,7 @@ def ind_comparison(physician_profile_id, specialty, state, city):
     # Compared each doctor total received to doctor entered in search and keep it if below
     best_doc = module.best_ten_doc(selected_doc, session['info_doc']['total_received'])
     best_doc = module.best_doc_sorted(best_doc)
-    print "-----------BEST DOC:"
-    print best_doc
+
     
     return render_template('ind_comparison.html', avg_per_state=avg_per_state, 
         avg_pharm=avg_pharm, avg_pharm_ind_doc=avg_pharm_match_doc, best_doc=best_doc, 
@@ -310,7 +326,9 @@ def payment_doc():
 def payment_ind_doc():
     """Return data about average payments made by each company to same specialty of doc 
     versus payment receievd by specific doctor of same specialty."""
-   
+    print '--------------- Chart bar DATA --------------------'
+    print session['listsamecompanies']
+    print session['pharm_avg']
     data_dict = {
                 "labels": session['listsamecompanies'],
                 "datasets":[

@@ -51,7 +51,7 @@
     </div>
     <br>
      <div>Total payments received from pharmaceutical companies in 2015: 
-        ${{ session['info_doc']['total_received'] }} </div> <br>
+        <b>${{ session['info_doc']['total_received'] }} <b></div> <br>
 
 
 <!-- info related to doctor that appear on top of the page -->
@@ -64,7 +64,7 @@
 
 <div>
     <!-- replace with a pie chart with JS chart or plython tool -->
-    <br><b>In 2015: </b> 
+    <br>In 2015: 
     <ul>
         {% for name, payment in session['pay_breakdown'] %}
 

@@ -85,9 +85,16 @@ def pay_per_comp(list_results):
 def pay_per_comp_filtered(filtered_dic,total_payment):
     """Return"""
     # duplicate dictionnary to be sure to not lost all the data:
-    top_pharm = sorted(filtered_dic.items(), key=lambda x:x[1], reverse=True)[:4]
-    top_pharm.append( ('Other', total_payment - top_pharm[0][1] - top_pharm[1][1] 
-    - top_pharm[2][1] - top_pharm[3][1]))
+    length = len(filtered_dic.items())
+    if length > 3:
+        top_pharm = sorted(filtered_dic.items(), key=lambda x:x[1], reverse=True)[:4]
+     
+        top_pharm.append( ('Other', total_payment - top_pharm[0][1] - top_pharm[1][1] 
+        - top_pharm[2][1] - top_pharm[3][1]))
+    elif length != 0:
+        top_pharm = sorted(filtered_dic.items(), key=lambda x:x[1], reverse=True)[:length]
+    else:
+        return []
     return top_pharm
 
 
@@ -136,13 +143,15 @@ def averg_ind_comp_doc(avg_pharm,doc_pay_breakdown):
     """ XXXXXXXX"""
 
     averg_comp_match_doc = {}
-    for company in doc_pay_breakdown:
-        if company[0] in avg_pharm.keys():
-            if company[0] == 'Other':
-                pass
-            else:
-                averg_comp_match_doc[company[0]] = avg_pharm[(company[0])]
+    print " '''''''''''LENGTH"
+    print len(doc_pay_breakdown)
+
+    for tuplei in doc_pay_breakdown:
+        if tuplei[0] in avg_pharm.keys():
+            averg_comp_match_doc[tuplei[0]] = avg_pharm[tuplei[0]]
     # import pdb; pdb.set_trace()
+    print "++++++++ AVG PHARM MATCH DOC IN MODULE"
+    print averg_comp_match_doc
     return averg_comp_match_doc
 
 def tuplelist_to_listfirstitem(tuplelist):
@@ -150,6 +159,8 @@ def tuplelist_to_listfirstitem(tuplelist):
     company_name = []
     for comp_tuple in sorted(tuplelist):
         company_name.append(comp_tuple[0])
+    print "CNAME"    
+    print company_name
     return company_name
 
 def tuplelist_to_listseconditem(tuplelist):

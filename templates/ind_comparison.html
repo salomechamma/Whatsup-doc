@@ -19,7 +19,22 @@
         Average payments recived by all doctors of the {{ session['info_doc']['short_specialty'] }} specialty in 2015 in {{ session['info_doc']['state'] }}: <b>${{ avg_per_state }} </b>
     </div>
     <br>
-    <div>
+    
+
+
+  <br>
+<!-- <div>  {{ avg_pharm }} </div>
+<div>  {{  avg_pharm_ind_doc }} </div> -->
+   
+
+<div class="comparison-chart" style="height: 200px; width: 50%;">
+    <h3> Comparison between this doctor and all doctors of the state of practicing the {{ session['info_doc']['short_specialty'] }} specialty</h3><br>
+    <canvas id="indChart" height:'256' width:'256'></canvas>
+    <div id="indLegend" class="chart-legend"></div>
+</div>
+
+
+<div>
         {% if best_doc|length > 1 %}
         Want to find out doctor in {{ session['info_doc']['city'] }} who receive less than Dr {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} ? Easy! <br>
         Here are three doctor of the same {{ session['info_doc']['short_specialty'] }} specialty, in {{ session['info_doc']['city'] }} who received less payments in 2015:
@@ -34,21 +49,6 @@
     </div>
 
  
-
-
-  <br>
-<!-- <div>  {{ avg_pharm }} </div>
-<div>  {{  avg_pharm_ind_doc }} </div> -->
-   
-
-<div class="comparison-chart" style="height: 300px; width: 50%;">
-    <h3> Comparison between this doctor and all doctors of the state of practicing the {{ session['info_doc']['short_specialty'] }} specialty</h3><br>
-    <canvas id="indChart" height:'256' width:'256'></canvas>
-    <div id="indLegend" class="chart-legend"></div>
-</div>
-
-
-
 
 
 
