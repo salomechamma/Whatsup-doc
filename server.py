@@ -77,18 +77,18 @@ headers = {'Authorization': 'Bearer ' + yelp_access_token}
 def index():
     """Homepage."""
 
-    p_id = 49877
+    # p_id = 49877
 
-    # parameter including app_secret
-    payload = {'$$app_token': secret_token,
-                'physician_profile_id': p_id}
+    # # parameter including app_secret
+    # payload = {'$$app_token': secret_token,
+    #             'physician_profile_id': p_id}
 
-    response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=payload)
+    # response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=payload)
     
-    # response = "https://openpaymentsdata.cms.gov/resource/tf25-5jad.json?$$app_token=secret_token&physician_profile_id=49877"
-    response = response.json()
+    # # response = "https://openpaymentsdata.cms.gov/resource/tf25-5jad.json?$$app_token=secret_token&physician_profile_id=49877"
+    # response = response.json()
     
-    return render_template('homepage.html', response=response)
+    return render_template('homepage.html')
 
 @app.route("/results_list")
 def results_list():
@@ -103,7 +103,7 @@ def results_list():
     # Try to use several keys to see if it return something different than empty list:
     trial = 0
     key_list = [secret_token, os.environ["DOC_APP_TOKEN1"], os.environ['DOC_APP_TOKEN2']]
-    while trial < 100:
+    while trial < 50:
         response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
         search_results = response.json()
         if search_results != []:
@@ -160,11 +160,7 @@ def summary(physician_profile_id):
     session['listsamecompanies'] = module.tuplelist_to_listfirstitem(top_pharm_dic_no_other)
     session['doc_payments_no_other']=module.tuplelist_to_listseconditem(top_pharm_dic_no_other)
     
-    print "------- SESSION DOC CHART PAYMT!!!!"
-    print top_pharm_dic_no_other
-    # print session['listsamecompanies']
-    # print session['doc_payments_no_other']
-    print "----"
+ 
     # Nber of Like for this doctor section:
     nb_likes = 0
     doctor1 = db.session.query(Doctor).filter(Doctor.doctor_id==info_doc['p_id']).first()
@@ -244,15 +240,7 @@ def ind_comparison(physician_profile_id, specialty, state, city):
     avg_pharm_match_doc = module.averg_ind_comp_doc(avg_pharm, session['pay_breakdown'])
     session['doc_comp'] = module.list_tup_to_dic(session['pay_breakdown'])
     session['pharm_avg'] = module.pharm_avg_sortedlist(avg_pharm_match_doc)
-    print "PHARM_AVG"
-    # print session['pharm_avg']
-    print avg_pharm_match_doc
-    print session['pay_breakdown']
-    # print avg_pharm
-    # print avg_per_state
     
-    
-
     # Extract doctors of same city and specialty:
     same_city = {'$$app_token': secret_token,
             'physician_specialty': specialty,
@@ -262,9 +250,7 @@ def ind_comparison(physician_profile_id, specialty, state, city):
     
 
     # three better doctors
-    
     all_doc = module.three_better_doc(record_same_city, session['info_doc']['p_id'])
-    print len(all_doc)
     # Make sure no error if all_doc have elss than 10 or no elements:
     if len(all_doc) <10:
         selected_list = all_doc.items()[:len(all_doc)]
@@ -392,7 +378,7 @@ def log_in():
     """Log-in."""
     if session.get('user_id'):
         flash("You are already logged in.")
-        return redirect('/')
+        return redirect('/user_page')
     return render_template("log_in.html")
 
 @app.route('/logged', methods=['POST'])
@@ -410,7 +396,7 @@ def logged():
         # if user.password == password:
             flash("Welcome to What's up Doc")
             session["user_id"]= user_id
-            return redirect('/')
+            return redirect('/user_page')
         else:
             flash("Wrong password, please try again.")
             return redirect('/log_in')

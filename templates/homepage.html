@@ -7,14 +7,12 @@
 
  <form action="/results_list">
     Enter Doctor information: <br>
-    First Name: <input type="text" name="firstname">
-    Last Name: <input type="text" name="lastname">
-
+    <label> First Name: <input type="text" style="text-transform:capitalize;" name="firstname"></label>
+    <label> Last Name: <input type="text"  style="text-transform:capitalize;" name="lastname"></label>
     <input type="submit" value="Search"> <br><br>
  </form>
  
-  <div> <b>Test to ensure connection with API:</b>
-{{ response[0]['physician_last_name'] }} </div>  
+
 
 <!--  <div> <b>Session:</b>
 {{ session }} </div>  -->

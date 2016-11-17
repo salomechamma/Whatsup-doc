@@ -3,12 +3,13 @@
 
     <h2>Sign-in</h2>
 <form action='/confirmation-sign_in' method ="POST">
- First name: <input type="text" name="fname" required>
- Last Name: <input type="text" name="lname" required>
- Email: <input type="text" name="email" required>
- Password: <input type="text" name="password" required>
- Age: <input type="text" name="age">
- Zipcode: <input type="text" name="zipcode" required>
+ <label>First name: <input type="text" style="text-transform:capitalize;" name="fname" required></label>
+ <label>Last Name: <input type="text" style="text-transform:capitalize;" name="lname" required></label>
+ <label>Email: <input type="email" name="email" required></label>
+ <label>Password: <input type="password" name="password" required></label>
+ <label>Age: <input type="number" name="age"></label>
+ <label>DOB <input type="date" name="DOB"></label>
+ <label>Zipcode: <input type="number" name="zipcode" required></label>
 
  <input type="submit" value="Register!">
 </form>
