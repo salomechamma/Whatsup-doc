@@ -1,4 +1,4 @@
-"""Module including all functions called by server.py in each routes"""
+"""Helper file including all functions called by server.py in each routes"""
 
 import os
 from jinja2 import StrictUndefined
@@ -144,14 +144,13 @@ def averg_ind_comp_doc(avg_pharm,doc_pay_breakdown):
 
     averg_comp_match_doc = {}
     print " '''''''''''LENGTH"
-    print len(doc_pay_breakdown)
+    # print len(doc_pay_breakdown)
+    print avg_pharm
 
     for tuplei in doc_pay_breakdown:
         if tuplei[0] in avg_pharm.keys():
             averg_comp_match_doc[tuplei[0]] = avg_pharm[tuplei[0]]
     # import pdb; pdb.set_trace()
-    print "++++++++ AVG PHARM MATCH DOC IN MODULE"
-    print averg_comp_match_doc
     return averg_comp_match_doc
 
 def tuplelist_to_listfirstitem(tuplelist):

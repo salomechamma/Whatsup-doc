@@ -1,7 +1,7 @@
 """What's up Doc"""
 
 import os
-import module
+import helper
 from random import randint
 from jinja2 import StrictUndefined
 
@@ -122,7 +122,7 @@ def results_list():
         return render_template('no_result.html')
 
     # to keep only unique id of doctor so no duplicates in list of results:
-    search_results = module.unique_dico(search_results)
+    search_results = helper.unique_dico(search_results)
     return render_template('results_list.html', search_results=search_results)
 
 @app.route("/doc_summary/<int:physician_profile_id>")
@@ -136,13 +136,13 @@ def summary(physician_profile_id):
     # Issue request to Govt API/ Extract doctor personal info/ Caluclate payments received by doctor
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=summ)
     search_results = response.json()
-    t = module.total_payments(search_results)
+    t = helper.total_payments(search_results)
     first_name = search_results[0]['physician_first_name']
     last_name = search_results[0]['physician_last_name']
-    info_doc = module.perso_doc_info(search_results)
-    pay_breakdown = module.pay_per_comp(search_results)
+    info_doc = helper.perso_doc_info(search_results)
+    pay_breakdown = helper.pay_per_comp(search_results)
     # List of tuple ; tuple = (pharmacy name, total):
-    top_pharm = module.pay_per_comp_filtered(pay_breakdown,t)
+    top_pharm = helper.pay_per_comp_filtered(pay_breakdown,t)
    
 
     # Setting relevant values in session that I am going to need later:
@@ -150,15 +150,15 @@ def summary(physician_profile_id):
     session['info_doc'] = info_doc
     session['info_doc']['total_received'] = round(t,2)
     session['pay_breakdown'] = top_pharm
-    session['doc_chart_pharm'] = module.tuplelist_to_listfirstitem(top_pharm)
-    session['doc_chart_payment'] = module.tuplelist_to_listseconditem(top_pharm)
+    session['doc_chart_pharm'] = helper.tuplelist_to_listfirstitem(top_pharm)
+    session['doc_chart_payment'] = helper.tuplelist_to_listseconditem(top_pharm)
    
   
     top_pharm_dic_no_other = top_pharm
     if len(top_pharm_dic_no_other) > 4:
         top_pharm_dic_no_other.pop()
-    session['listsamecompanies'] = module.tuplelist_to_listfirstitem(top_pharm_dic_no_other)
-    session['doc_payments_no_other']=module.tuplelist_to_listseconditem(top_pharm_dic_no_other)
+    session['listsamecompanies'] = helper.tuplelist_to_listfirstitem(top_pharm_dic_no_other)
+    session['doc_payments_no_other']=helper.tuplelist_to_listseconditem(top_pharm_dic_no_other)
     
  
     # Nber of Like for this doctor section:
@@ -231,15 +231,20 @@ def ind_comparison(physician_profile_id, specialty, state, city):
             }
 
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=summ, stream=True)
-    all_payments = module.results_per_spe(response)
+    all_payments = helper.results_per_spe(response)
     # avg_per_state: Average payments recived by all doctors of the specialty in this state:
-    avg_per_state = round(module.averg_per_state(all_payments),2)
+    avg_per_state = round(helper.averg_per_state(all_payments),2)
     #avg_pharm: dictionnary with key: pharmacy, value: avg payed doc for specific specialty & state:
-    avg_pharm = module.averg_per_company(all_payments) 
+    avg_pharm = helper.averg_per_company(all_payments) 
     # session['pay_breakdown'] : list of tuple with (pharmacy name, total payment)
-    avg_pharm_match_doc = module.averg_ind_comp_doc(avg_pharm, session['pay_breakdown'])
-    session['doc_comp'] = module.list_tup_to_dic(session['pay_breakdown'])
-    session['pharm_avg'] = module.pharm_avg_sortedlist(avg_pharm_match_doc)
+    avg_pharm_match_doc = helper.averg_ind_comp_doc(avg_pharm, session['pay_breakdown'])
+    print "---------------"
+    print avg_pharm
+    print session['pay_breakdown']
+    
+    session['doc_comp'] = helper.list_tup_to_dic(session['pay_breakdown'])
+    session['pharm_avg'] = helper.pharm_avg_sortedlist(avg_pharm_match_doc)
+
     
     # Extract doctors of same city and specialty:
     same_city = {'$$app_token': secret_token,
@@ -250,7 +255,7 @@ def ind_comparison(physician_profile_id, specialty, state, city):
     
 
     # three better doctors
-    all_doc = module.three_better_doc(record_same_city, session['info_doc']['p_id'])
+    all_doc = helper.three_better_doc(record_same_city, session['info_doc']['p_id'])
     # Make sure no error if all_doc have elss than 10 or no elements:
     if len(all_doc) <10:
         selected_list = all_doc.items()[:len(all_doc)]
@@ -266,10 +271,10 @@ def ind_comparison(physician_profile_id, specialty, state, city):
         data1 = {'$$app_token': secret_token,
                 'physician_profile_id': elem[0]}
         response1 = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data1)
-        selected_doc[elem[0]] = module.total_payments(response1.json())
+        selected_doc[elem[0]] = helper.total_payments(response1.json())
     # Compared each doctor total received to doctor entered in search and keep it if below
-    best_doc = module.best_ten_doc(selected_doc, session['info_doc']['total_received'])
-    best_doc = module.best_doc_sorted(best_doc)
+    best_doc = helper.best_ten_doc(selected_doc, session['info_doc']['total_received'])
+    best_doc = helper.best_doc_sorted(best_doc)
 
     
     return render_template('ind_comparison.html', avg_per_state=avg_per_state, 
