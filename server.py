@@ -204,7 +204,7 @@ def summary(physician_profile_id):
     session['info_doc']['lat'] = lat
     session['info_doc']['lng'] = lng 
     session['info_doc']['gmap_address'] = title_address
-
+    # import pdb; pdb.set_trace()
 
    # Return parameters to jinja  
     return render_template("summary.html", liked_check=liked_check,
@@ -376,17 +376,16 @@ def logged():
     email = request.form.get('email')
     password = request.form.get('password')
     user = db.session.query(User).filter(User.email==email).first()
-    user_id = user.user_id
     if user == None:
-        flash("No such user")
+        flash("We do not have this email addres sin our records. Please try again")
         return redirect('/log_in')
     else:
-        
+        user_id = user.user_id
         if pbkdf2_sha256.verify(password, user.password):
         # if user.password == password:
             flash("Welcome to What's up Doc")
             session["user_id"]= user_id
-            import pdb; pdb.set_trace() 
+            # import pdb; pdb.set_trace() 
             return redirect('/user_page')
         else:
             flash("Wrong password, please try again.")
@@ -399,11 +398,12 @@ def log_out():
 
     if session.get('user_id',0) == 0:
         flash("You are not logged in.")
-        return redirect("/")
+        return redirect('/')
     else:
         del session["user_id"]
         flash("Logged out.")
-    return redirect("/")
+        return redirect('/')
+
 
 
 # Like button
@@ -454,7 +454,7 @@ def user_page():
 def send_email():
     recipients = email = request.form.get('emailAddress')
     msg = Message("What's Up Doc informs you!", recipients=[recipients])
-    msg.body = "testing"
+    # msg.body = "testing"
 
     # Getting the Google Image:
     # payloadG = {'key': google_key,
@@ -466,8 +466,7 @@ def send_email():
     # image = image.show()
 
     msg.html = render_template('summary_to_send.html', lat=session['info_doc']['lat'],
-    lng=session['info_doc']['lng'], title_address =session['info_doc']['gmap_address'],
-    google_key=google_key)
+    lng=session['info_doc']['lng'], title_address =session['info_doc']['gmap_address'])
     with app.open_resource("static/img/map.png") as fp:
         msg.attach("static/img/map.png", "image/png", fp.read())
     mail.send(msg)

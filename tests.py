@@ -23,11 +23,17 @@ class FlaskTestIntegrationLoggedIn(TestCase):
             with c.session_transaction() as session:
                 session['info_doc'] = {'short_specialty': u'Gastroenterology', 
                 'city': u'NEW YORK', 'first_name': u'CHARLES', 'last_name': u'SAHA', 
-                'name': u'Charles Saha', 'rating': -1, 'p_id': u'98906', 
+                'name': u'Charles Saha', 'rating': 3.5, 'url': u'https://www.yelp.com'\
+                '/biz/saha-s-charles-md-new-york?adjust_creative=tlmYwaULihK1wN2xL2o_'\
+                'FQ&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_'\
+                'source=tlmYwaULihK1wN2xL2o_FQ', 'p_id': u'98906', 
                 'specialty': u'Allopathic & Osteopathic Physicians|Internal Medicine|Gastroenterology', 
                 'total_received': 1087.71, 'zipcode': u'10028-1062', 'state': u'NY', 
+                'lat': 40.7795808, 'lng': -73.95631519999999, 
+                'gmap_address': u'120 E 86TH ST 10028-1062 NEW YORK NY ', 
                 'street_address': u'120 E 86TH ST'}
-                session['pay_breakdown'] = [(u'Shire North American Group Inc', 171.77), (u'GlaxoSmithKline, LLC.', 160.48000000000002), 
+                session['pay_breakdown'] = [(u'Shire North American Group Inc', 171.77), 
+                (u'GlaxoSmithKline, LLC.', 160.48000000000002), 
                 (u'Merck Sharp & Dohme Corporation', 127.34000000000002), 
                 (u'Takeda Pharmaceuticals U.S.A., Inc.', 121.86)]
                 session['doc_chart_pharm'] = [u'GlaxoSmithKline, LLC.',
@@ -97,16 +103,49 @@ class FlaskTestIntegrationLoggedIn(TestCase):
         self.assertIn("Welcome", result.data)
 
 
-    def testLogIn(self):
-        """ Test Log-in page"""
-        result = self.client.post("/sign_in", data={'fname': 'ben', 'lname':'berger', 
-            'email':'ben@gmail.com','password': 'ben', 'zipcode':94109})
-        self.assertIn("Welcome", result.data)
+    def testLogOut(self):
+        """ Test Log-out page"""
+        result = self.client.get("/log_out", follow_redirects=True)
+        # import pdb; pdb.set_trace() 
+        self.assertIn("Enter", result.data)
 
-# test if I log out
-# test if I sign in and already exists
+        
+    def testLogIn(self):
+        """ Test Log-in page if already logged-in"""
+        result = self.client.get("/log_in", follow_redirects=True)
+        # import pdb; pdb.set_trace() 
+        self.assertIn("Number", result.data)
+
+
+    def testLike(self):
+        """ Test /Like route """
+        result = self.client.post("/like", follow_redirects=True)
+        self.assertEqual(result.status_code, 200)
+
+    def testUnlike(self):
+        """ Test /unlke route """
+        result = self.client.post("/unlike", follow_redirects=True)
+        self.assertEqual(result.status_code, 200)
+
+    def testPieChart(self):
+        """ Test /doc_info route route """
+        result = self.client.get("/doc_info.json", follow_redirects=True)
+        self.assertEqual(result.status_code, 200)
+
+
+    def testBarChart(self):
+        """ Test /ind_info.json route route """
+        result = self.client.get("/ind_info.json", follow_redirects=True)
+        self.assertEqual(result.status_code, 200)
+
+# Unsuccessful
+    # def testSendEmail(self):
+    #     """ Test /send_email route route """
+    #     result = self.client.post("/send_email", follow_redirects=True)
+    #     self.assertEqual(result.status_code, 200)
+
 # test if log in and wrong password
-# test if log in and already logged in 
+
 
 # Do integration test forform (post) search, log in and log out 
 # class FlaskTestsDatabase(TestCase):
@@ -203,7 +242,7 @@ class FlaskTestsLoggedOut(TestCase):
                 u'Takeda Pharmaceuticals U.S.A., Inc.': 121.86, u'GlaxoSmithKline, LLC.': 160.48000000000002}
                 session['pharm_avg'] = [17.0, 27.0, 16.0, 117.0]
 
-          # Connect to test database
+        # Connect to test database
         connect_to_db(app, "postgresql:///testdb")
         # Create tables and add sample data
         db.create_all()
@@ -214,6 +253,30 @@ class FlaskTestsLoggedOut(TestCase):
         result = self.client.get("/user_page")
         self.assertNotIn("Number", result.data)
         self.assertIn("You are not logged-in", result.data)
+
+    def testSummaryLike(self):
+        """ Test that summary page do not allow user to 'like'"""
+        result = self.client.get("/doc_summary/98906", data={'physician_profile_id': 98906})
+        self.assertIn("Login to vote", result.data)
+
+
+    def LogIn(self):
+        """ Test log-in when user not initially logged in'"""
+        result = self.client.post("/log_in", data={'email':'salome@gmail.com',
+            'password':'salome'})
+        self.assertIn("Number", result.data)
+
+    def LogIn2(self):
+        """ Test log-in when user not initially logged in and enters wrong password'"""
+        result = self.client.post("/log_in", data={'email':'salome@gmail.com',
+            'password':'bla'})
+        self.assertIn("try", result.data)
+
+    def testSignIn(self):
+        """ Test Sign-in page"""
+        result = self.client.get("/sign_in", data={'fname': 'ben', 'lname':'berger', 
+            'email':'salome@gmail.com','password': 'ben', 'zipcode':94109})
+        self.assertIn("Zipcode", result.data)
 
 
 if __name__ == "__main__":
