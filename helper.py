@@ -141,12 +141,7 @@ def averg_per_company(all_payments):
 
 def averg_ind_comp_doc(avg_pharm,doc_pay_breakdown):
     """ XXXXXXXX"""
-
     averg_comp_match_doc = {}
-    print " '''''''''''LENGTH"
-    # print len(doc_pay_breakdown)
-    print avg_pharm
-
     for tuplei in doc_pay_breakdown:
         if tuplei[0] in avg_pharm.keys():
             averg_comp_match_doc[tuplei[0]] = avg_pharm[tuplei[0]]
@@ -157,9 +152,7 @@ def tuplelist_to_listfirstitem(tuplelist):
     """ Takes list of tuple and return list of first item of each tuple """
     company_name = []
     for comp_tuple in sorted(tuplelist):
-        company_name.append(comp_tuple[0])
-    print "CNAME"    
-    print company_name
+        company_name.append(comp_tuple[0])  
     return company_name
 
 def tuplelist_to_listseconditem(tuplelist):
@@ -227,7 +220,6 @@ def best_ten_doc(all_doc, t):
 
 def best_doc_sorted(best_doc):
     sorted_best_doc = sorted(best_doc.items(), key=lambda x:x[1])
-    print sorted_best_doc
     return sorted_best_doc
 
 

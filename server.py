@@ -76,17 +76,6 @@ headers = {'Authorization': 'Bearer ' + yelp_access_token}
 @app.route('/')
 def index():
     """Homepage."""
-
-    # p_id = 49877
-
-    # # parameter including app_secret
-    # payload = {'$$app_token': secret_token,
-    #             'physician_profile_id': p_id}
-
-    # response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=payload)
-    
-    # # response = "https://openpaymentsdata.cms.gov/resource/tf25-5jad.json?$$app_token=secret_token&physician_profile_id=49877"
-    # response = response.json()
     
     return render_template('homepage.html')
 
@@ -153,13 +142,14 @@ def summary(physician_profile_id):
     session['doc_chart_pharm'] = helper.tuplelist_to_listfirstitem(top_pharm)
     session['doc_chart_payment'] = helper.tuplelist_to_listseconditem(top_pharm)
    
-  
+    
     top_pharm_dic_no_other = top_pharm
     if len(top_pharm_dic_no_other) > 4:
         top_pharm_dic_no_other.pop()
     session['listsamecompanies'] = helper.tuplelist_to_listfirstitem(top_pharm_dic_no_other)
     session['doc_payments_no_other']=helper.tuplelist_to_listseconditem(top_pharm_dic_no_other)
     
+
  
     # Nber of Like for this doctor section:
     nb_likes = 0
@@ -215,6 +205,7 @@ def summary(physician_profile_id):
     session['info_doc']['lng'] = lng 
     session['info_doc']['gmap_address'] = title_address
 
+
    # Return parameters to jinja  
     return render_template("summary.html", liked_check=liked_check,
         google_key=google_key, lat=lat, lng=lng, title_address=title_address)
@@ -238,10 +229,7 @@ def ind_comparison(physician_profile_id, specialty, state, city):
     avg_pharm = helper.averg_per_company(all_payments) 
     # session['pay_breakdown'] : list of tuple with (pharmacy name, total payment)
     avg_pharm_match_doc = helper.averg_ind_comp_doc(avg_pharm, session['pay_breakdown'])
-    print "---------------"
-    print avg_pharm
-    print session['pay_breakdown']
-    
+
     session['doc_comp'] = helper.list_tup_to_dic(session['pay_breakdown'])
     session['pharm_avg'] = helper.pharm_avg_sortedlist(avg_pharm_match_doc)
 
@@ -263,7 +251,6 @@ def ind_comparison(physician_profile_id, specialty, state, city):
         selected_list = []
     else:
         selected_list = all_doc.items()[:10]
-        print selected_list
     selected_doc = {}
 
     # Extract for each doctor its total received
@@ -276,7 +263,7 @@ def ind_comparison(physician_profile_id, specialty, state, city):
     best_doc = helper.best_ten_doc(selected_doc, session['info_doc']['total_received'])
     best_doc = helper.best_doc_sorted(best_doc)
 
-    
+    # import pdb; pdb.set_trace() 
     return render_template('ind_comparison.html', avg_per_state=avg_per_state, 
         avg_pharm=avg_pharm, avg_pharm_ind_doc=avg_pharm_match_doc, best_doc=best_doc, 
         len = len(best_doc))
@@ -317,9 +304,7 @@ def payment_doc():
 def payment_ind_doc():
     """Return data about average payments made by each company to same specialty of doc 
     versus payment receievd by specific doctor of same specialty."""
-    print '--------------- Chart bar DATA --------------------'
-    print session['listsamecompanies']
-    print session['pharm_avg']
+  
     data_dict = {
                 "labels": session['listsamecompanies'],
                 "datasets":[
@@ -346,13 +331,13 @@ def payment_ind_doc():
                 }
     return jsonify(data_dict)
 
-@app.route("/sign_in")
+@app.route("/sign_in", methods=["GET"])
 def sign_in():
     """Sign-in access."""
 
     return render_template("sign_in.html")
 
-@app.route('/confirmation-sign_in', methods=["POST"])
+@app.route('/sign_in', methods=["POST"])
 def conf_sign_in():
     """Conf sign-in"""
     fname = request.form.get('fname')
@@ -386,7 +371,7 @@ def log_in():
         return redirect('/user_page')
     return render_template("log_in.html")
 
-@app.route('/logged', methods=['POST'])
+@app.route('/log_in', methods=['POST'])
 def logged():
     email = request.form.get('email')
     password = request.form.get('password')
@@ -401,11 +386,12 @@ def logged():
         # if user.password == password:
             flash("Welcome to What's up Doc")
             session["user_id"]= user_id
+            import pdb; pdb.set_trace() 
             return redirect('/user_page')
         else:
             flash("Wrong password, please try again.")
             return redirect('/log_in')
-
+    
 # check why email bug when i log out when im already logged out
 @app.route("/log_out")
 def log_out():
@@ -450,6 +436,8 @@ def unlike():
 @app.route("/user_page")
 def user_page():
     """User_page."""
+    if session.get('user_id',0) == 0:
+        return render_template("not_logged.html")
     user1 = db.session.query(User).filter(User.user_id==session['user_id']).first()
     fname = user1.first_name
     lname = user1.last_name
@@ -472,11 +460,9 @@ def send_email():
     # payloadG = {'key': google_key,
     #             'address': title_address }
     url = "http://maps.googleapis.com/maps/api/staticmap?center=%s,%s&size=800x800&zoom=14&sensor=false"%(session['info_doc']['lat'],session['info_doc']['lng'])
-    print url
     buffer = StringIO(urllib.urlopen(url).read())
     image1 = Image.open(buffer)
     image1.save("static/img/map.png")
-    print image1
     # image = image.show()
 
     msg.html = render_template('summary_to_send.html', lat=session['info_doc']['lat'],

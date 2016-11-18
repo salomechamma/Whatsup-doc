@@ -74,14 +74,34 @@ class Like(db.Model):
     # Define relationship to movie
     doctor = db.relationship("Doctor",
                             backref=db.backref("likes"))
+
+
+
+def example_data():
+    """Create some sample data."""
+
+    # In case this is run more than once, empty out existing data
+    Doctor.query.delete()
+    User.query.delete()
+    Like.query.delete()
+
+    # Add sample 
+    u1 = User(first_name = 'salome', last_name= 'chamma', email='salome@gmail.com', 
+        password='salome', zipcode = int(94109))
+    u2 = User(first_name = 'jacob', last_name= 'berger', email='jacob@gmail.com', 
+        password='jacob', zipcode = int(94109))
+
+    db.session.add_all([u1,u2])
+    db.session.commit()
 ##############################################################################
 # Helper functions
 
-def connect_to_db(app):
+
+def connect_to_db(app, uri='postgresql:///doctors'):
     """Connect the database to our Flask app."""
 
     # Configure to use our PstgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///doctors'
+    app.config['SQLALCHEMY_DATABASE_URI'] = uri
     db.app = app
     db.init_app(app)
 
