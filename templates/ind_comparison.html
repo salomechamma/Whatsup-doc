@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block content %}
 
 
@@ -18,11 +19,7 @@
    <div> 
         Average payments recived by all doctors of the {{ session['info_doc']['short_specialty'] }} specialty in 2015 in {{ session['info_doc']['state'] }}: <b>${{ avg_per_state }} </b>
     </div>
-    <br>
-    
-
-
-  <br>
+  
    
 
 <div class="comparison-chart" style="height: 70px; width: 35%;">
@@ -31,7 +28,7 @@
     <div id="indLegend" class="chart-legend"></div>
 </div>
 
-
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <div>
         {% if best_doc|length > 1 %}
         Want to find out doctor in {{ session['info_doc']['city'] }} who receive less than Dr {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} ? Easy! <br>

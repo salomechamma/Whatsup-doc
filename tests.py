@@ -131,6 +131,7 @@ class FlaskTestIntegrationLoggedIn(TestCase):
         """ Test /doc_info route route """
         result = self.client.get("/doc_info.json", follow_redirects=True)
         self.assertEqual(result.status_code, 200)
+        self.assertIn("datasets", result.data)
 
 
     def testBarChart(self):
@@ -139,10 +140,12 @@ class FlaskTestIntegrationLoggedIn(TestCase):
         self.assertEqual(result.status_code, 200)
 
 # Unsuccessful
-    # def testSendEmail(self):
-    #     """ Test /send_email route route """
-    #     result = self.client.post("/send_email", follow_redirects=True)
-    #     self.assertEqual(result.status_code, 200)
+    def testSendEmail(self):
+        """ Test /send_email route route """
+        result = self.client.post("/send_email", data={'recipients': "hi@hi.com"}, follow_redirects=True)
+        print "---- RESULT"
+        print result
+        self.assertEqual(result.status_code, 200)
 
 # test if log in and wrong password
 

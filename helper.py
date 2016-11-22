@@ -82,9 +82,11 @@ def pay_per_comp(list_results):
             pharm_name.append(dic['submitting_applicable_manufacturer_or_applicable_gpo_name'])
     return pay_breakdown
 
-def pay_per_comp_filtered(filtered_dic,total_payment):
+def pay_per_comp_filtered(resjson,total_payment):
     """Return"""
     # duplicate dictionnary to be sure to not lost all the data:
+    
+    filtered_dic = pay_per_comp(resjson)
     length = len(filtered_dic.items())
     if length > 3:
         top_pharm = sorted(filtered_dic.items(), key=lambda x:x[1], reverse=True)[:4]

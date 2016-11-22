@@ -129,9 +129,9 @@ def summary(physician_profile_id):
     first_name = search_results[0]['physician_first_name']
     last_name = search_results[0]['physician_last_name']
     info_doc = helper.perso_doc_info(search_results)
-    pay_breakdown = helper.pay_per_comp(search_results)
+    # pay_breakdown = helper.pay_per_comp(search_results)
     # List of tuple ; tuple = (pharmacy name, total):
-    top_pharm = helper.pay_per_comp_filtered(pay_breakdown,t)
+    top_pharm = helper.pay_per_comp_filtered(search_results,t)
    
 
     # Setting relevant values in session that I am going to need later:
@@ -452,7 +452,7 @@ def user_page():
 
 @app.route("/send_email", methods=['POST'])
 def send_email():
-    recipients = email = request.form.get('emailAddress')
+    recipients = request.form.get('emailAddress')
     msg = Message("What's Up Doc informs you!", recipients=[recipients])
     # msg.body = "testing"
 

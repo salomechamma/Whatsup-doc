@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% block content %}
 
+{% block titleblock %}
+Simple Map
+{% endblock %}
 
+{% block headblock %}
 
-  <h2>Doctor Summary Profile</h2>
-
-  <head>
     <style>
         #map {
           height: 400px;
@@ -18,11 +18,19 @@
           padding: 0;
         }*/
     </style>
-    <title>Simple Map</title>
-    <meta name="viewport" content="initial-scale=1.0">
+    <title>Simple Map</title>   <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
+{% endblock %}
+
+{% block  content %}
+
+
+
+  <h2>Doctor Summary Profile</h2>
+
   
-  </head>
+
+
 
     <h3>  {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} <br>
     </h3>
@@ -196,7 +204,7 @@ $.get("/doc_info.json", function (data) {
                                             data: data,
                                             options: options,
                                             });
-
+// change DOM
 });
 // Google Map section
     
@@ -236,5 +244,7 @@ $.get("/doc_info.json", function (data) {
  <script async defer
       src="https://maps.googleapis.com/maps/api/js?key={{ google_key }}&callback=initMap">
     </script>
+    <link rel="stylesheet"
+        href="static/styles_sheet.css">
 
 {% endblock %}
