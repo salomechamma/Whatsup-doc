@@ -3,14 +3,24 @@
 
 
 
-  <h2>Search Results</h2>
-    <table>
-        <tr>
-        <th>Name</th>
+  <h2></h2>
+
+
+<div class="container-fluid">
+    <div class="row"> 
+        <div class="col-md-7 col-xs-7"> 
+  <table class="table">
+  <thead>
+    <tr>
+       <th>Name</th>
         <th>Specialty</th>
         <th>City</th>
         <th>Zipcode</th>
-        </tr>
+    </tr>
+  </thead>
+  <tbody>
+
+
     {% for dic in search_results %}
         <tr>
              <td> <a href="/doc_summary/{{ dic['physician_profile_id'] }}">{{ dic['physician_first_name'] }} {{ dic['physician_last_name'] }} </a> </td>
@@ -19,11 +29,20 @@
              <td>{{ dic['recipient_zip_code'] }} </td>
          </tr>
     {% endfor %}
-     <!-- <div> {{ search_results }} </div> <br> -->
-     </table>
+    
+  </tbody>
+</table>
+ </div>
+    </div>
 
-<form method="get" action="/">
+   
+</div>
+
+<!-- <form method="get" action="/">
     <button type="submit">Go Back</button>
-</form>
+</form> -->
+
+
+
 
 {% endblock %}

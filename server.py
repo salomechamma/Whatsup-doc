@@ -141,7 +141,8 @@ def summary(physician_profile_id):
     session['pay_breakdown'] = top_pharm
     session['doc_chart_pharm'] = helper.tuplelist_to_listfirstitem(top_pharm)
     session['doc_chart_payment'] = helper.tuplelist_to_listseconditem(top_pharm)
-   
+    print '-------'
+    print session['doc_chart_pharm']
     
     top_pharm_dic_no_other = top_pharm
     if len(top_pharm_dic_no_other) > 4:

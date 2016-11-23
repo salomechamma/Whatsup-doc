@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block titleblock %}
-Simple Map
+What's Up Doc
 {% endblock %}
 
 {% block headblock %}
 
     <style>
         #map {
-          height: 400px;
+          height: 200px;
           width: 400px;
 
         }
@@ -23,46 +23,56 @@ Simple Map
 {% endblock %}
 
 {% block  content %}
+ 
 
 
 
-  <h2>Doctor Summary Profile</h2>
+  <h2></h2>
 
   
 
+<div class="container-fluid">
+    <div class="row"> 
+        <div class="col-md-6 col-xs-6"> 
 
+            <h3>  {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} 
+            </h3>
+       
+            <br>{{ session['info_doc']['short_specialty'] }} <br>
+            {{ session['info_doc']['street_address'] }} {{ session['info_doc']['zipcode' ] }} {{ session['info_doc']['city' ] }} 
+        </div>
 
-    <h3>  {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} <br>
-    </h3>
-    <div>
-    {{ session['info_doc']['short_specialty'] }} <br>
-    {{ session['info_doc']['street_address'] }} {{ session['info_doc']['zipcode' ] }} {{ session['info_doc']['city' ] }} 
-    </div> <br>
+   
 
+    <div class="col-md-6 col-xs-6"> 
+        {% if   session['info_doc']['rating']  > 0 %} 
+            <b>Yelp Rating </b>: {{ session['info_doc']['rating'] }}/5  -  Access the doctor Yelp page
+            <a href= {{ session['info_doc']['url'] }} >here</a>
+        {% endif %} <br>
+        <span id='nb_likes'> <b>Number of total Likes </b>: {{ session['likes'] }}  </span>
 
-    <div>
-    {% if   session['info_doc']['rating']  > 0 %} 
-        <b>Yelp Rating </b>: {{ session['info_doc']['rating'] }}/5  -  Access the doctor Yelp page
-        <a href= {{ session['info_doc']['url'] }} >here</a>
-    {% endif %} 
+        <span id='like_section'>
+        {% if  session.get('user_id') %} 
+            {% if liked_check is none %}
+                <button id="like">Like this doctor</button>
+                <span id="like-message"></span>
+            {% else %}
+                <button id="unlike">Unlike this doctor</button>
+                <span id="unlike-message"></span>
+            {% endif %}
+            {% else %}
+            - Login to vote!
+            {% endif %}
+            </span>
     </div>
 
+    <div class="row"> 
+    <div class="col-md-12 col-xs-12"> 
+    <div id="map"></div>
+    </div>
+</div>
 
-    <span id='nb_likes'> <b>Number of total Likes </b>: {{ session['likes'] }}  </span>
-
-    <span id='like_section'>
-    {% if  session.get('user_id') %} 
-        {% if liked_check is none %}
-            <button id="like">Like this doctor</button>
-            <span id="like-message"></span>
-        {% else %}
-            <button id="unlike">Unlike this doctor</button>
-            <span id="unlike-message"></span>
-        {% endif %}
-    {% else %}
-    - Login to vote!
-    {% endif %}
-    </span>
+</div>
     <br>
     <div>Total payments received from pharmaceutical companies in 2015: 
     <b>${{ session['info_doc']['total_received'] }} </b></div> <br>
@@ -108,7 +118,8 @@ Simple Map
     <div id="docLegend" class="chart-legend"></div>
 </div>
 <br><br><br><br><br><br>
-<div id="map"></div>
+
+
 
 
 <script>
@@ -212,7 +223,7 @@ $.get("/doc_info.json", function (data) {
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: {{ lat }}, lng: {{ lng }}},
-          zoom: 10
+          zoom: 14
         });
         // var marker = new google.maps.Marker({
         //   position: {lat: {{ lat }}, lng: {{ lng }}},
