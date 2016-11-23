@@ -70,6 +70,10 @@ section {
 	font-size: 18px;
 }
 
+
+#docChart {
+  border: 1px solid orange;
+}
 #map {
 	/*margin: 0;
 	padding: 0;

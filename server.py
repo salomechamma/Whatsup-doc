@@ -16,7 +16,7 @@ import json
 from model import connect_to_db, db, User, Doctor, Like
 
 # ***************************** To use Yelp API:
-from yelp.client import Client 
+from yelp.client import Client
 import io
 
 # ***************************** To hash password:
@@ -29,19 +29,10 @@ import urllib
 
 
 app = Flask(__name__)
+app.config.from_object('configuration')
 
-# Required to use Flask sessions and the debug toolbar
-app.secret_key = "ABC" 
+
 # ***************************** Flask mail settings:
-
-email_password = os.environ['EMAIL_PASSWORD']
-app.config['MAIL_SERVER']='smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_DEFAULT_SENDER'] = 'whatsup.doctor.website@gmail.com'
-app.config['MAIL_USERNAME'] = 'whatsup.doctor.website@gmail.com'
-app.config['MAIL_PASSWORD'] = email_password
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
 
 mail = Mail(app)
 
@@ -56,22 +47,7 @@ app.jinja_env.undefined = StrictUndefined
 app.jinja_env.auto_reload = True
 
 
-# Government API /extract from secret.sh
-secret_token = os.environ["DOC_APP_TOKEN"]
 
-google_key = os.environ["GOOGLE_KEY"]
-
-# Yelp API
-client_id = os.environ["YELP_APP_ID"]
-client_secret = os.environ["YELP_APP_SECRET"]
-url_yelp='https://api.yelp.com/oauth2/token'
-data_yelp ={'grand_type': 'client_credentials',
-    'client_id': client_id, 'client_secret': client_secret}
-r = requests.post(url_yelp, data = data_yelp)
-
-yelp_access_token = r.json()['access_token']
-yelp_search_url = 'https://api.yelp.com/v3/businesses/search'
-headers = {'Authorization': 'Bearer ' + yelp_access_token}
 
 @app.route('/')
 def index():
@@ -84,14 +60,14 @@ def results_list():
     """Show list of doctor resulting from search."""
     firstname = request.args.get('firstname')
     lastname = request.args.get('lastname')
-    data = {'$$app_token': secret_token,
+    data = {'$$app_token': app.config['SECRET_TOKEN'],
                 'physician_first_name': firstname,
                 'physician_last_name': lastname}
     
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
     # Try to use several keys to see if it return something different than empty list:
     trial = 0
-    key_list = [secret_token, os.environ["DOC_APP_TOKEN1"], os.environ['DOC_APP_TOKEN2']]
+    key_list = [app.config['SECRET_TOKEN'], os.environ["DOC_APP_TOKEN1"], os.environ['DOC_APP_TOKEN2']]
     while trial < 50:
         response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
         search_results = response.json()
@@ -118,7 +94,7 @@ def results_list():
 def summary(physician_profile_id):
     """Show summary page on doctor resulting from search."""
     # Govt API Request
-    summ = {'$$app_token': secret_token,
+    summ = {'$$app_token': app.config['SECRET_TOKEN'],
                 'physician_profile_id': physician_profile_id
             }
 
@@ -178,7 +154,7 @@ def summary(physician_profile_id):
 
     }
 
-    result = requests.get(url=yelp_search_url, params=params, headers=headers)
+    result = requests.get(url=app.config['YELP_SEARCH_URL'], params=params, headers=app.config['HEADERS'])
 
     businesses = result.json()['businesses']
     for business in businesses:
@@ -193,7 +169,7 @@ def summary(physician_profile_id):
     title_address = "%s %s %s %s "%(session['info_doc']['street_address'],
         session['info_doc']['zipcode'], session['info_doc']['city'],
                 session['info_doc']['state'])
-    payloadG = {'key': google_key,
+    payloadG = {'key': app.config['GOOGLE_KEY'],
                 'address': title_address }
     response_google = requests.get("https://maps.googleapis.com/maps/api/geocode/json", params=payloadG)
     
@@ -209,7 +185,7 @@ def summary(physician_profile_id):
 
    # Return parameters to jinja  
     return render_template("summary.html", liked_check=liked_check,
-        google_key=google_key, lat=lat, lng=lng, title_address=title_address)
+        google_key=app.config['GOOGLE_KEY'], lat=lat, lng=lng, title_address=title_address)
 
  
 @app.route("/ind_comparison/<int:physician_profile_id>/<specialty>/<state>/<city>")
@@ -217,7 +193,7 @@ def ind_comparison(physician_profile_id, specialty, state, city):
     """Show payments received by doctor in comparison to payments received by 
     all doctors of the same specialty"""
     
-    summ = {'$$app_token': secret_token,
+    summ = {'$$app_token': app.config['SECRET_TOKEN'],
             'physician_specialty': specialty,
             'recipient_state': state
             }
@@ -236,7 +212,7 @@ def ind_comparison(physician_profile_id, specialty, state, city):
 
     
     # Extract doctors of same city and specialty:
-    same_city = {'$$app_token': secret_token,
+    same_city = {'$$app_token': app.config['SECRET_TOKEN'],
             'physician_specialty': specialty,
             'recipient_city': city
             }
@@ -256,7 +232,7 @@ def ind_comparison(physician_profile_id, specialty, state, city):
 
     # Extract for each doctor its total received
     for elem in selected_list:
-        data1 = {'$$app_token': secret_token,
+        data1 = {'$$app_token': app.config['SECRET_TOKEN'],
                 'physician_profile_id': elem[0]}
         response1 = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data1)
         selected_doc[elem[0]] = helper.total_payments(response1.json())
