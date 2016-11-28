@@ -1,35 +1,113 @@
 {% extends 'base.html' %}
 
-{% block content %}
+
+
+{% block titleblock %}
+What's Up Doc
+{% endblock %}
+
+{% block headblock %}
+
+    <style>
+        #map {
+          height: 100px;
+          width: 300px;
+
+
+        }
+
+    </style>
+    <title>Simple Map</title>   <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+{% endblock %}
+
+{% block  content %}
+ 
 
 
 
-    <h2>Industry Comparison </h2>
-    <h4>  
-        {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} <br>
-        {% if   session['info_doc']['rating']  > 0 %} 
-        Yelp Rating: {{ session['info_doc']['rating'] }}/5 
-    </h4><br>
-        {% endif %}
+
+<div class="container-fluid">
+    <div class="row"> 
+        <div class="col-md-6 col-xs-6" id="doc_info"> 
+            <h2 class='vertical-align'>  {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} 
+            </h2>
+            
+        </div> 
+
+        <div class="col-md-4 col-xs-4 col-md-offset-2 "> 
+            
+            <b> {{ session['info_doc']['street_address'] }} {{ session['info_doc']['zipcode'] }} {{ session['info_doc']['city'] }} </b> <br>
+           
+           
+           <b> {{ session['info_doc']['short_specialty'] }} </b> <br>
+       
+            {% if   session['info_doc']['rating']  > 0 %} 
+            <a href= {{ session['info_doc']['url'] }} ><b>Yelp: </b><span class="stars">{{ session['info_doc']['rating'] }}</span></a> 
+            {% else %}
+            <b>No Existing Yelp page.</b>
+            {% endif %} 
+           
+        
+        </div>
+    </div>
+
+    <div class="row"> 
+        <div class="col-md-12 col-xs-12" style='padding:0;'> 
+            <div id="map"></div>
+        </div>
+    </div>
+
    
-    <div> 
-        Payments recived by {{ session['info_doc']['name'] }} in 2015: <b>${{session['info_doc']['total_received'] }} </b>
-    </div>
-
-   <div> 
-        Average payments recived by all doctors of the {{ session['info_doc']['short_specialty'] }} specialty in 2015 in {{ session['info_doc']['state'] }}: <b>${{ avg_per_state }} </b>
-    </div>
   
-   
 
-<div class="comparison-chart" style="height: 70px; width: 35%;">
-    <h3> Comparison between this doctor and all doctors of the state of practicing the {{ session['info_doc']['short_specialty'] }} specialty</h3><br>
-    <canvas id="indChart" height:'256' width:'256'></canvas>
-    <div id="indLegend" class="chart-legend"></div>
+
+
+
+    <div class="row" id='total_payment'> 
+        <!-- <div class="col-md-offset-1 col-md-5 col-xs-5">  
+            {{ session['info_doc']['state'] }} state <br>  Specialty: {{ session['info_doc']['short_specialty'] }} </b><br>
+        </div> -->
+        <div class="col-md-offset-4 col-md-4 col-xs-4"> 
+            <table  class="table" class='comp'>
+            
+            <thead>
+            <tr>
+           <th style='color:green;'>Dr. {{ session['info_doc']['last_name'] }} </th>
+            <th style='color:pink;'>{{ session['info_doc']['state'] }} Average </th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr>
+                 <td style='color:green;'>${{ session['info_doc']['total_received'] }} </td>
+                 <td style='color:pink;'>${{ avg_per_state }} </td>
+                 
+             </tr>
+       
+        
+            </tbody>
+            </table>
+        </div>
+     </div>
+
+
+ <div class="row" style='margin:5px;style=padding:5px;'> 
+    
+    <div id='barchart'class="col-md-9 col-xs-9"> 
+        <div class="comparison-chart" style=" width: 100%;">
+            <canvas id="indChart"></canvas>
+            <div id="indLegend" class="chart-legend"></div>
+        </div>
+    </div>
+
+    
 </div>
+    
 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<div>
+<div class="row">
+    <div class="col-md-offset-2 col-md-7 col-xs-7"> 
+
         {% if best_doc|length > 1 %}
         Want to find out doctor in {{ session['info_doc']['city'] }} who receive less than Dr {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} ? Easy! <br>
         Here are three doctor of the same {{ session['info_doc']['short_specialty'] }} specialty, in {{ session['info_doc']['city'] }} who received less payments in 2015:
@@ -38,31 +116,65 @@
         <ul>
             <li> <a href="/doc_summary/{{ best_doc[i][0] }}">  Option {{ i + 1 }} </a> -  total payments received:  ${{ best_doc[i][1] }}
         </li>
-    </ul>
+        </ul>
         {% endfor %}
-        
 
         {% endif %}
     </div>
 
- 
+ </div>
 
 
+
+</div>
+
+<script>
+
+
+"use strict";
+// Yelp stars section
+$.fn.stars = function() {
+    return $(this).each(function() {
+        // Get the value
+        var val = parseFloat($(this).html());
+        // Make sure that the value is in 0 - 5 range, multiply to get width
+        var size = Math.max(0, (Math.min(5, val))) * 16;
+        // Create stars holder
+        var $span = $('<span />').width(size);
+        // Replace the numerical value with stars
+        $(this).html($span);
+    });
+}
+$(function() {
+    $('span.stars').stars();
+});
 
 
 <!-- Chart part -->
-<script>
-
-// put stuff in options
-
 console.log(Chart.defaults.scale.ticks);
 Chart.defaults.scale.ticks.beginAtZero = true;
 
 var options = { responsive: true, maintainAspectRatio: true,
        
-                
+                scales: {
+                    xAxes: [{
+                                gridLines: {
+                                    color: "rgba(0, 0, 0, 0)",
+                                }
+                            }],
+                    yAxes: [{
+                                gridLines: {
+                                    color: "rgba(0, 0, 0, 0)",
+                                }   
+                            }]
+                    },
                 legend: {
-                display: true},   
+                display: true,
+                position:'left',
+                labels: {
+                padding: 20,
+                fontSize:10,
+                usePointStyle:true,}},   
                 tooltips: { 
                     callbacks: {
                     label: function(tooltipItem, data) {
@@ -94,16 +206,46 @@ $.get("/ind_info.json", function (data) {
                                           });
     
 });
+ // Google Map section
+    
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: {{ lat }}, lng: {{ lng }}},
+          zoom: 14
+        });
+        // var marker = new google.maps.Marker({
+        //   position: {lat: {{ lat }}, lng: {{ lng }}},
+        //   map: map,
+        //   title: 'Doctor'
+        //  });
+        
+        // Setting options for carrot icon (size etc..)
+        var image = {
+            url: 'http://pngimg.com/upload/carrot_PNG4997.png',
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(45, 45)
+        };
+
+        // Create carrot icon and specify its position
+        var marker2 = new google.maps.Marker({
+            position: { lat: {{ lat }}, lng: {{ lng }} },
+            icon: image,
+            map: map,
+            title: '{{ title_address }}'
+            // scaledSize : new google.maps.Size(10, 20)
+          });
+        };
+
 
 </script>
 
 
- <form method="get" action="/doc_summary/{{ session['info_doc']['p_id'] }}">
-    <button type="submit">Go Back</button>
-</form>
-
- <form method="get" action="/">
-    <button type="submit">New Search</button>
-</form>
+ <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key={{ google_key }}&callback=initMap">
+    </script>
+    <link rel="stylesheet"
+        href="static/styles_sheet.css">
 
 {% endblock %}

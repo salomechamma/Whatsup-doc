@@ -30,8 +30,8 @@ What's Up Doc
 
 <div class="container-fluid">
     <div class="row"> 
-        <div class="col-md-6 col-xs-6" id="doc_info"> 
-            <h2>  {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} 
+        <div class="col-md-6 col-xs-6 "> 
+            <h2 class='vertical-align'>  {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} 
             </h2>
             
         </div> 
@@ -54,14 +54,14 @@ What's Up Doc
     </div>
 
     <div class="row"> 
-        <div class="col-md-12 col-xs-12"> 
+        <div class="col-md-12 col-xs-12" style='padding:0;'> 
             <div id="map"></div>
         </div>
     </div>
 
 <div class="row" id='bborder'> <br><br></div>
 <div class="row" id='total_payment'> 
-<div class="col-md-offset-2 col-md-7 col-xs-7">             Total payments  in 2015<br> 
+<div class="col-md-offset-2 col-md-7 col-xs-7">             2015 Total Payments <br> 
     <b>${{ session['info_doc']['total_received'] }} </b><br></div></div>
 <div class="row"> <br><br></div>
 <!-- <div class="second-section"> -->
@@ -82,14 +82,20 @@ What's Up Doc
                 <input type="submit" value="Send"/> <br>
                 </form>
                 <br>
-                <span id='nb_likes'> <b>Number of total Likes </b>: {{ session['likes'] }}  </span>
+                <span id='nb_likes'> <b> #{{ session['likes'] }} Likes </b> </span>
                 <span id='like_section'>
                     {% if  session.get('user_id') %} 
                     {% if liked_check is none %}
-                        <button id="like">Like this doctor</button>
+
+                    
+                        <button id="like" type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-thumbs-up"></span> Like
+                            </button>
                         <span id="like-message"></span>
                     {% else %}
-                        <button id="unlike">Unlike this doctor</button>
+                        <button id="unlike" type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-thumbs-down"></span> Unlike
+                            </button>
                         <span id="unlike-message"></span>
                     {% endif %}
                     {% else %}
@@ -97,36 +103,34 @@ What's Up Doc
                     {% endif %}
                 </span>
                 <br><br>
-                <form method="get" action="/ind_comparison/{{ session['info_doc']['p_id'] }}/{{ session['info_doc']['specialty'] }}/{{ session['info_doc']['state'] }}/{{ session['info_doc']['city'] }}">
-                <button type="submit">Compare with State Average</button>
-                </form>
+           
+                
             </div>
             
         </div>
-
+        
 
 
 
     </div>
-<!-- </div> -->
 
-  
+    <div class="row">
+        <div id='nextbtn' class="col-md-offset-10  col-md-1 col-xs-1">
+             <a type="button" class="btn btn-primary" style="color:white; position:relative; right:12px;" href="/ind_comparison/{{ session['info_doc']['p_id'] }}/{{ session['info_doc']['specialty'] }}/{{ session['info_doc']['state'] }}/{{ session['info_doc']['city'] }}">
+                Compare with State Average</a>
+        </div>
 
-    <!-- <form method="get" action="/">
-    <button type="submit">New Search</button>
-    </form> -->
+        </div>
 
-<!-- button to access other pages -->
-
-
-
+</div>
+<!-- <button type="button" class="btn btn-primary">Primary</button> -->
 
 
 
 <script>
 
    "use strict";
-
+// Yelp stars section
 $.fn.stars = function() {
     return $(this).each(function() {
         // Get the value
@@ -142,10 +146,6 @@ $.fn.stars = function() {
 $(function() {
     $('span.stars').stars();
 });
-
-    
-
-
 
  
 
@@ -167,9 +167,9 @@ $(function() {
         $.post('/like', function (data) {
             $('#like-message').text('You liked this doctor.');
             $('#nb_likes').empty();
-            $('#nb_likes').append('<b> Number of total Likes:</b> ' +  data['like']);
+            $('#nb_likes').append('<b> # Likes:</b> ' +  data['like']);
             $('#like_section').empty();
-            $('#like_section').append('<button id="unlike">Unlike this doctor</button><span id="unlike-message"></span>')
+            $('#like_section').append('<button id="unlike">Unlike</button><span id="unlike-message"></span>')
             $('#unlike').on('click', handleDownVote);
 
             // $('#like').attr('disabled', true);
@@ -189,9 +189,9 @@ $(function() {
         $.post('/unlike', function (data) {
         $('#unlike-message').text('You unliked this doctor.');
         $('#nb_likes').empty();
-        $('#nb_likes').append('<b> Number of total Likes:</b> ' +  data['unlike']);
+        $('#nb_likes').append('<b> # Likes:</b> ' +  data['unlike']);
         $('#like_section').empty();
-        $('#like_section').append('<button id="like">Like this doctor</button><span id="like-message"></span>')
+        $('#like_section').append('<button id="like">Like</button><span id="like-message"></span>')
         $('#like').on('click', handleUpvote);
       
             // $('#unlike').attr('disabled', true);
@@ -248,25 +248,7 @@ $.get("/doc_info.json", function (data) {
 
 // change DOM
 });
-// Chart.pluginService.register({
-//   beforeDraw: function(chart) {
-//     var width = chart.chart.width,
-//         height = chart.chart.height,
-//         ctx = chart.chart.ctx;
 
-//     ctx.restore();
-//     var fontSize = (height / 114).toFixed(2);
-//     ctx.font = fontSize + "em sans-serif";
-//     ctx.textBaseline = "middle";
-
-//     var text = "75%",
-//         textX = Math.round((width - ctx.measureText(text).width) / 2),
-//         textY = height / 2;
-
-//     ctx.fillText(text, textX, textY);
-//     ctx.save();
-//   }
-// });
 
 // Google Map section
     

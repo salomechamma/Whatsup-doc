@@ -243,7 +243,8 @@ def ind_comparison(physician_profile_id, specialty, state, city):
     # import pdb; pdb.set_trace() 
     return render_template('ind_comparison.html', avg_per_state=avg_per_state, 
         avg_pharm=avg_pharm, avg_pharm_ind_doc=avg_pharm_match_doc, best_doc=best_doc, 
-        len = len(best_doc))
+        len = len(best_doc), lat=session['info_doc']['lat'], lng=session['info_doc']['lng'],
+        title_address=session['info_doc']['gmap_address'],google_key=app.config['GOOGLE_KEY'])
 
 
 @app.route('/doc_info.json')
@@ -286,7 +287,7 @@ def payment_ind_doc():
                 "labels": session['listsamecompanies'],
                 "datasets":[
                     {
-                        "label": "Payments Received by this specific Doctor",
+                        "label": "Doctor",
                         "data": session['doc_payments_no_other'],
                         "borderColor": '#00FF00',
                         "borderWidth": 2,
@@ -296,7 +297,7 @@ def payment_ind_doc():
                 
                     },
                     {
-                        "label": "Average Payments spent on this Specialty per Doctor",
+                        "label": "State Average",
                         "data": session['pharm_avg'],
                         "borderColor": '#00FF00',
                         "borderWidth": 2,
