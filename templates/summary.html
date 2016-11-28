@@ -8,15 +8,12 @@ What's Up Doc
 
     <style>
         #map {
-          height: 200px;
-          width: 400px;
+          height: 100px;
+          width: 300px;
+
 
         }
-/*        html, body {
-          height: 80%;
-          margin: 0;
-          padding: 0;
-        }*/
+
     </style>
     <title>Simple Map</title>   <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
@@ -33,97 +30,126 @@ What's Up Doc
 
 <div class="container-fluid">
     <div class="row"> 
-        <div class="col-md-6 col-xs-6"> 
+        <div class="col-md-6 col-xs-6" id="doc_info"> 
+            <h2>  {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} 
+            </h2>
+            
+        </div> 
 
-            <h3>  {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} 
-            </h3>
+        <div class="col-md-4 col-xs-4 col-md-offset-2"> 
+            
+            <b> {{ session['info_doc']['street_address'] }} {{ session['info_doc']['zipcode'] }} {{ session['info_doc']['city'] }} </b> <br>
+           
+           
+           <b> {{ session['info_doc']['short_specialty'] }} </b> <br>
        
-            <br>{{ session['info_doc']['short_specialty'] }} <br>
-            {{ session['info_doc']['street_address'] }} {{ session['info_doc']['zipcode' ] }} {{ session['info_doc']['city' ] }} 
+            {% if   session['info_doc']['rating']  > 0 %} 
+            <a href= {{ session['info_doc']['url'] }} ><b>Yelp: </b><span class="stars">{{ session['info_doc']['rating'] }}</span></a> 
+            {% else %}
+            <b>No Existing Yelp page.</b>
+            {% endif %} 
+           
+        
         </div>
-
-   
-
-    <div class="col-md-6 col-xs-6"> 
-        {% if   session['info_doc']['rating']  > 0 %} 
-            <b>Yelp Rating </b>: {{ session['info_doc']['rating'] }}/5  -  Access the doctor Yelp page
-            <a href= {{ session['info_doc']['url'] }} >here</a>
-        {% endif %} <br>
-        <span id='nb_likes'> <b>Number of total Likes </b>: {{ session['likes'] }}  </span>
-
-        <span id='like_section'>
-        {% if  session.get('user_id') %} 
-            {% if liked_check is none %}
-                <button id="like">Like this doctor</button>
-                <span id="like-message"></span>
-            {% else %}
-                <button id="unlike">Unlike this doctor</button>
-                <span id="unlike-message"></span>
-            {% endif %}
-            {% else %}
-            - Login to vote!
-            {% endif %}
-            </span>
     </div>
 
     <div class="row"> 
-    <div class="col-md-12 col-xs-12"> 
-    <div id="map"></div>
+        <div class="col-md-12 col-xs-12"> 
+            <div id="map"></div>
+        </div>
     </div>
-</div>
 
-</div>
-    <br>
-    <div>Total payments received from pharmaceutical companies in 2015: 
-    <b>${{ session['info_doc']['total_received'] }} </b></div> <br>
+<div class="row" id='bborder'> <br><br></div>
+<div class="row" id='total_payment'> 
+<div class="col-md-offset-2 col-md-7 col-xs-7">             Total payments  in 2015<br> 
+    <b>${{ session['info_doc']['total_received'] }} </b><br></div></div>
+<div class="row"> <br><br></div>
+<!-- <div class="second-section"> -->
+    <div class="row"> 
+       
+        <div class="col-md-offset-1  col-md-9 col-xs-9">
+            <div class="summary-chart" style="height: 200px; width: 65%;">
+                <canvas id="docChart"></canvas>
+                <div id="docLegend" class="chart-legend"></div> 
+            </div>
+        </div>
+
+        <div class=" col-md-2 col-xs-2 "> 
+            <div class="small-section"> 
+                <form id="sendForm" action="/send_email" method="POST">
+                <b>Forward Dr. {{ session['info_doc']['last_name'] }}'s information: </b><br>
+                <span id ="emailInput"></span><input id='emailAddress' type="text" placeholder="Enter email address" name="emailAddress"/>
+                <input type="submit" value="Send"/> <br>
+                </form>
+                <br>
+                <span id='nb_likes'> <b>Number of total Likes </b>: {{ session['likes'] }}  </span>
+                <span id='like_section'>
+                    {% if  session.get('user_id') %} 
+                    {% if liked_check is none %}
+                        <button id="like">Like this doctor</button>
+                        <span id="like-message"></span>
+                    {% else %}
+                        <button id="unlike">Unlike this doctor</button>
+                        <span id="unlike-message"></span>
+                    {% endif %}
+                    {% else %}
+                    - Login to vote!
+                    {% endif %}
+                </span>
+                <br><br>
+                <form method="get" action="/ind_comparison/{{ session['info_doc']['p_id'] }}/{{ session['info_doc']['specialty'] }}/{{ session['info_doc']['state'] }}/{{ session['info_doc']['city'] }}">
+                <button type="submit">Compare with State Average</button>
+                </form>
+            </div>
+            
+        </div>
 
 
-<!-- info related to doctor that appear on top of the page -->
-<!-- change to sue the SESSION here instead of the perso_doc dictionnary passed as parameters via route -->
 
 
-<div>
-    <!-- replace with a pie chart with JS chart or plython tool -->
-<!--     <br>In 2015: 
-    <ul>
-        {% for name, payment in session['pay_breakdown'] %}
+    </div>
+<!-- </div> -->
 
-            <li> {{ name }} paid a total of  ${{ payment }} - {{ (payment*100/session['info_doc']['total_received'])|round|int }}% of total payments received </li>
-        {% endfor %}
-    </ul> -->
+  
 
- <form id="sendForm" action="/send_email" method="POST">
-    Forward Dr {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} information: <br>
-    <span id ="emailInput">Enter email address you wish to send it to: </span><input id='emailAddress' type="text" placeholder="Enter the email address" name="emailAddress"/>
-    <input type="submit" value="Send"> <br><br>
- </form>
-
-</div>
-<!-- button to access other pages -->
-<div>
-    <form method="get" action="/ind_comparison/{{ session['info_doc']['p_id'] }}/{{ session['info_doc']['specialty'] }}/{{ session['info_doc']['state'] }}/{{ session['info_doc']['city'] }}">
-    <button type="submit">Compare with peers</button>
-    </form>
-
-
-    <form method="get" action="/">
+    <!-- <form method="get" action="/">
     <button type="submit">New Search</button>
-    </form>
-</div>
+    </form> -->
+
+<!-- button to access other pages -->
 
 
 
-<div class="summary-chart" style="height: 300px; width: 35%;">
-    <canvas id="docChart" height:'256' width:'256'></canvas>
-    <div id="docLegend" class="chart-legend"></div>
 
-</div>
-<br><br><br><br><br><br>
+
 
 <script>
 
+   "use strict";
 
-    "use strict";
+$.fn.stars = function() {
+    return $(this).each(function() {
+        // Get the value
+        var val = parseFloat($(this).html());
+        // Make sure that the value is in 0 - 5 range, multiply to get width
+        var size = Math.max(0, (Math.min(5, val))) * 16;
+        // Create stars holder
+        var $span = $('<span />').width(size);
+        // Replace the numerical value with stars
+        $(this).html($span);
+    });
+}
+$(function() {
+    $('span.stars').stars();
+});
+
+    
+
+
+
+ 
+
+
     function sendEmail(evt) {
         evt.preventDefault();
           var formInputs = {
@@ -141,7 +167,7 @@ What's Up Doc
         $.post('/like', function (data) {
             $('#like-message').text('You liked this doctor.');
             $('#nb_likes').empty();
-            $('#nb_likes').append('Number of total Likes: ' +  data['like']);
+            $('#nb_likes').append('<b> Number of total Likes:</b> ' +  data['like']);
             $('#like_section').empty();
             $('#like_section').append('<button id="unlike">Unlike this doctor</button><span id="unlike-message"></span>')
             $('#unlike').on('click', handleDownVote);
@@ -163,7 +189,7 @@ What's Up Doc
         $.post('/unlike', function (data) {
         $('#unlike-message').text('You unliked this doctor.');
         $('#nb_likes').empty();
-        $('#nb_likes').append('Number of total Likes: ' +  data['unlike']);
+        $('#nb_likes').append('<b> Number of total Likes:</b> ' +  data['unlike']);
         $('#like_section').empty();
         $('#like_section').append('<button id="like">Like this doctor</button><span id="like-message"></span>')
         $('#like').on('click', handleUpvote);
@@ -178,13 +204,17 @@ What's Up Doc
 // Chart section 
 var options = { responsive: true, maintainAspectRatio: true,
        
-                title: {            
-                    display: true,
-                    text: 'Payments received by this doctor'
-                },
+                
                 legend: {
-                display: true},   
+                display: true,
+                position:'left',
+                labels: {
+                padding: 20,
+                fontSize:14,
+                usePointStyle:true,
+            }},   
                 tooltips: { 
+                    bodyFontSize: 18,
                     callbacks: {
                     label: function(tooltipItem, data) {
                     var allData = data.datasets[tooltipItem.datasetIndex].data;

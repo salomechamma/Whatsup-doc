@@ -12,6 +12,9 @@
           <link rel="stylesheet"
         href="/static/css/styles_sheet.css">
         <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Catamaran" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet"> 
 </head>
 <body>
 
@@ -30,9 +33,9 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/sign_in">Sign-up</a></li>
                     {% if session.get('user_id') %}
-                    <li><a href="/log_out">Logout</a></li><li>                    
+                    <li><a href="/log_out">Logout</a></li>              
                     {% else %}
-                    <a href="/log_in">Login</a></li>
+                    <li><a href="/log_in">Login</a></li>
                     {% endif %}
                     <li><a href="/user_page">My account</a></li>
                 </ul>
