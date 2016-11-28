@@ -178,7 +178,7 @@ padding: 0;
 
 }
 .small-section{
-padding: 0.5cm 1cm 0.5cm 1cm;
+padding: 0.4cm 1cm 0.5cm 1cm;
 margin: :0;
 /*background-color: w;*/
 border: solid;
@@ -239,4 +239,14 @@ span.stars span {
 #barchart{
     display: inline-block;
 
+
 }
+
+.info_doc{
+    vertical-align: middle;
+}
+
+.cap{
+    text-transform: capitalize;
+}
+

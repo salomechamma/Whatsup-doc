@@ -22,12 +22,6 @@ What's Up Doc
 {% block  content %}
  
 
-
-
-  <h2></h2>
-
-  
-
 <div class="container-fluid">
     <div class="row"> 
         <div class="col-md-6 col-xs-6 "> 
@@ -36,8 +30,9 @@ What's Up Doc
             
         </div> 
 
-        <div class="col-md-4 col-xs-4 col-md-offset-2"> 
+        <div class="col-md-4 col-xs-4 col-md-offset-2" style='padding-bottom:10px;'> 
             
+          <!--   <span class='info_doc'>  -->
             <b> {{ session['info_doc']['street_address'] }} {{ session['info_doc']['zipcode'] }} {{ session['info_doc']['city'] }} </b> <br>
            
            
@@ -49,7 +44,7 @@ What's Up Doc
             <b>No Existing Yelp page.</b>
             {% endif %} 
            
-        
+           <!--  </span> -->
         </div>
     </div>
 
@@ -77,7 +72,7 @@ What's Up Doc
         <div class=" col-md-2 col-xs-2 "> 
             <div class="small-section"> 
                 <form id="sendForm" action="/send_email" method="POST">
-                <b>Forward Dr. {{ session['info_doc']['last_name'] }}'s information: </b><br>
+                <b>Forward Dr. <span class='cap'>{{ session['info_doc']['last_name'] }}</span>'s information: </b><br>
                 <span id ="emailInput"></span><input id='emailAddress' type="text" placeholder="Enter email address" name="emailAddress"/>
                 <input type="submit" value="Send"/> <br>
                 </form>

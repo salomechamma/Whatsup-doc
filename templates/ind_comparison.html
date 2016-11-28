@@ -68,13 +68,13 @@ What's Up Doc
         <!-- <div class="col-md-offset-1 col-md-5 col-xs-5">  
             {{ session['info_doc']['state'] }} state <br>  Specialty: {{ session['info_doc']['short_specialty'] }} </b><br>
         </div> -->
-        <div class="col-md-offset-4 col-md-4 col-xs-4"> 
+        <div class="col-md-offset-2 col-md-3 col-xs-3"> 
             <table  class="table" class='comp'>
             
             <thead>
             <tr>
            <th style='color:green;'>Dr. {{ session['info_doc']['last_name'] }} </th>
-            <th style='color:pink;'>{{ session['info_doc']['state'] }} Average </th>
+            <th style='color:pink;'>{{ session['info_doc']['state'] }} State Average </th>
             </tr>
             </thead>
             <tbody>
@@ -89,40 +89,43 @@ What's Up Doc
             </tbody>
             </table>
         </div>
-     </div>
+        <div class="col-md-offset-4 col-md-3 col-xs-3">
+        <div class="small-section" style='padding: 0.1cm 1cm 0.5cm 1cm;'>  
+            {% if best_doc|length > 1 %}
+            <h3 > Other Options </h3>
+            <span id='expl'> <i>{{ session['info_doc']['short_specialty'] }} Doctors 
+                in {{ session['info_doc']['city'] }} who received less than Dr. 
+                {{ session['info_doc']['last_name'] }} </i></span> <br><br>
 
-
- <div class="row" style='margin:5px;style=padding:5px;'> 
-    
-    <div id='barchart'class="col-md-9 col-xs-9"> 
-        <div class="comparison-chart" style=" width: 100%;">
-            <canvas id="indChart"></canvas>
-            <div id="indLegend" class="chart-legend"></div>
-        </div>
-    </div>
-
-    
-</div>
-    
-
-<div class="row">
-    <div class="col-md-offset-2 col-md-7 col-xs-7"> 
-
-        {% if best_doc|length > 1 %}
-        Want to find out doctor in {{ session['info_doc']['city'] }} who receive less than Dr {{ session['info_doc']['first_name'] }} {{ session['info_doc']['last_name'] }} ? Easy! <br>
-        Here are three doctor of the same {{ session['info_doc']['short_specialty'] }} specialty, in {{ session['info_doc']['city'] }} who received less payments in 2015:
 
         {% for i in range(len) %}
         <ul>
-            <li> <a href="/doc_summary/{{ best_doc[i][0] }}">  Option {{ i + 1 }} </a> -  total payments received:  ${{ best_doc[i][1] }}
+            <li style='text-align:left;'> <a href="/doc_summary/{{ best_doc[i][0] }}">  Option {{ i + 1 }} </a> - This Dr. received:  ${{ best_doc[i][1] }}
         </li>
         </ul>
         {% endfor %}
 
         {% endif %}
+        </div>
     </div>
+     </div>
 
- </div>
+
+ <div class="row" > 
+    
+    <div id='barchart'class="col-md-offset-1 col-md-6 col-xs-6"> 
+        <div class="comparison-chart" style=" width: 100%;">
+            <canvas id="indChart"></canvas>
+            <div id="indLegend" class="chart-legend"></div>
+        </div>
+    </div>
+    
+
+    
+</div>
+    
+
+
 
 
 
@@ -170,7 +173,7 @@ var options = { responsive: true, maintainAspectRatio: true,
                     },
                 legend: {
                 display: true,
-                position:'left',
+                position:'right',
                 labels: {
                 padding: 20,
                 fontSize:10,
