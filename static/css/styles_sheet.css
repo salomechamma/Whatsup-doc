@@ -30,6 +30,7 @@ h3{
     /*font-size: 70px;*/
     font-weight: bold;
     vertical-align: center;
+    
 }
 
 
@@ -45,11 +46,6 @@ a:link, a:hover, a:visited {
 
 }
 
-/* .comp {
-    border-collapse: collapse;
-    border: 1px solid #ff5733;
-    margin: 5px;
-}*/
 
 .nav, .navbar, .navbar-default, .navbar-default {
 	background-color: #ff5733;
@@ -68,6 +64,7 @@ a:link, a:hover, a:visited {
 
 .navbar-default .navbar-nav>li>a {
 	color: white;
+    font-family: 'Noto Sans', sans-serif;
 }
 
 
@@ -127,22 +124,6 @@ margin: 0;
 padding: 0;
 }
 
-#map {
-	/*margin: 0;
-	padding: 0;
-	border: 0;
-	overflow: hidden;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-	position: absolute; 
-	left: 0px; 
-	top: 0px; 
-	z-index: 3; */
-	width: 110%; 
-	/*height: 100%;*/
-
-}
 
 
 
@@ -235,10 +216,10 @@ span.stars span {
   transform: translateY(-50%);
   position: absolute;
   top: 50%;
-
+}
 #barchart{
     display: inline-block;
-
+    margin-top: 0cm;
 
 }
 
@@ -246,7 +227,6 @@ span.stars span {
     vertical-align: middle;
 }
 
-.cap{
-    text-transform: capitalize;
-}
+
+
 

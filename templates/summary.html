@@ -8,10 +8,13 @@ What's Up Doc
 
     <style>
         #map {
-          height: 100px;
-          width: 300px;
+          height: 150px;
+          width: 100%;
 
 
+        }
+        .cap {
+            text-transform: capitalize;
         }
 
     </style>
@@ -54,16 +57,16 @@ What's Up Doc
         </div>
     </div>
 
-<div class="row" id='bborder'> <br><br></div>
+
 <div class="row" id='total_payment'> 
-<div class="col-md-offset-2 col-md-7 col-xs-7">             2015 Total Payments <br> 
-    <b>${{ session['info_doc']['total_received'] }} </b><br></div></div>
-<div class="row"> <br><br></div>
+<div class="col-md-offset-2 col-md-6 col-xs-6">             2015 Total Payments <br> 
+    <b>{{ "${:,.0f}".format(session['info_doc']['total_received']) }} </b><br></div></div>
+<div class="row"> </div>
 <!-- <div class="second-section"> -->
     <div class="row"> 
        
         <div class="col-md-offset-1  col-md-9 col-xs-9">
-            <div class="summary-chart" style="height: 200px; width: 65%;">
+            <div class="summary-chart" style="height: 200px; width: 60%;">
                 <canvas id="docChart"></canvas>
                 <div id="docLegend" class="chart-legend"></div> 
             </div>
@@ -72,7 +75,7 @@ What's Up Doc
         <div class=" col-md-2 col-xs-2 "> 
             <div class="small-section"> 
                 <form id="sendForm" action="/send_email" method="POST">
-                <b>Forward Dr. <span class='cap'>{{ session['info_doc']['last_name'] }}</span>'s information: </b><br>
+                <b>Email Dr. <span class='cap'>{{ session['info_doc']['last_name']|lower }} </span>'s information: </b><br>
                 <span id ="emailInput"></span><input id='emailAddress' type="text" placeholder="Enter email address" name="emailAddress"/>
                 <input type="submit" value="Send"/> <br>
                 </form>
@@ -162,9 +165,9 @@ $(function() {
         $.post('/like', function (data) {
             $('#like-message').text('You liked this doctor.');
             $('#nb_likes').empty();
-            $('#nb_likes').append('<b> # Likes:</b> ' +  data['like']);
+            $('#nb_likes').append('<b> #' +  data['like'] + ' Likes</b> ');
             $('#like_section').empty();
-            $('#like_section').append('<button id="unlike">Unlike</button><span id="unlike-message"></span>')
+            $('#like_section').append('<button id="unlike" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-thumbs-up"></span>Unike</button><span id="unlike-message"></span>');
             $('#unlike').on('click', handleDownVote);
 
             // $('#like').attr('disabled', true);
@@ -177,6 +180,7 @@ $(function() {
 
     $('#like').on('click', handleUpvote);
 
+                            
 
 // Unike part
 
@@ -184,9 +188,9 @@ $(function() {
         $.post('/unlike', function (data) {
         $('#unlike-message').text('You unliked this doctor.');
         $('#nb_likes').empty();
-        $('#nb_likes').append('<b> # Likes:</b> ' +  data['unlike']);
+        $('#nb_likes').append('<b> #' +  data['unlike'] + ' Likes </b> ');
         $('#like_section').empty();
-        $('#like_section').append('<button id="like">Like</button><span id="like-message"></span>')
+        $('#like_section').append('<button id="like" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-thumbs-up"></span>Like</button><span id="like-message"></span>');
         $('#like').on('click', handleUpvote);
       
             // $('#unlike').attr('disabled', true);
@@ -283,7 +287,6 @@ $.get("/doc_info.json", function (data) {
  <script async defer
       src="https://maps.googleapis.com/maps/api/js?key={{ google_key }}&callback=initMap">
     </script>
-    <link rel="stylesheet"
-        href="static/styles_sheet.css">
+   
 
 {% endblock %}

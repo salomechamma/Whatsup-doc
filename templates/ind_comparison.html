@@ -10,10 +10,14 @@ What's Up Doc
 
     <style>
         #map {
-          height: 100px;
-          width: 300px;
+          height: 130px;
+          width: 100%;
 
 
+        }
+
+        .cap {
+            text-transform: capitalize;
         }
 
     </style>
@@ -35,7 +39,7 @@ What's Up Doc
             
         </div> 
 
-        <div class="col-md-4 col-xs-4 col-md-offset-2 "> 
+        <div class="col-md-4 col-xs-4 col-md-offset-2" style='padding-bottom:10px;'> 
             
             <b> {{ session['info_doc']['street_address'] }} {{ session['info_doc']['zipcode'] }} {{ session['info_doc']['city'] }} </b> <br>
            
@@ -64,7 +68,7 @@ What's Up Doc
 
 
 
-    <div class="row" id='total_payment'> 
+    <div class="row" id='total_payment' style='margin-top:15px;margin-bottom:5px;'> 
         <!-- <div class="col-md-offset-1 col-md-5 col-xs-5">  
             {{ session['info_doc']['state'] }} state <br>  Specialty: {{ session['info_doc']['short_specialty'] }} </b><br>
         </div> -->
@@ -73,15 +77,15 @@ What's Up Doc
             
             <thead>
             <tr>
-           <th style='color:green;'>Dr. {{ session['info_doc']['last_name'] }} </th>
-            <th style='color:pink;'>{{ session['info_doc']['state'] }} State Average </th>
+           <th style='color:#ff5733;font-size:20px;'>Dr. <span class='cap'>{{ session['info_doc']['last_name']|lower }}</span> </th>
+            <th style='color:#008080;font-size:20px;'>{{ session['info_doc']['state'] }} State Average </th>
             </tr>
             </thead>
             <tbody>
 
             <tr>
-                 <td style='color:green;'>${{ session['info_doc']['total_received'] }} </td>
-                 <td style='color:pink;'>${{ avg_per_state }} </td>
+                 <td style='color:#ff5733;font-size:20px;'>{{ "${:,.0f}".format(session['info_doc']['total_received']) }} </td>
+                 <td style='color:#008080;font-size:20px;'>{{ "${:,.0f}".format(avg_per_state) }} </td>
                  
              </tr>
        
@@ -90,17 +94,16 @@ What's Up Doc
             </table>
         </div>
         <div class="col-md-offset-4 col-md-3 col-xs-3">
-        <div class="small-section" style='padding: 0.1cm 1cm 0.5cm 1cm;'>  
+        <div class="small-section" style='padding: 0.1cm 0.5cm 0.5cm 0.5cm;'>  
             {% if best_doc|length > 1 %}
-            <h3 > Other Options </h3>
-            <span id='expl'> <i>{{ session['info_doc']['short_specialty'] }} Doctors 
-                in {{ session['info_doc']['city'] }} who received less than Dr. 
-                {{ session['info_doc']['last_name'] }} </i></span> <br><br>
+            <h4> Physicians specialized in {{ session['info_doc']['short_specialty'] }}  </h4>
+            <span id='expl'> <i> <br> 
+                 less compensated than Dr. <span class='cap'>{{ session['info_doc']['last_name']|lower }} </span> <br>located in <span class='cap'> {{ session['info_doc']['city'] |lower}} </span>city</i></span> <br><br>
 
 
         {% for i in range(len) %}
         <ul>
-            <li style='text-align:left;'> <a href="/doc_summary/{{ best_doc[i][0] }}">  Option {{ i + 1 }} </a> - This Dr. received:  ${{ best_doc[i][1] }}
+            <li style='text-align:left;'> <a href="/doc_summary/{{ best_doc[i][0] }}">  Option {{ i + 1 }} </a> - This physician received:  {{ "${:,.0f}".format(best_doc[i][1]) }}
         </li>
         </ul>
         {% endfor %}

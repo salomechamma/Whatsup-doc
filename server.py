@@ -289,20 +289,20 @@ def payment_ind_doc():
                     {
                         "label": "Doctor",
                         "data": session['doc_payments_no_other'],
-                        "borderColor": '#00FF00',
+                        # "borderColor": '#00FF00',
                         "borderWidth": 2,
                         "stack": 1,
-                        "backgroundColor": "rgba(99,255,132,0.2)"
+                        "backgroundColor": "#ff5733"
                         
                 
                     },
                     {
                         "label": "State Average",
                         "data": session['pharm_avg'],
-                        "borderColor": '#00FF00',
+                        # "borderColor": '#00FF00',
                         "borderWidth": 2,
                         "stack": 2,
-                        "backgroundColor": "rgba(255,99,132,0.2)"
+                        "backgroundColor": "#008080"
                         
                 
                     }]
@@ -454,12 +454,12 @@ def send_email():
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension
-    app.debug = True
+    app.debug = False
 
     connect_to_db(app)
 
     # Use the DebugToolbar
-    DebugToolbarExtension(app)
+    # DebugToolbarExtension(app)
 
 
     
