@@ -67,7 +67,7 @@ To build this website I used 3 RESTful web APIS:
 ![Homepage](https://github.com/salomechamma/Doctor_Project/blob/master/static/img/comp.png)
 
 
-##### The mechanic behind What's Up Doc
+### The Mechanic behind What's Up Doc
 
 
 When the user enters a doctor name, the server, built using the Flask framework, makes a request to the CMS API, the parameters being the name entered. It lists of all the different doctors that match the search using the API doctor ID to differentiate them. 
@@ -94,15 +94,15 @@ The users selects the right doctor and gets:
 
 
 
-##### Challenges
+### Challenges
 * An interesting challenge I had was that my API was not always returning results even though it returned it in the past. When the attempt was unsuccessful it would return an empty list.  I realized the lack of consistency was coming from the API, and to circumvent this I created additional web keys and had the server choose randomly from the list of keys when making a request until the list received was not empty. I was able to improve the match rate from 30% to 90%.
 
 
-##### Tests
+### Tests
 The web app has been tested using unit tests and integration tests.
 The coverage so far reached 90%.
 
-##### Version 2.0
+### Version 2.0
 
 ###### Improvements
 * Allow the user to look for a doctor by only entering the last name or the zipcode instead of the full name as it is currently.
