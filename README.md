@@ -5,7 +5,7 @@ Learn more about the developer: https://www.linkedin.com/in/salomechamma
 
 Finding  doctors is hard. When I first moved to the US from France 4 years ago I didn't know where to turn to find a doctor. There are some resources like Zocdoc and Yelp, but who really wants to find their doctor from the same place they find the best taco truck? I developed What's up Doc to offer users a unique tool to discover physicians’ compensations from pharmaceutical companies. Intended to educate patients, this web app allows users to gain greater transparency and strengthen the trust between patients and doctors.
 
-![Homepage](https://raw.githubusercontent.com/salomechamma/Doctor_Project/master/static/img/homepage.png)
+![Homepage](https://github.com/salomechamma/Doctor_Project/tree/master/static/img/homepage.png)
 
 
 ### Technology
