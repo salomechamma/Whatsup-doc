@@ -51,7 +51,7 @@ To build this website I used 3 RESTful web APIS:
     * Lists doctors name, adress and specialty
     * Uses Google Maps Geocoder and Google Maps API to display the exact location.
     * Connects to the Yelp API to show the yelp score (if available) and a link to the Yelp Page.
-    * Users can like or unlike a doctor which automatically saves that doctor to the users account page.
+    * Users can like or unlike a doctor which automatically saves that doctor to the Users account page.
     * Shows total number of doctor likes by all web app users.
     * Displays total compensation to doctor and breaks it down by pharmaceutical company in a pie chart.
     * Link to Industry Average page
@@ -70,15 +70,15 @@ To build this website I used 3 RESTful web APIS:
 ### The Mechanic behind What's Up Doc
 
 
-When the user enters a doctor name, the server, built using the Flask framework, makes a request to the CMS API, the parameters being the name entered. It lists of all the different doctors that match the search using the API doctor ID to differentiate them. 
+When the User enters a doctor name, the server, built using the Flask framework, makes a request to the CMS API, the parameters being the name entered. It lists of all the different doctors that match the search using the API doctor's ID to differentiate them. 
 
 
 
-The users selects the right doctor and gets: 
-* The doctor contact information 
-* A map showing the physician location: the latitude and longitude of the doctor address is retrived using Google maps Geocoder and sent the request to Google Maps API.
+The User selects the right doctor and gets: 
+* The Doctor's contact information 
+* A map showing the Physician's location: the latitude and longitude of the Doctor's address is retrived using Google maps Geocoder and sent the request to Google Maps API.
 * The yelp score and URL of the doctor page if it exists: a call is made to the Yelp API using the doctor name and location as parameters. To make sure the URL and score correspond to the right doctor, I check tht the full doctor name is part of the Yelp business name (title of the Yelp page).
-* An internal rating system where the user can like or unlike a doctor: An ajax call is made to the server using SQL Alchemy to update the number of likes in the Postgress database and at the same time the number of likes and the button action are dynamically updated using JavaScript. 
+* An internal rating system where the User can like or unlike a doctor: An ajax call is made to the server using SQL Alchemy to update the number of likes in the Postgress database and at the same time the number of likes and the button action are dynamically updated using JavaScript. 
 * Two charts using Chart.js: 
     * Pie chart to display the payments from each pharmaceutical company to the doctor. After extracting and storing the company that paid the doctors I calculated the total payments  they each made and returned this info as a JSON file to the front end.
     * Bar chart to compare the payments received by the doctor with the state average for the same specialty broken down by pharmaceutical company.
@@ -89,7 +89,7 @@ The users selects the right doctor and gets:
 ![Physician Information](https://github.com/salomechamma/Doctor_Project/blob/master/static/img/email.png)
 
 * A list of alternatives doctors who received less compensations than the given doctor.  
-* The website also includes register login logout and user page including a list of doctors the user has previously liked. 
+* The website also includes register login logout and user page including a list of doctors the User has previously liked. 
 
 
 
@@ -105,7 +105,7 @@ The coverage so far reached 90%.
 ### Version 2.0
 
 ###### Improvements
-* Allow the user to look for a doctor by only entering the last name or the zipcode instead of the full name as it is currently.
+* Allow the User to look for a doctor by only entering the last name or the zipcode instead of the full name as it is currently.
 * Create more API keys to reach a total match of 100% when searching for a doctor.
 * Show on the pie chart for each company the type of expenses (ex: restaurant, conference, travel etc..).
 
