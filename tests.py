@@ -73,13 +73,13 @@ class FlaskTestIntegrationLoggedIn(TestCase):
         """Test results page."""
 
         result = self.client.get("/results_list", data={'firstname':'charles', 'lastname':'saha'})
-        self.assertIn("Search", result.data)
+        self.assertIn("Specialty", result.data)
 
 
     def testSummaryPage(self):
         """Test summary page."""
         result = self.client.get("/doc_summary/98906", data={'physician_profile_id': 98906})
-        self.assertIn("Forward", result.data)
+        self.assertIn("Email", result.data)
         # self.assertIn('<iframe class="chartjs-hidden-iframe"', result.data)
 
 
@@ -107,7 +107,7 @@ class FlaskTestIntegrationLoggedIn(TestCase):
         """ Test Log-out page"""
         result = self.client.get("/log_out", follow_redirects=True)
         # import pdb; pdb.set_trace() 
-        self.assertIn("Enter", result.data)
+        self.assertIn("Find", result.data)
 
         
     def testLogIn(self):
@@ -139,15 +139,17 @@ class FlaskTestIntegrationLoggedIn(TestCase):
         result = self.client.get("/ind_info.json", follow_redirects=True)
         self.assertEqual(result.status_code, 200)
 
-# Unsuccessful
+
     def testSendEmail(self):
         """ Test /send_email route route """
-        result = self.client.post("/send_email", data={'recipients': "hi@hi.com"}, follow_redirects=True)
-        print "---- RESULT"
-        print result
+        result = self.client.post("/send_email", data={'recipients': "chammasalome@gmail.com"})
         self.assertEqual(result.status_code, 200)
 
 # test if log in and wrong password
+
+# case where doc paid by less than 3 companies
+# case where response is empty
+# if I have less than 10 doctors payed less
 
 
 # Do integration test forform (post) search, log in and log out 

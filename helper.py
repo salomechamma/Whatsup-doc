@@ -12,9 +12,9 @@ import server
 
 
 
-def print_nicely_results(list_results):
-    """Fname Lname of results."""
-    pprint(list_results)
+# def print_nicely_results(list_results):
+#     """Fname Lname of results."""
+#     pprint(list_results)
 
      
 
