@@ -324,14 +324,14 @@ def conf_sign_in():
     lname = request.form.get('lname')
     email = request.form.get('email')
     password = request.form.get('password')
-    hash = pbkdf2_sha256.encrypt(password, rounds=200000, salt_size=16)
+    hashing = pbkdf2_sha256.encrypt(password, rounds=200000, salt_size=16)
     
     age = request.form.get('age')
     zipcode = request.form.get('zipcode')
     q1 = User.query.filter_by(email=email).first()
     if q1 == None:
         if age:
-            u1 = User(first_name = fname, last_name= lname, email=email, password=hash,
+            u1 = User(first_name = fname, last_name= lname, email=email, password=hashing,
             age = int(age), zipcode = int(zipcode))
         else:
             u1 = User(first_name = fname, last_name= lname, email=email, password=password,
