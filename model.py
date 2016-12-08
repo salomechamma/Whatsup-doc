@@ -97,7 +97,7 @@ def example_data():
 # Helper functions
 
 
-def connect_to_db(app, uri='postgresql:///doctors'):
+def connect_to_db(app, uri=None):
     """Connect the database to our Flask app."""
 
     # Configure to use our PstgreSQL database
