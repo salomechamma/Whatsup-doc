@@ -2,7 +2,7 @@
 
 import os
 import helper
-
+import passlib.hash
 from random import randint
 from jinja2 import StrictUndefined
 
