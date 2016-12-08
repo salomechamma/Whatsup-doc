@@ -5,7 +5,7 @@ MAIL_SERVER='smtp.gmail.com'
 MAIL_PORT = 465
 MAIL_DEFAULT_SENDER = 'whatsup.doctor.website@gmail.com'
 MAIL_USERNAME = 'whatsup.doctor.website@gmail.com'
-MAIL_PASSWORD = os.environ['EMAIL_PASSWORD']
+MAIL_PASSWORD = os.environ["EMAIL_PASSWORD"]
 MAIL_USE_TLS = False
 MAIL_USE_SSL = True
 
