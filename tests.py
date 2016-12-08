@@ -1,8 +1,9 @@
 import json
+import unittest
 from unittest import TestCase
 from model import Doctor, User, Like, connect_to_db, db, example_data
 from server import app
-import server
+import server, helper, model
 
 
 class FlaskTestIntegrationLoggedIn(TestCase):
@@ -142,8 +143,9 @@ class FlaskTestIntegrationLoggedIn(TestCase):
 
     def testSendEmail(self):
         """ Test /send_email route route """
-        result = self.client.post("/send_email", data={'recipients': "chammasalome@gmail.com"})
+        result = self.client.post("/send_email", data={'emailAddress': "bla@gmail.com"})
         self.assertEqual(result.status_code, 200)
+     
 
 # test if log in and wrong password
 
@@ -214,10 +216,10 @@ class FlaskTestIntegrationLoggedIn(TestCase):
 
 
 class FlaskTestsLoggedOut(TestCase):
-    """Flask tests with user logged in to session."""
+    """Flask tests with user logged out of session."""
 
     def setUp(self):
-        """Stuff to do before every test."""
+        """ To do before every test."""
 
         app.config['TESTING'] = True
         self.client = app.test_client()
@@ -277,12 +279,39 @@ class FlaskTestsLoggedOut(TestCase):
             'password':'bla'})
         self.assertIn("try", result.data)
 
-    def testSignIn(self):
-        """ Test Sign-in page"""
+    def testSignUp(self):
+        """ Test Sign-up page"""
         result = self.client.get("/sign_in", data={'fname': 'ben', 'lname':'berger', 
             'email':'salome@gmail.com','password': 'ben', 'zipcode':94109})
-        self.assertIn("Zipcode", result.data)
+        self.assertIn("name", result.data)
 
+    def testSignUp2(self):
+        """ Test Sign-in with existing email address"""
+        result = self.client.post("/sign_in", data={'fname': 'ben', 'lname':'berger', 
+            'email':'salomefake@gmail.com','password': 'ben', 'zipcode':94109}, follow_redirects=True)
+        self.assertIn("Welcome", result.data)
+
+    def testLogOut(self):
+        """ Test Log-out page when not logged-in"""
+        result = self.client.get("/log_out", follow_redirects=True)
+        # import pdb; pdb.set_trace() 
+        self.assertIn("Search", result.data)
+
+class UnitTestCase(unittest.TestCase):
+    """Test function from helper.py"""
+    def test_pay_per_comp_filtered(self):
+        assert helper.pay_per_comp_filtered({}, 4) == []
+    
+    # def test_repr(self):
+    # assert model.repr(User(first_name='bar')) == "<MyClass: {'foo': 'bar'}>"
+    # True
+
+    # first_name = db.Column(db.String(64), nullable=False)
+    # last_name = db.Column(db.String(64), nullable=False)
+    # email = db.Column(db.String(64), nullable=False)
+    # password = db.Column(db.String(200), nullable=False)
+    # age = db.Column(db.Integer, nullable=True)
+    # zipcode = db.Column(db.Integer, nullable=False)
 
 if __name__ == "__main__":
     import unittest

@@ -338,7 +338,7 @@ def conf_sign_in():
         db.session.commit()
         return render_template('conf_sign_in.html', email=email, passw=password)
     else:
-        flash("It is already taken, please choose smthg else")
+        flash("It is already taken, please choose something else")
         return redirect('/sign_in')
 
 @app.route("/log_in")
