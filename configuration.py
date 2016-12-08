@@ -10,7 +10,7 @@ MAIL_USE_TLS = False
 MAIL_USE_SSL = True
 
 # Required to use Flask sessions and the debug toolbar
-SECRET_KEY = "ABC"
+SECRET_KEY = os.environ.get("FLASK_SECRET_KEY", "ABC")
 
 # Government API /extract from secret.sh
 SECRET_TOKEN = os.environ["DOC_APP_TOKEN"]
