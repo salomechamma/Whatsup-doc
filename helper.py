@@ -2,8 +2,6 @@
 
 import os
 from jinja2 import StrictUndefined
-
-
 import requests
 from sys import argv
 from pprint import pprint
