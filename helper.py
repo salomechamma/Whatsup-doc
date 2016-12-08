@@ -8,7 +8,7 @@ import requests
 from sys import argv
 from pprint import pprint
 import json
-import server
+
 
 
 

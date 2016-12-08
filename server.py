@@ -2,13 +2,14 @@
 
 import os
 import helper
+
 from random import randint
 from jinja2 import StrictUndefined
 
 from flask import jsonify
 from flask import (Flask, render_template, redirect, request, flash,
                    session)
-from flask_mail import Mail, Message
+
 
 from flask_debugtoolbar import DebugToolbarExtension
 import requests
@@ -29,6 +30,7 @@ import urllib
 
 
 app = Flask(__name__)
+from flask_mail import Mail, Message
 app.config.from_object('configuration')
 
 
