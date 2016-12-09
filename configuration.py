@@ -13,8 +13,8 @@ MAIL_USE_SSL = True
 SECRET_KEY = os.environ.get("FLASK_SECRET_KEY", "ABC")
 
 # Government API /extract from secret.sh
-docapptoken = os.environ['DOC_APP_TOKEN']
-SECRET_TOKEN = os.environ.get("HEROKU_DOC_APP_TOKEN", docapptoken)
+docapptoken = os.environ['DOC_APP_TOKEN3']
+SECRET_TOKEN = os.environ.get("DOC_APP_TOKEN", docapptoken)
 GOOGLE_KEY = os.environ["GOOGLE_KEY"]
 
 # Yelp API
