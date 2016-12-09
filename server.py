@@ -69,7 +69,11 @@ def results_list():
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
     # Try to use several keys to see if it return something different than empty list:
     trial = 0
-    key_list = [app.config['SECRET_TOKEN'], os.environ["DOC_APP_TOKEN1"], os.environ['DOC_APP_TOKEN2']]
+    doc_app_token1 = os.environ["DOC_APP_TOKEN1"]
+    doc_app_token2 = os.environ['DOC_APP_TOKEN2']
+    key_list = [app.config['SECRET_TOKEN'], os.environ.get("DOC_APP_TOKEN1",doc_app_token1), 
+    os.environ.get('DOC_APP_TOKEN2',doc_app_token2)]
+    # key_list = [app.config['SECRET_TOKEN'], os.environ["DOC_APP_TOKEN1"], os.environ['DOC_APP_TOKEN2']]
     while trial < 50:
         response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
         search_results = response.json()

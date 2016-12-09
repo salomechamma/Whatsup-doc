@@ -5,7 +5,8 @@ MAIL_SERVER='smtp.gmail.com'
 MAIL_PORT = 465
 MAIL_DEFAULT_SENDER = 'whatsup.doctor.website@gmail.com'
 MAIL_USERNAME = 'whatsup.doctor.website@gmail.com'
-MAIL_PASSWORD = os.environ["EMAIL_PASSWORD"] 
+email_passw = os.environ["EMAIL_PASSWORD"]
+MAIL_PASSWORD = os.environ.get("FLASK_EMAIL_PASSWORD",email_passw)
 MAIL_USE_TLS = False
 MAIL_USE_SSL = True
 
@@ -13,13 +14,19 @@ MAIL_USE_SSL = True
 SECRET_KEY = os.environ.get("FLASK_SECRET_KEY", "ABC")
 
 # Government API /extract from secret.sh
-docapptoken = os.environ['DOC_APP_TOKEN3']
-SECRET_TOKEN = os.environ.get("DOC_APP_TOKEN", docapptoken)
-GOOGLE_KEY = os.environ["GOOGLE_KEY"]
+doc_app_token = os.environ['DOC_APP_TOKEN3']
+SECRET_TOKEN = os.environ.get("DOC_APP_TOKEN", doc_app_token)
+# GOOGLE_KEY = os.environ["GOOGLE_KEY"]
+google_key = os.environ["GOOGLE_KEY"]
+GOOGLE_KEY = os.environ.get("HEROKU_GOOGLE_KEY",google_key)
 
 # Yelp API
-CLIENT_ID = os.environ["YELP_APP_ID"]
+# CLIENT_ID = os.environ["YELP_APP_ID"]
+yelp_app_id = os.environ["YELP_APP_ID"]
+CLIENT_ID = os.environ.get("HEROKU_YELP_APP_ID",yelp_app_id)
 CLIENT_SECRET = os.environ["YELP_APP_SECRET"]
+yelp_app_secret = os.environ["YELP_APP_SECRET"]
+CLIENT_SECRET = os.environ.get("HEROKU_YELP_APP_SECRET",yelp_app_secret)
 url_yelp='https://api.yelp.com/oauth2/token'
 data_yelp ={'grand_type': 'client_credentials',
     'client_id': CLIENT_ID, 'client_secret': CLIENT_SECRET}
