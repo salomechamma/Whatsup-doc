@@ -456,6 +456,9 @@ def send_email():
     mail.send(msg)
     return jsonify({'status':'Sent'})
 
+@app.route("/error")
+def error():
+    raise Exception("Error!")
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
@@ -463,6 +466,10 @@ if __name__ == "__main__":
     app.debug = False
 
     connect_to_db(app, os.environ.get("DATABASE_URL"))
+    # Create the tables we need from our models (if they already
+    # exist, nothing will happen here, so it's fine to do this each
+    # time on startup)
+    db.create_all(app=app)
 
     # Use the DebugToolbar
     # DebugToolbarExtension(app)
