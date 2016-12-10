@@ -1,6 +1,7 @@
 """Models and database functions for What's up Doc project."""
 
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
+from flask.ext.sqlalchemy import SQLAlchemy
 
 
 # This is the connection to the PostgreSQL database; we're getting this through
@@ -105,12 +106,13 @@ def connect_to_db(app, uri=None):
     # app.config['SQLALCHEMY_DATABASE_URI'] = uri 
     db.app = app
     db.init_app(app)
+       print "Connected to DB."
 
 
-if __name__ == "__main__":
-    # As a convenience, if we run this module interactively, it will leave
-    # you in a state of being able to work with the database directly.
+# if __name__ == "__main__":
+#     # As a convenience, if we run this module interactively, it will leave
+#     # you in a state of being able to work with the database directly.
 
-    from server import app
-    connect_to_db(app)
-    print "Connected to DB."
+#     from server import app
+#     connect_to_db(app)
+ 
