@@ -1,7 +1,7 @@
 """Models and database functions for What's up Doc project."""
 
-# from flask_sqlalchemy import SQLAlchemy
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
+
 
 
 # This is the connection to the PostgreSQL database; we're getting this through
