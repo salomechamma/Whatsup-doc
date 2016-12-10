@@ -136,7 +136,7 @@ def summary(physician_profile_id):
  
     # Nber of Like for this doctor section:
     nb_likes = 0
-    doctor1 = db.session.query(Doctor).filter(Doctor.doctor_id==info_doc['p_id']).one()
+    doctor1 = db.session.query(Doctor).filter(Doctor.doctor_id==info_doc['p_id']).first()
     if doctor1:
         nb_likes = Like.query.filter_by(doctor_id=session['info_doc']['p_id']).count()
     session['likes'] = nb_likes
