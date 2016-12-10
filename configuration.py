@@ -14,18 +14,18 @@ MAIL_USE_SSL = True
 SECRET_KEY = os.environ.get("FLASK_SECRET_KEY", "ABC")
 
 # Government API /extract from secret.sh
-doc_app_token = os.environ['DOC_APP_TOKEN3']
+doc_app_token = os.getenv['DOC_APP_TOKEN3']
 SECRET_TOKEN = os.environ.get("DOC_APP_TOKEN", doc_app_token)
 # GOOGLE_KEY = os.environ["GOOGLE_KEY"]
-google_key = os.environ["GOOGLE_KEY"]
+google_key = os.getenv["GOOGLE_KEY"]
 GOOGLE_KEY = os.environ.get("HEROKU_GOOGLE_KEY",google_key)
 
 # Yelp API
 # CLIENT_ID = os.environ["YELP_APP_ID"]
-yelp_app_id = os.environ["YELP_APP_ID"]
+yelp_app_id = os.getenv["YELP_APP_ID"]
 CLIENT_ID = os.environ.get("HEROKU_YELP_APP_ID",yelp_app_id)
 CLIENT_SECRET = os.environ["YELP_APP_SECRET"]
-yelp_app_secret = os.environ["YELP_APP_SECRET"]
+yelp_app_secret = os.getenv["YELP_APP_SECRET"]
 CLIENT_SECRET = os.environ.get("HEROKU_YELP_APP_SECRET",yelp_app_secret)
 url_yelp='https://api.yelp.com/oauth2/token'
 data_yelp ={'grand_type': 'client_credentials',
