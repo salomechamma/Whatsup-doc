@@ -100,7 +100,7 @@ The User selects the right doctor and gets:
 
 ### Tests
 The web app has been tested using unit tests and integration tests.
-The coverage so far reached 92%.
+The coverage so far reached 90%.
 
 ### Version 2.0
 
