@@ -86,7 +86,7 @@ def results_list():
             data['$$app_token'] = key_list[t]
             response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
             trial = trial + 1
-            print response.json()
+            
           
     search_results = response.json()
     if search_results == []:
@@ -123,8 +123,7 @@ def summary(physician_profile_id):
     session['pay_breakdown'] = top_pharm
     session['doc_chart_pharm'] = helper.tuplelist_to_listfirstitem(top_pharm)
     session['doc_chart_payment'] = helper.tuplelist_to_listseconditem(top_pharm)
-    print '-------'
-    print session['doc_chart_pharm']
+  
     
     top_pharm_dic_no_other = top_pharm
     if len(top_pharm_dic_no_other) > 4:

@@ -143,7 +143,7 @@ class FlaskTestIntegrationLoggedIn(TestCase):
 
     def testSendEmail(self):
         """ Test /send_email route route """
-        result = self.client.post("/send_email", data={'emailAddress': "bla@gmail.com"})
+        result = self.client.post("/send_email", data={'emailAddress': "chammasalome@gmail.com"})
         self.assertEqual(result.status_code, 200)
      
 

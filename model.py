@@ -106,7 +106,7 @@ def connect_to_db(app, uri=None):
     # app.config['SQLALCHEMY_DATABASE_URI'] = uri 
     db.app = app
     db.init_app(app)
-    print "Connected to DB."
+    # print "Connected to DB."
 
 
 # if __name__ == "__main__":
