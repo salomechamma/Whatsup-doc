@@ -456,6 +456,10 @@ def send_email():
     mail.send(msg)
     return jsonify({'status':'Sent'})
 
+@app.route("/googleaba44ca4809ee042.html")
+def google():
+    return render_template("googleaba44ca4809ee042.html")
+
 @app.route("/error")
 def error():
     raise Exception("Error!")
