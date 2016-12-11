@@ -68,18 +68,14 @@ a:link, a:hover, a:visited {
 }
 
 
-#form{
+#formsearch{
 	text-align: center;
 
 }
 
-/*glyphicon {
-	font-size: 24px;
+.form-group,label{
+  display: block!important;
 }
-
-section {
-	margin-top: 50px;
-}*/
 
 #logo {
     height: 80px;
@@ -123,7 +119,6 @@ section {
 margin: 0;
 padding: 0;
 }
-
 
 
 

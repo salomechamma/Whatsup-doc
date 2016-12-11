@@ -1,17 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    <h2>Sign-in</h2>
-<form action='/sign_in' method ="POST">
- <label>First name: <input type="text" style="text-transform:capitalize;" name="fname" required></label>
- <label>Last Name: <input type="text" style="text-transform:capitalize;" name="lname" required></label>
- <label>Email: <input type="email" name="email" required></label>
- <label>Password: <input type="password" name="password" required></label>
- <label>Age: <input type="number" name="age"></label>
- <label>DOB <input type="date" name="DOB"></label>
- <label>Zipcode: <input type="number" name="zipcode" required></label>
+    <h2>Sign-up</h2>
+<div class="container-fluid">
+    <div class="row"> 
+        <div class="col-md-6 col-xs-6" id="sign-up"> 
+            <form action='/sign_in' method ="POST">  
+                <div class=form-group> <label>First name: <input type="text" style="text-transform:capitalize;" name="fname" required></label></div>
+                 <label>Last Name: <input type="text" style="text-transform:capitalize;" name="lname" required></label>
+                 <label>Email: <input type="email" name="email" required></label>
+                 <label>Password: <input type="password" name="password" required></label>
+                 <label>Age: <input type="number" name="age"></label>
+                 <label>DOB <input type="date" name="DOB"></label>
+                 <label>Zipcode: <input type="number" name="zipcode" required></label>
 
- <input type="submit" value="Register!">
-</form>
+                <input type="submit" value="Register!">
+            </form>
+        </div>
+    </div>
+</div>
 
+<link rel="stylesheet" href="static/styles_sheet.css">
 {% endblock %}
