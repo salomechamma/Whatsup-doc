@@ -71,8 +71,11 @@ def results_list():
     trial = 0
     doc_app_token1 = os.getenv("DOC_APP_TOKEN1")
     doc_app_token2 = os.getenv('DOC_APP_TOKEN2')
+    doc_app_token4 = os.getenv('DOC_APP_TOKEN4')
+    doc_app_token5 = os.getenv('DOC_APP_TOKEN5')
     key_list = [app.config['SECRET_TOKEN'], os.getenv("DOC_APP_TOKEN1",doc_app_token1), 
-    os.getenv('DOC_APP_TOKEN2',doc_app_token2)]
+    os.getenv('DOC_APP_TOKEN2',doc_app_token2),os.getenv('DOC_APP_TOKEN4',doc_app_token4),
+    os.getenv('DOC_APP_TOKEN5',doc_app_token5)]
     # key_list = [app.config['SECRET_TOKEN'], os.environ["DOC_APP_TOKEN1"], os.environ['DOC_APP_TOKEN2']]
     while trial < 50:
         response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
