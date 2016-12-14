@@ -60,8 +60,8 @@ def index():
 @app.route("/results_list")
 def results_list():
     """Show list of doctor resulting from search."""
-    firstname = request.args.get('firstname')
-    lastname = request.args.get('lastname')
+    firstname = (request.args.get('firstname')).strip()
+    lastname = (request.args.get('lastname')).strip()
     data = {'$$app_token': app.config['SECRET_TOKEN'],
                 'physician_first_name': firstname,
                 'physician_last_name': lastname}

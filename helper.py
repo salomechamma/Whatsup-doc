@@ -57,8 +57,8 @@ def perso_doc_info(list_results):
     info['short_specialty'] = list_specialty[-1]
     info['street_address'] = list_results[0]['recipient_primary_business_street_address_line1']
     info['zipcode'] = list_results[0]['recipient_zip_code'] 
-    info['city'] = list_results[0]['recipient_city']
-    info['state'] = list_results[0]['recipient_state']
+    info['city'] = (list_results[0]['recipient_city']).upper()
+    info['state'] = (list_results[0]['recipient_state']).upper()
     info['p_id'] = list_results[0]['physician_profile_id']
     # Need to set rating to -1 so earse previous value
     info['rating'] = -1
