@@ -157,4 +157,4 @@ Before Hackbright Salomé worked in Marketing for four years in New York, grwoin
  Visit her on [LinkedIn](https://www.linkedin.com/in/salomechamma).
 
 
-![salome](https://github.com/salomechamma/Whatsup-doc/blob/master/static/img/salome.jpg=250x)
+![salome](https://github.com/salomechamma/Whatsup-doc/blob/master/static/img/salome.jpg)
