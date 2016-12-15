@@ -1,4 +1,5 @@
-What's Up Doc <!-- [carrot](http://pngimg.com/upload/carrot_PNG4997.png) -->
+What's Up Doc [carrot]((https://github.com/salomechamma/Doctor_Project/blob/master/static/css/carrot_title.png)
+.png)
 ===========
 
 ###### Deployed Site: [What's Up Doc](https://whatsup-doc.herokuapp.com/)<br>
