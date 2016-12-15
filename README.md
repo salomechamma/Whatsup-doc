@@ -100,10 +100,9 @@ The coverage so far reached 92%.
 
 ### <a name="installation"></a>Installation 
 
-
+TBD
 
 ### <a name="bts"></a>Behind The Scene
-
 
 When the User enters a doctor name, the server, built using the Flask framework, makes a request to the CMS API, the parameters being the name entered. It lists of all the different doctors that match the search using the API doctor's ID to differentiate them. 
 
