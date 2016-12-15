@@ -1,4 +1,4 @@
-What's Up Doc [carrot](https://github.com/salomechamma/Whatsup-doc/blob/master/static/img/carrot_title.png)
+#What's Up Doc ![carrot](https://github.com/salomechamma/Whatsup-doc/blob/master/static/img/carrot_title.png)
 
 ===========
 
