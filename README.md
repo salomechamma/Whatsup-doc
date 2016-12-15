@@ -3,7 +3,7 @@
 ===========
 
 ###### Deployed Site: [What's Up Doc](https://whatsup-doc.herokuapp.com/)<br>
-App by Salomé Chamma. Visit her on [LinkedIn](https://www.linkedin.com/in/salomechamma)
+App by Salomé Chamma. Visit her on [LinkedIn](https://www.linkedin.com/in/salomechamma).
 
 Finding a doctor is hard. When I first moved to the US from France 4 years ago I didn't know where to turn to find a doctor. There are some resources like Zocdoc and Yelp, but who really wants to find their doctor from the same place they find the best taco truck? 
 
