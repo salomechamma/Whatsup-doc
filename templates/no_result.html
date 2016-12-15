@@ -4,18 +4,32 @@
 <div class="container-fluid">
     <div class="row"> 
         <div class="col-md-6 col-xs-6 "> 
-<h3> No results found. </h3><br>
-   <div style='font-size: 15px;'> Please make sure the physican meet the below criteria: <br>
+            <h3> No results found </h3><br>
+            <div style='font-size: 15px;'> Please make sure the physican meet the below criteria:* <br>
     
-    -  Name must match exactly the ones of the pysician.<br>
-    - Physician posseses a MD degree. </div><br>
+            -  The name entered must exactly match the pysician's name.<br>
+            - The physician must hold a MD degree. 
+            </div><br>
+            
     
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6 col-xs-6 "> 
-     <input id= 'search_but' style="max height:35px;font-size:12pt; vertical-align:center;" type="submit" class="btn btn-primary" value="Search">
-</div>
+            <div class="col-md-6 col-xs-6 "> 
+              <form method="get" action="/">
+                <input id= 'search_but' style="max height:35px;font-size:12pt; vertical-align:center;" type="submit" class="btn btn-primary" value="Search">
+              </form>
+            </div>
     </div>
 </div>
+</div>
 {% endblock %}
+
+
+{% block footer %}
+<div class="footer">
+    <i>*If the search is unsuccessful after several attempts, conclude this doctor did not receive any payments in 2015.
+  Contact information: <a href="mailto:whatsup.doctor.website@gmail.com">
+ whatsup.doctor.website@gmail.com.</a></i>
+</div>
+  {% endblock %}

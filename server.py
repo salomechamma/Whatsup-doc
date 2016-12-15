@@ -425,8 +425,8 @@ def user_page():
     if session.get('user_id',0) == 0:
         return render_template("not_logged.html")
     user1 = db.session.query(User).filter(User.user_id==session['user_id']).first()
-    fname = user1.first_name
-    lname = user1.last_name
+    fname = (user1.first_name).capitalize()
+    lname = (user1.last_name).capitalize()
     email = user1.email
     zipcode = user1.zipcode
 

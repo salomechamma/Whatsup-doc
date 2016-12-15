@@ -32,7 +32,15 @@ h3{
     
 }
 
+.well{
 
+background-color: #ffe7e2;
+/*text-align: center;*/
+padding-left: 20px;
+padding-right: 10px;
+
+
+}
 
 a:link, a:hover, a:visited {
     color: #ff5733;
@@ -77,13 +85,7 @@ label.col-xs-2.col-form-label{
 	text-align: center;
 
 }
-/*
-.form-group{
-/*  display: inline-block;*/
-  display: inline-block;
-  width:100px;
- 
-}*/
+
 
 #logo {
     height: 80px;
@@ -92,10 +94,10 @@ label.col-xs-2.col-form-label{
 
 #search{
 	text-align: center;
-	font-size: 65px;
+	font-size: 60px;
 	font-family: 'Lato', serif;
 	font-weight: bold;
-    text-shadow: -1px 0 #ff5733, 0 1px #ff5733, 1px 0 #ff5733, 0 -1px #ff5733;
+  text-shadow: -1px 0 #ff5733, 0 1px #ff5733, 1px 0 #ff5733, 0 -1px #ff5733;
 
 
 
@@ -105,7 +107,16 @@ label.col-xs-2.col-form-label{
 }
 
 
- 
+.footer{
+  position: absolute;
+  font-size: 12px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: #efefef;
+/*  text-align: center;*/
+ }
 
 #hero	{
 	height: 400px;
