@@ -1,5 +1,5 @@
-What's Up Doc [carrot]((https://github.com/salomechamma/Doctor_Project/blob/master/static/css/carrot_title.png)
-.png)
+What's Up Doc [carrot](https://github.com/salomechamma/Doctor_Project/blob/master/static/css/carrot_title.png)
+
 ===========
 
 ###### Deployed Site: [What's Up Doc](https://whatsup-doc.herokuapp.com/)<br>
