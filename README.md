@@ -12,7 +12,7 @@ Finding a doctor is hard. When I first moved to the US from France 4 years ago I
 * [Features](#features)
 * [Version 2.0](#v2)
 * [Installation](#install)
-* [Behind The Scene](#bTs)
+* [Behind The Scene](#bts)
 * [Challenges](#challenges)
 * [Structure](#structure)
 * [About Me](#aboutme)
@@ -98,7 +98,7 @@ The coverage so far reached 92%.
 * Display the average payments per state per specialty.
 * Predict compensations for next year (the API only tracks companies payments since 2013).
 
-### <a name="instal"></a>Installation 
+### <a name="install"></a>Installation 
 
 TBD
 
