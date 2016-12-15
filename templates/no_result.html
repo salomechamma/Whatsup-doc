@@ -1,11 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    <h2>Unsuccessful Search</h2>
-<span> Sorry, no such names correspond to our data. </span>
-
-<form method="get" action="/">
-    <button type="submit">New Search</button>
-    </form>
-
+<div class="container-fluid">
+    <div class="row"> 
+        <div class="col-md-6 col-xs-6 "> 
+<h3> No results found. </h3><br>
+   <div style='font-size: 15px;'> Please make sure the physican meet the below criteria: <br>
+    
+    -  Name must match exactly the ones of the pysician.<br>
+    - Physician posseses a MD degree. </div><br>
+    
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-xs-6 "> 
+     <input id= 'search_but' style="max height:35px;font-size:12pt; vertical-align:center;" type="submit" class="btn btn-primary" value="Search">
+</div>
+    </div>
+</div>
 {% endblock %}

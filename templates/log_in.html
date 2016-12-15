@@ -1,20 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    <h2>Log-in</h2>
+<div class="container-fluid">
+    <div class="row"> 
+        <div class="col-md-6 col-xs-6 "> 
+
+    <h3>Login</h3>
+
 <form action='/log_in' method ="POST">
  Email: <input type="text" name="email">
  Password: <input type="password" name="password">
 
- <input type="submit" value="Log in!">
-</form>
-
-
-<form method="get" action="/">
+ <form method="get" action="/">
 <!--     <button type="submit"> Back to Search</button> -->
 
-<input id= 'search_but' style="max height:35px;font-size:12pt; vertical-align:center;" type="submit" class="btn btn-primary" value="Back to Search">
+<input id= 'search_but' style="max height:35px;font-size:12pt; vertical-align:center;" type="submit" class="btn btn-primary" value="Login!">
 </form>
+
+
+</div>
+<div class="col-md-6 col-xs-6 "> 
+     <img src="/static/css/img4.jpeg" alt="work" height="300"> 
+</div>
+</div>
+
 
 <link rel="stylesheet" href="static/styles_sheet.css">
 {% endblock %}

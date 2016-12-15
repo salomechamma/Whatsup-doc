@@ -1,24 +1,71 @@
 {% extends 'base.html' %}
+
+
+{% block titleblock %}
+What's Up Doc
+{% endblock %}
+
 {% block content %}
 
-    <h2>Sign-up</h2>
+
 <div class="container-fluid">
     <div class="row"> 
-        <div class="col-md-6 col-xs-6" id="sign-up"> 
-            <form action='/sign_in' method ="POST">  
-                <label class='form-group'>First name: <input type="text" style="text-transform:capitalize;" name="fname" required></label>
-                 <label>Last Name: <input type="text" style="text-transform:capitalize;" name="lname" required></label>
-                 <label>Email: <input type="email" name="email" required></label>
-                 <label>Password: <input type="password" name="password" required></label>
-                 <label>Age: <input type="number" name="age"></label>
-                 <label>DOB <input type="date" name="DOB"></label>
-                 <label>Zipcode: <input type="number" name="zipcode" required></label>
+        <div class="col-md-5 col-xs-5 col-md-offset-1" id="sign-up">   <h2>Sign-up</h2> <br>   
 
-                <input type="submit" value="Register!">
+            <form action='/sign_in' method ="POST"> 
+            
+                <div class="form-group row">
+                  <label for="example-text-input" class="col-xs-2 col-form-label">First Name</label>
+                  <div class="col-xs-6">
+                    <input class="form-control" type="text" id="example-text-input" style="text-transform:capitalize;" name="fname" required/>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="example-text-input" class="col-xs-2 col-form-label">Last Name</label>
+                  <div class="col-xs-6">
+                    <input class="form-control" type="text" id="example-text-input" style="text-transform:capitalize;" name="lname" required/>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="example-text-input" class="col-xs-2 col-form-label">Email</label>
+                  <div class="col-xs-6">
+                    <input class="form-control" type="email" id="example-text-input" name="email" required/>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="example-text-input" class="col-xs-2 col-form-label">Password</label>
+                  <div class="col-xs-6">
+                    <input class="form-control" type="password" id="example-text-input" name="password" required/>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="example-text-input" class="col-xs-2 col-form-label">Age</label>
+                  <div class="col-xs-6">
+                    <input class="form-control" type="number" id="example-text-input" name="age" required/>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="example-text-input" class="col-xs-2 col-form-label">Zipcode</label>
+                  <div class="col-xs-6">
+                    <input class="form-control" type="number" id="example-text-input" name="zipcode" required/>
+                  </div>
+                </div>
+        
+            
+                <input id= 'search_but' style="max height:35px;font-size:12pt; vertical-align:center;" type="submit" class="btn btn-primary" value="Sign-up!">
+
+
             </form>
         </div>
+
+        <div class="col-md-3 col-xs-4 "> 
+            <br>
+     <img id='steto' src="/static/css/img6.jpeg" alt="work" height="350"> 
+</div>
+</div>
     </div>
 </div>
-
-<link rel="stylesheet" href="static/styles_sheet.css">
+<!-- 
+<link rel="stylesheet" href="/static/styles_sheet.css">
 {% endblock %}

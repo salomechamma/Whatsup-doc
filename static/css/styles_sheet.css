@@ -3,7 +3,6 @@
 html, body {
   width: 100%;
   height: 100%;
-  
   font-family: 'Noto Sans', sans-serif;
 
 }
@@ -67,15 +66,24 @@ a:link, a:hover, a:visited {
     font-family: 'Noto Sans', sans-serif;
 }
 
+.form-control{
+  width: 200px;
+}
 
+label.col-xs-2.col-form-label{
+  width: 150px;
+}
 #formsearch{
 	text-align: center;
 
 }
-
+/*
 .form-group{
-  display: block!important;
-}
+/*  display: inline-block;*/
+  display: inline-block;
+  width:100px;
+ 
+}*/
 
 #logo {
     height: 80px;
@@ -221,7 +229,10 @@ span.stars span {
 .info_doc{
     vertical-align: middle;
 }
-
-
+ #steto{
+ position: absolute;
+  top: 100%;
+  vertical-align: middle;
+}
 
 
