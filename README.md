@@ -1,20 +1,20 @@
-What's Up Doc [carrot](http://pngimg.com/upload/carrot_PNG4997.png)
+What's Up Doc <!-- [carrot](http://pngimg.com/upload/carrot_PNG4997.png) -->
 ===========
 
-###### Deployed Site: [https://whatsup-doc.herokuapp.com/]<br>
+###### Deployed Site: [What's Up Doc](https://whatsup-doc.herokuapp.com/)<br>
 App by Salomé Chamma. Visit her on [LinkedIn](https://www.linkedin.com/in/salomechamma)
 
 Finding a doctor is hard. When I first moved to the US from France 4 years ago I didn't know where to turn to find a doctor. There are some resources like Zocdoc and Yelp, but who really wants to find their doctor from the same place they find the best taco truck? 
 
 ##Contents
-* [Overview](###overview)
-* [Tech Stack](###tech)
-* [Features](###features)
+* [Overview](#overview)
+* [Tech Stack](#tech)
+* [Features](#features)
 * [Version 2.0](#v2)
 * [Installation](#install)
-* [Behind The Scene](###bhs)
-* [Challenges](###challenges)
-* [Structure](###structure)
+* [Behind The Scene](#bhs)
+* [Challenges](#challenges)
+* [Structure](#structure)
 * [About Me](#aboutme)
 
 
