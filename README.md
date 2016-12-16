@@ -150,7 +150,7 @@ Include integration and unit tests.
 
 ### <a name="aboutme"></a>About Me 
 
-Salomé lives in the San Francisco Bay Area. This is her first software project.
+Salomé lives in the San Francisco Bay Area. This is her first software project.<br>
 Before Hackbright Salomé worked in Marketing for four years in New York, grwoing from a Coordinator to a Manager in top cosmetic companies. Prior to this, she completed a Master’s degree in Mathematics at Dauphine University including some coding classes followed by a Master’s in Business at ESSEC Business School. She decided to pick up coding where she left off and to join Hackbright. Salomé is now excited to look for a full-stack software engineer position in the Bay Area.
  
  Visit her on [LinkedIn](https://www.linkedin.com/in/salomechamma).
