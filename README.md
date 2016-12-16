@@ -108,7 +108,6 @@ Clone or fork this repo:
 
 ```
 $ git clone https://github.com/salomechamma/Whatsup-doc.git
-
 ```
 
 Create and activate a virtual environment inside your What's Up Doc directory:
@@ -132,7 +131,7 @@ Save your API keys in a file called <kbd>secrets.sh</kbd> using this format. Not
 # What'sup doc email password:
 export EMAIL_PASSWORD="YOUR_KEY_HERE"
 
-# Government CMS API 5 different set of keys to improve match rate:
+# Government CMS API 5 different set of keys to improve your match rate:
 export DOC_APP_TOKEN3="YOUR_KEY_HERE"
 export DOC_APP_TOKEN1="YOUR_KEY_HERE"
 export DOC_APP_TOKEN2="YOUR_KEY_HERE"
@@ -144,7 +143,6 @@ export DOC_APP_TOKEN5="YOUR_KEY_HERE"
 export YELP_APP_ID="YOUR_KEY_HERE"
 export YELP_APP_SECRET="YOUR_KEY_HERE"
 export GOOGLE_KEY="YOUR_KEY_HERE"
-
 ```
 
 Source your keys from your secrets.sh file into your virtual environment:
@@ -158,7 +156,6 @@ Set up the database:
 ```
 createdb doctors
 python model.py
-
 ```
 
 Run the app:
