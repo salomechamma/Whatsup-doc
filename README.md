@@ -128,18 +128,14 @@ Sign up to use the [CMS API](https://dev.socrata.com/foundry/openpaymentsdata.cm
 Save your API keys in a file called <kbd>secrets.sh</kbd> using this format. Note that 5 different CMS keys have been created in order to increase the match rate (for more details, please refer to the ReadMe "Challenge" section).
 
 ```
-# What'sup doc email password:
 export EMAIL_PASSWORD="YOUR_KEY_HERE"
 
-# Government CMS API 5 different set of keys to improve your match rate:
 export DOC_APP_TOKEN3="YOUR_KEY_HERE"
 export DOC_APP_TOKEN1="YOUR_KEY_HERE"
 export DOC_APP_TOKEN2="YOUR_KEY_HERE"
 export DOC_APP_TOKEN4="YOUR_KEY_HERE"
 export DOC_APP_TOKEN5="YOUR_KEY_HERE"
 
-
-# Yelp and Google API keys:
 export YELP_APP_ID="YOUR_KEY_HERE"
 export YELP_APP_SECRET="YOUR_KEY_HERE"
 export GOOGLE_KEY="YOUR_KEY_HERE"
