@@ -100,7 +100,75 @@ The coverage so far reached 92%.
 
 ### <a name="install"></a>Installation 
 
-TBD
+To run What's Up Doc:
+
+Install PostgreSQL (Mac OSX)
+
+Clone or fork this repo:
+
+```
+$ git clone https://github.com/salomechamma/Whatsup-doc.git
+
+```
+
+Create and activate a virtual environment inside your What's Up Doc directory:
+
+```
+virtualenv env
+source env/bin/activate
+```
+
+Install the dependencies:
+
+```
+pip install -r requirements.txt
+```
+
+Sign up to use the [CMS API](https://dev.socrata.com/foundry/openpaymentsdata.cms.gov/tf25-5jad), the [Google Maps API](https://developers.google.com/maps/documentation/embed/guide), and the [Yelp API](https://www.yelp.com/login?return_url=%2Fdevelopers%2Fmanage_api_keys)
+
+Save your API keys in a file called <kbd>secrets.sh</kbd> using this format. Note that 5 different CMS keys have been created in order to increase the match rate (for more details, please refer to the ReadMe "Challenge" section).
+
+```
+# What'sup doc email password:
+export EMAIL_PASSWORD="YOUR_KEY_HERE"
+
+# Government CMS API 5 different set of keys to improve match rate:
+export DOC_APP_TOKEN3="YOUR_KEY_HERE"
+export DOC_APP_TOKEN1="YOUR_KEY_HERE"
+export DOC_APP_TOKEN2="YOUR_KEY_HERE"
+export DOC_APP_TOKEN4="YOUR_KEY_HERE"
+export DOC_APP_TOKEN5="YOUR_KEY_HERE"
+
+
+# Yelp and Google API keys:
+export YELP_APP_ID="YOUR_KEY_HERE"
+export YELP_APP_SECRET="YOUR_KEY_HERE"
+export GOOGLE_KEY="YOUR_KEY_HERE"
+
+```
+
+Source your keys from your secrets.sh file into your virtual environment:
+
+```
+source secrets.sh
+```
+
+Set up the database:
+
+```
+createdb doctors
+python model.py
+
+```
+
+Run the app:
+
+```
+python server.py
+```
+
+You can now navigate to 'localhost:5000/' to access What's Up Doc.
+
 
 ### <a name="bts"></a>Behind The Scene
 
@@ -148,13 +216,15 @@ All database queries made by the flask app.
 ##### tests.py
 Include integration and unit tests.
 
-### <a name="aboutme"></a>About Me 
+### <a name="aboutme"></a>About the Developer 
 
-Salomé lives in the San Francisco Bay Area. This is her first software project.<br>
-Before Hackbright Salomé worked in Marketing for four years in New York, grwoing from a Coordinator to a Manager in top cosmetic companies. Prior to this, she completed a Master’s degree in Mathematics at Dauphine University including some coding classes followed by a Master’s in Business at ESSEC Business School. She decided to pick up coding where she left off and to join Hackbright. Salomé is now excited to look for a full-stack software engineer position in the Bay Area.
+Salomé lives in the San Francisco Bay Area. This is her first software project.
+<br />
+Before Hackbright Salomé worked in Marketing for four years in New York, growing from a Coordinator to a Manager in top cosmetic companies. Prior to this, she completed a Master’s degree in Mathematics at Dauphine University including some coding classes followed by a Master’s in Business at ESSEC Business School. She decided to pick up coding where she left off and to join Hackbright. Salomé is now excited to look for a full-stack software engineer position in the Bay Area.
  
- Visit her on [LinkedIn](https://www.linkedin.com/in/salomechamma).
+Visit her on [LinkedIn](https://www.linkedin.com/in/salomechamma).
 
-<img src="/static/img/salome.png" alt="salome" style="height:50%;"/>
+<img src="/static/img/salome.png" alt="salome"/>
 <!-- 
 ![salome](https://github.com/salomechamma/Whatsup-doc/blob/master/static/img/salome.jpg) -->
+<!-- style="height:50%;" -->
