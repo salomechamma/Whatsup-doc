@@ -73,7 +73,7 @@ To build this website I used 3 RESTful web APIS:
 ---------
 
 * Industry Comparison and Alternate Doctors Page
-    * Bar graph comparing doctors compensation to the state average, broken down by individual pharmaceutical company. 
+    * Bar chart comparing doctors compensation to the state average, broken down by individual pharmaceutical company. 
     * List of alternative doctors of the same specialty, in the same city who recieved less by pharmaceutical companies
 
 ![Homepage](https://github.com/salomechamma/Doctor_Project/blob/master/static/img/comp.png)
