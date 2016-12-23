@@ -1,7 +1,12 @@
 {% extends 'base2.html' %}
+
+{% block headblock %}
+
+
+  
+{% endblock %}
+
 {% block content %}
-
-
 
   <h3>Here are some information about Dr {{ session['info_doc']['first_name'] }} 
     {{ session['info_doc']['last_name'] }}</h3>
@@ -11,7 +16,7 @@
 
 
 </div>
-    <h4>  
+    <h4 style="font-size:32pt; font-family: 'Noto Sans', sans-serif;">  
     {% if   session['info_doc']['rating']  > 0 %} 
         Yelp Rating: {{ session['info_doc']['rating'] }}/5  -  Access the doctor Yelp page
         <a href= {{ session['info_doc']['url'] }} >here</a></h4><br>

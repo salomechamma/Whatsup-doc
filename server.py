@@ -359,6 +359,7 @@ def log_in():
 
 @app.route('/log_in', methods=['POST'])
 def logged():
+    """Logged-in."""
     email = request.form.get('email')
     password = request.form.get('password')
     user = db.session.query(User).filter(User.email==email).first()
@@ -395,6 +396,7 @@ def log_out():
 # Like button
 @app.route('/like', methods=["POST"])
 def like():
+    """Allow user to like a doctor"""
     # doctor0 = db.session.query(Doctor).filter(Doctor.doctor_id==session['info_doc']['p_id']).first()
     doctor0 = Doctor.query.get(session['info_doc']['p_id'])
     if doctor0 is None:
@@ -411,6 +413,7 @@ def like():
 
 @app.route('/unlike', methods=["POST"])
 def unlike():
+    """Allow user to unlike a doctor"""
     
     Like.query.filter_by(doctor_id=session['info_doc']['p_id'], user_id=session['user_id']).delete()
     db.session.commit()
@@ -438,6 +441,7 @@ def user_page():
 
 @app.route("/send_email", methods=['POST'])
 def send_email():
+    """Allow user to send an email with the doctor information"""
     recipients = request.form.get('emailAddress')
     msg = Message("What's Up Doc informs you!", recipients=[recipients])
     # msg.body = "testing"
