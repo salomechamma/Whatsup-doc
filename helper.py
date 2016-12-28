@@ -65,8 +65,7 @@ def perso_doc_info(list_results):
     return info
 
 def pay_per_comp(list_results):
-    """ Return dictionnary with keys being company names and values 
-    being the total payment the company made to that doctor  """
+    """ Return dictionnary (keys = company names,  values = total payment the company made to that doctor)  """
     pay_breakdown = {}
     pharm_name = []
     for dic in list_results:
@@ -81,8 +80,7 @@ def pay_per_comp(list_results):
     return pay_breakdown
 
 def pay_per_comp_filtered(resjson,total_payment):
-    """Return"""
-    # duplicate dictionnary to be sure to not lost all the data:
+    """Return list of 4 pharm.companies or less"""
     
     filtered_dic = pay_per_comp(resjson)
     length = len(filtered_dic.items())
@@ -174,7 +172,7 @@ def list_tup_to_dic(tuplelist):
 
 
 def pharm_avg_sortedlist(dic_avg_pharm):
-    """XXXXXX"""
+    """Average each companies spent for same specialty in same state"""
     listavg = []
     avg_pharm = sorted(dic_avg_pharm.items())
     for company in avg_pharm:
@@ -182,30 +180,28 @@ def pharm_avg_sortedlist(dic_avg_pharm):
     return listavg
 
 # Find three better doctors:
-def three_better_doc(response, p_id):
+def same_spec_state(response, p_id):
     """ xxxx"""
     # create a dictionnary with key as doctor id : total payment
     all_doc = {}
   
     for record in response.json():
-        # add an if statement to make sure it doesn't add the doctor entered by user
         if record['physician_profile_id'] != p_id:
             all_doc[record['physician_profile_id']] = all_doc.get(record['physician_profile_id'], 0.00) 
             + float(record['total_amount_of_payment_usdollars']) 
     return all_doc
 
-def best_ten_doc(all_doc, t):
-    """ xxxx"""   
+def doc_less_paid(all_doc, t):
+    """ Keep doctors which have been payed less that t"""   
 
     best_doc = {}
     for elem in all_doc:
         if all_doc[elem] < t:
             best_doc[elem] = all_doc[elem]
-    return best_doc
-
-def best_doc_sorted(best_doc):
     sorted_best_doc = sorted(best_doc.items(), key=lambda x:x[1])
     return sorted_best_doc
+
+
 
 
 

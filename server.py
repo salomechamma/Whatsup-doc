@@ -227,8 +227,8 @@ def ind_comparison(physician_profile_id, specialty, state, city):
     record_same_city = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=same_city, stream=True)
     
 
-    # three better doctors
-    all_doc = helper.three_better_doc(record_same_city, session['info_doc']['p_id'])
+    # doc of same state same sepc.
+    all_doc = helper.same_spec_state(record_same_city, session['info_doc']['p_id'])
     # Make sure no error if all_doc have elss than 10 or no elements:
     if len(all_doc) <10:
         selected_list = all_doc.items()[:len(all_doc)]
@@ -245,8 +245,8 @@ def ind_comparison(physician_profile_id, specialty, state, city):
         response1 = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data1)
         selected_doc[elem[0]] = helper.total_payments(response1.json())
     # Compared each doctor total received to doctor entered in search and keep it if below
-    best_doc = helper.best_ten_doc(selected_doc, session['info_doc']['total_received'])
-    best_doc = helper.best_doc_sorted(best_doc)
+    best_doc = helper.doc_less_paid(selected_doc, session['info_doc']['total_received'])
+    # best_doc = helper.best_doc_sorted(best_doc)
 
     # import pdb; pdb.set_trace() 
     return render_template('ind_comparison.html', avg_per_state=avg_per_state, 
