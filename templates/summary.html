@@ -170,11 +170,6 @@ $(function() {
             $('#like_section').append('<button id="unlike" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-thumbs-up"></span>Unike</button><span id="unlike-message"></span>');
             $('#unlike').on('click', handleDownVote);
 
-            // $('#like').attr('disabled', true);
-            // 
-            // change #nb likes to session['nb_likes']
-            // hide like
-            // show unvote button
         });
     }
 
@@ -193,14 +188,12 @@ $(function() {
         $('#like_section').append('<button id="like" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-thumbs-up"></span>Like</button><span id="like-message"></span>');
         $('#like').on('click', handleUpvote);
       
-            // $('#unlike').attr('disabled', true);
-            // grab id
         });
     }
 
     $('#unlike').on('click', handleDownVote);
 
-// Chart section 
+// Pie Chart section 
 var options = { responsive: true, maintainAspectRatio: true,
        
                 

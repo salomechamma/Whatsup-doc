@@ -66,7 +66,7 @@ def results_list():
                 'physician_first_name': firstname,
                 'physician_last_name': lastname}
     
-    response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
+    
     # Try to use several keys to see if it return something different than empty list:
     trial = 0
     doc_app_token1 = os.getenv("DOC_APP_TOKEN1")
@@ -76,7 +76,7 @@ def results_list():
     key_list = [app.config['SECRET_TOKEN'], os.getenv("DOC_APP_TOKEN1",doc_app_token1), 
     os.getenv('DOC_APP_TOKEN2',doc_app_token2),os.getenv('DOC_APP_TOKEN4',doc_app_token4),
     os.getenv('DOC_APP_TOKEN5',doc_app_token5)]
-    # key_list = [app.config['SECRET_TOKEN'], os.environ["DOC_APP_TOKEN1"], os.environ['DOC_APP_TOKEN2']]
+    
     while trial < 50:
         response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
         search_results = response.json()
@@ -85,7 +85,7 @@ def results_list():
             break
         else:
             print 'EMPTY'
-            t = randint(0,2)
+            t = randint(0,4)
             data['$$app_token'] = key_list[t]
             response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
             trial = trial + 1
@@ -107,15 +107,13 @@ def summary(physician_profile_id):
                 'physician_profile_id': physician_profile_id
             }
 
-    # Issue request to Govt API/ Extract doctor personal info/ Caluclate payments received by doctor
+    # Issue request to Govt API/ Extract doctor personal info/ Calculate payments received by doctor
     response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=summ)
     search_results = response.json()
     t = helper.total_payments(search_results)
-    first_name = search_results[0]['physician_first_name']
-    last_name = search_results[0]['physician_last_name']
     info_doc = helper.perso_doc_info(search_results)
     # pay_breakdown = helper.pay_per_comp(search_results)
-    # List of tuple ; tuple = (pharmacy name, total):
+    # List of tuple ; each tuple = (pharmacy name, total paid to this doctor):
     top_pharm = helper.pay_per_comp_filtered(search_results,t)
    
 
@@ -124,14 +122,17 @@ def summary(physician_profile_id):
     session['info_doc'] = info_doc
     session['info_doc']['total_received'] = round(t,2)
     session['pay_breakdown'] = top_pharm
+    # list of companies name + other section:
     session['doc_chart_pharm'] = helper.tuplelist_to_listfirstitem(top_pharm)
+    # list of total paid by each company to this doctor + total of 'other' section:
     session['doc_chart_payment'] = helper.tuplelist_to_listseconditem(top_pharm)
-  
     
     top_pharm_dic_no_other = top_pharm
     if len(top_pharm_dic_no_other) > 4:
         top_pharm_dic_no_other.pop()
+    # list listing companies without 'other' section to be used for ind_comparison page
     session['listsamecompanies'] = helper.tuplelist_to_listfirstitem(top_pharm_dic_no_other)
+    # list listing amount excluding the one of 'other'section
     session['doc_payments_no_other']=helper.tuplelist_to_listseconditem(top_pharm_dic_no_other)
     
 
@@ -143,17 +144,15 @@ def summary(physician_profile_id):
         nb_likes = Like.query.filter_by(doctor_id=session['info_doc']['p_id']).count()
     session['likes'] = nb_likes
         
-    # Check if user did like this doctor
+    # Check if user did like this doctor (if he/she is logged-in)
     liked_check = None
     if session.get('user_id'):
         liked_check = db.session.query(Like).filter(Like.doctor_id==info_doc['p_id'], 
             Like.user_id == session['user_id']).first()
 
-  
     
     
     # Yelp API request
-    # storer rating in session
     
     params = {
     'term': session['info_doc']['last_name'],
@@ -229,7 +228,7 @@ def ind_comparison(physician_profile_id, specialty, state, city):
 
     # doc of same state same sepc.
     all_doc = helper.same_spec_state(record_same_city, session['info_doc']['p_id'])
-    # Make sure no error if all_doc have elss than 10 or no elements:
+    # Make sure no error if all_doc have less than 10 or no elements:
     if len(all_doc) <10:
         selected_list = all_doc.items()[:len(all_doc)]
     elif len(all_doc) == 0:
@@ -246,7 +245,6 @@ def ind_comparison(physician_profile_id, specialty, state, city):
         selected_doc[elem[0]] = helper.total_payments(response1.json())
     # Compared each doctor total received to doctor entered in search and keep it if below
     best_doc = helper.doc_less_paid(selected_doc, session['info_doc']['total_received'])
-    # best_doc = helper.best_doc_sorted(best_doc)
 
     # import pdb; pdb.set_trace() 
     return render_template('ind_comparison.html', avg_per_state=avg_per_state, 
@@ -259,7 +257,6 @@ def ind_comparison(physician_profile_id, specialty, state, city):
 def payment_doc():
     """Return data about payments received by doctor per each company."""
 
-# Be careful here , formatted for only 5 companies
     data_dict = {
                 "labels":  session['doc_chart_pharm'],
                 "datasets": [
@@ -282,7 +279,6 @@ def payment_doc():
                 
                     }]
             }
-
     return jsonify(data_dict)
 
             
@@ -364,13 +360,12 @@ def logged():
     password = request.form.get('password')
     user = db.session.query(User).filter(User.email==email).first()
     if user == None:
-        flash("We do not have this email addres sin our records. Please try again")
+        flash("We do not have this email address in our records. Please try again")
         return redirect('/log_in')
     else:
         user_id = user.user_id
         if pbkdf2_sha256.verify(password, user.password):
         # if user.password == password:
-            flash("Welcome to What's up Doc")
             session["user_id"]= user_id
             # import pdb; pdb.set_trace() 
             return redirect('/user_page')
@@ -399,11 +394,13 @@ def like():
     """Allow user to like a doctor"""
     # doctor0 = db.session.query(Doctor).filter(Doctor.doctor_id==session['info_doc']['p_id']).first()
     doctor0 = Doctor.query.get(session['info_doc']['p_id'])
+    # if doctor not already in Doctor table, we add it:
     if doctor0 is None:
         doctor1 = Doctor(doctor_id = session['info_doc']['p_id'],first_name = 
         session['info_doc']['first_name'],last_name=session['info_doc']['last_name'],
         specialty= session['info_doc']['short_specialty'],yelp_rating = session['info_doc']['rating'])
         db.session.add(doctor1)
+    # add the like record in the record table:
     like1 = Like(doctor_id=session['info_doc']['p_id'], user_id=session['user_id'])
     db.session.add(like1)
     db.session.commit()
