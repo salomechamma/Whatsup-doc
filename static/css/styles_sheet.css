@@ -246,5 +246,9 @@ span.stars span {
   vertical-align: middle;
 }
 
+ .upper {
+            text-transform: uppercase;
+        }
+
 img[alt=salome] { height: 50px; }
 
