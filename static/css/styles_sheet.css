@@ -92,6 +92,23 @@ label.col-xs-2.col-form-label{
     width: 200%;
 }
 
+
+#entete{
+  text-align: center;
+  margin-right: 50px;
+  margin: 50px;
+  font-size: 38px;
+/*  font-family: 'Lato', serif;*/
+/*  font-weight: bold;*/
+  text-shadow: -2px 0 black, 0 1px black, 1px 0 black, 0 -2px black;
+  /*text-shadow: -1px 0 #ff5733, 0 1px #ff5733, 1px 0 #ff5733, 0 -1px #ff5733;*/
+  font-style: italic;
+  color: white;
+
+
+
+
+}
 #search{
 	text-align: center;
 	font-size: 60px;
