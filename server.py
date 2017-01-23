@@ -76,9 +76,10 @@ def results_list():
     key_list = [app.config['SECRET_TOKEN'], os.getenv("DOC_APP_TOKEN1",doc_app_token1), 
     os.getenv('DOC_APP_TOKEN2',doc_app_token2),os.getenv('DOC_APP_TOKEN4',doc_app_token4),
     os.getenv('DOC_APP_TOKEN5',doc_app_token5)]
+
     
     while trial < 50:
-        response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
+        response = requests.get("https://openpaymentsdata.cms.gov/resource/t3za-xhk7.json", params=data)
         search_results = response.json()
         if search_results != []:
             print 'NOT EMPTY'
@@ -87,7 +88,7 @@ def results_list():
             print 'EMPTY'
             t = randint(0,4)
             data['$$app_token'] = key_list[t]
-            response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data)
+            response = requests.get("https://openpaymentsdata.cms.gov/resource/t3za-xhk7.json", params=data)
             trial = trial + 1
             
           
@@ -108,7 +109,7 @@ def summary(physician_profile_id):
             }
 
     # Issue request to Govt API/ Extract doctor personal info/ Calculate payments received by doctor
-    response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=summ)
+    response = requests.get("https://openpaymentsdata.cms.gov/resource/t3za-xhk7.json", params=summ)
     search_results = response.json()
     t = helper.total_payments(search_results)
     info_doc = helper.perso_doc_info(search_results)
@@ -205,7 +206,7 @@ def ind_comparison(physician_profile_id, specialty, state, city):
             'recipient_state': state
             }
 
-    response = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=summ, stream=True)
+    response = requests.get("https://openpaymentsdata.cms.gov/resource/t3za-xhk7.json", params=summ, stream=True)
     all_payments = helper.results_per_spe(response)
     # avg_per_state: Average payments recived by all doctors of the specialty in this state:
     avg_per_state = round(helper.averg_per_state(all_payments),2)
@@ -223,7 +224,7 @@ def ind_comparison(physician_profile_id, specialty, state, city):
             'physician_specialty': specialty,
             'recipient_city': city
             }
-    record_same_city = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=same_city, stream=True)
+    record_same_city = requests.get("https://openpaymentsdata.cms.gov/resource/t3za-xhk7.json", params=same_city, stream=True)
     
 
     # doc of same state same sepc.
@@ -241,7 +242,7 @@ def ind_comparison(physician_profile_id, specialty, state, city):
     for elem in selected_list:
         data1 = {'$$app_token': app.config['SECRET_TOKEN'],
                 'physician_profile_id': elem[0]}
-        response1 = requests.get("https://openpaymentsdata.cms.gov/resource/tf25-5jad.json", params=data1)
+        response1 = requests.get("https://openpaymentsdata.cms.gov/resource/t3za-xhk7.json", params=data1)
         selected_doc[elem[0]] = helper.total_payments(response1.json())
     # Compared each doctor total received to doctor entered in search and keep it if below
     best_doc = helper.doc_less_paid(selected_doc, session['info_doc']['total_received'])
