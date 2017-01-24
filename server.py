@@ -78,7 +78,7 @@ def results_list():
     os.getenv('DOC_APP_TOKEN5',doc_app_token5)]
 
     
-    while trial < 50:
+    while trial < 20:
         response = requests.get("https://openpaymentsdata.cms.gov/resource/t3za-xhk7.json", params=data)
         search_results = response.json()
         if search_results != []:
@@ -88,7 +88,7 @@ def results_list():
             print 'EMPTY'
             t = randint(0,4)
             data['$$app_token'] = key_list[t]
-            response = requests.get("https://openpaymentsdata.cms.gov/resource/t3za-xhk7.json", params=data)
+            # response = requests.get("https://openpaymentsdata.cms.gov/resource/t3za-xhk7.json", params=data)
             trial = trial + 1
             
           

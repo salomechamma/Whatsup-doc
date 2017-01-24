@@ -47,7 +47,7 @@ What's Up Doc
            <b> {{ session['info_doc']['short_specialty'] }} </b> <br>
        
             {% if   session['info_doc']['rating']  > 0 %} 
-            <a href= {{ session['info_doc']['url'] }} ><b>Yelp: </b><span class="stars">{{ session['info_doc']['rating'] }}</span></a> 
+            <a href= {{ session['info_doc']['url'] }} ><img src="/static/img/Yelp_Logo.png" alt="Yelp logo" style="width:15%;"></a> <span>  </span><span class="stars">{{ session['info_doc']['rating'] }}</span>
             {% else %}
             <b>No Existing Yelp page.</b>
             {% endif %} 
