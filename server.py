@@ -67,7 +67,8 @@ def results_list():
                 'physician_last_name': lastname}
     
     
-    # Try to use several keys to see if it return something different than empty list:
+    # Try to use several keys to see if it return something different than empty list 
+    # In order to circumvent the API lack of consistency
     trial = 0
     doc_app_token1 = os.getenv("DOC_APP_TOKEN1")
     doc_app_token2 = os.getenv('DOC_APP_TOKEN2')
@@ -81,7 +82,7 @@ def results_list():
     os.getenv('DOC_APP_TOKEN7',doc_app_token7)]
 
     
-    while trial < 20:
+    while trial < 40:
         response = requests.get("https://openpaymentsdata.cms.gov/resource/t3za-xhk7.json", params=data)
         search_results = response.json()
         if search_results != []:
@@ -91,7 +92,7 @@ def results_list():
             print 'EMPTY'
             t = randint(0,6)
             data['$$app_token'] = key_list[t]
-            # response = requests.get("https://openpaymentsdata.cms.gov/resource/t3za-xhk7.json", params=data)
+            response = requests.get("https://openpaymentsdata.cms.gov/resource/t3za-xhk7.json", params=data)
             trial = trial + 1
             
           
