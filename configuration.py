@@ -15,7 +15,7 @@ SECRET_KEY = os.environ.get("FLASK_SECRET_KEY", "ABC")
 
 # Government API /extract from secret.sh
 doc_app_token = os.getenv('DOC_APP_TOKEN3')
-SECRET_TOKEN = os.environ.get("DOC_APP_TOKEN", doc_app_token)
+SECRET_TOKEN = os.environ.get("DOC_APP_TOKEN3", doc_app_token)
 # GOOGLE_KEY = os.environ["GOOGLE_KEY"]
 google_key = os.getenv("GOOGLE_KEY")
 GOOGLE_KEY = os.environ.get("HEROKU_GOOGLE_KEY",google_key)

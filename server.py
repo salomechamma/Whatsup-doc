@@ -73,9 +73,12 @@ def results_list():
     doc_app_token2 = os.getenv('DOC_APP_TOKEN2')
     doc_app_token4 = os.getenv('DOC_APP_TOKEN4')
     doc_app_token5 = os.getenv('DOC_APP_TOKEN5')
+    doc_app_token6 = os.getenv('DOC_APP_TOKEN6')
+    doc_app_token7 = os.getenv('DOC_APP_TOKEN7')
     key_list = [app.config['SECRET_TOKEN'], os.getenv("DOC_APP_TOKEN1",doc_app_token1), 
     os.getenv('DOC_APP_TOKEN2',doc_app_token2),os.getenv('DOC_APP_TOKEN4',doc_app_token4),
-    os.getenv('DOC_APP_TOKEN5',doc_app_token5)]
+    os.getenv('DOC_APP_TOKEN5',doc_app_token5),os.getenv('DOC_APP_TOKEN6',doc_app_token6),
+    os.getenv('DOC_APP_TOKEN7',doc_app_token7)]
 
     
     while trial < 20:
@@ -86,7 +89,7 @@ def results_list():
             break
         else:
             print 'EMPTY'
-            t = randint(0,4)
+            t = randint(0,6)
             data['$$app_token'] = key_list[t]
             # response = requests.get("https://openpaymentsdata.cms.gov/resource/t3za-xhk7.json", params=data)
             trial = trial + 1
