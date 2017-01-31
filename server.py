@@ -468,6 +468,10 @@ def send_email():
 def google():
     return render_template("googleaba44ca4809ee042.html")
 
+@app.route("/about_section")
+def about_section():
+    return render_template("about_section.html")
+
 @app.route("/error")
 def error():
     raise Exception("Error!")

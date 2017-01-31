@@ -17,10 +17,10 @@ body.homepage{
 	background-color: #fff;
 	background-size: cover;
 	background-repeat: no-repeat;
-  	background-position: center center;
-  	color: #000;
-  	line-height: 1.3;
-  	-webkit-font-smoothing: antialiased;
+	background-position: center center;
+	color: #000;
+	line-height: 1.3;
+	-webkit-font-smoothing: antialiased;
   
 
 }
@@ -265,9 +265,16 @@ span.stars span {
   vertical-align: middle;
 }
 
- .upper {
+.upper {
             text-transform: uppercase;
         }
+.about_section{
+font-size: 15px;
 
+}
 img[alt=salome] { height: 50px; }
 
+li {
+    margin-bottom: 10px;
+    font-size: 15px;
+}
