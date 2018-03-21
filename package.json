@@ -1,0 +1,12 @@
+{
+  "name": "whatsup-doc",
+  "private": true,
+  "scripts": {
+    "lint": "jshint **.js",
+    "test": "npm run lint"
+  },
+  "author": "salome chamma",
+  "devDependencies": {
+    "jshint": "^2.9.4"
+  }
+}
