@@ -30,10 +30,11 @@ CLIENT_SECRET = os.environ.get("HEROKU_YELP_APP_SECRET",yelp_app_secret)
 url_yelp='https://api.yelp.com/oauth2/token'
 data_yelp ={'grand_type': 'client_credentials',
     'client_id': CLIENT_ID, 'client_secret': CLIENT_SECRET}
-r = requests.post(url_yelp, data = data_yelp)
+# r = requests.post(url_yelp, data = data_yelp)
 
-YELP_ACCESS_TOKEN = r.json()['access_token']
+# YELP_ACCESS_TOKEN = r.json()['access_token']
 YELP_SEARCH_URL = 'https://api.yelp.com/v3/businesses/search'
-HEADERS = {'Authorization': 'Bearer ' + YELP_ACCESS_TOKEN}
+# HEADERS = {'Authorization': 'Bearer ' + YELP_ACCESS_TOKEN}
+HEADERS = {'Authorization': 'Bearer ' + CLIENT_SECRET}
 # no need to put in upper case things i dont need in the server like'r'
 # like yelp and data yelp
